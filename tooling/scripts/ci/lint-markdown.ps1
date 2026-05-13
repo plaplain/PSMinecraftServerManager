@@ -1,5 +1,5 @@
 param(
-    [string]$MarkdownDirectory,
+    [Parameter(Mandatory=$true)][string]$MarkdownDirectory,
     [string]$OutputDirectory
 )
 
