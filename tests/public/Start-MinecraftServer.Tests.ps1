@@ -11,10 +11,6 @@ BeforeAll {
 Describe 'Start-MinecraftServer Tests' {
 
 	Context "unit tests" -Tag "Unit" {
-		It 'Export-ModuleMember is defined & uncommented' {
-			Test-FunctionCallsExportModuleMember -FilePath $ScriptPath -FunctionName 'Start-MinecraftServer'
-		}
-
 		It 'Script file exists' {
 			Test-ScriptFileExists -PSScriptRoot $PSScriptRoot -ScriptRelativePath $ScriptRelativePath
 		}

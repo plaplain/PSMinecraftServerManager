@@ -37,6 +37,10 @@ Describe "Base Function Tests" {
             It "Function is defined: $($File.BaseName)" -TestCases @{ File = $File} {
                 Test-CmdletIsDefined -FilePath $File.FullName -CmdletName $File.BaseName
             }
+
+            It "Export-ModuleMember is defined & uncommented: $($File.BaseName)" -TestCases @{ File = $File} {
+			    Test-FunctionCallsExportModuleMember -FilePath $File.FullName -FunctionName $File.BaseName
+		    }
         }
     }
 }
