@@ -1,11 +1,12 @@
 BeforeAll {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification='False positive due to how Pester works.')]
     $Helpers = Get-ChildItem -Path "$PSScriptRoot\..\Helpers\" -Recurse -Filter "*.ps1" -ErrorAction Stop
     foreach ($Helper in $Helpers) {
         . $Helper.FullName
     }
 
 	$ScriptRelativePath = "..\..\src\public\Start-MinecraftServer.ps1"
+	
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification='False positive due to how Pester works.')]
 	$ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
 }
 
