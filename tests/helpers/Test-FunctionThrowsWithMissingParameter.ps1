@@ -1,5 +1,5 @@
 
-function Test-FunctionThrowsWithMissingParameters {
+function Test-FunctionThrowsWithMissingParameter {
     param(
         [Parameter(Mandatory = $true)][string]$FunctionName
     )

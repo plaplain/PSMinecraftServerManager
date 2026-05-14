@@ -12,13 +12,13 @@ Describe 'Start-MinecraftServer Tests' {
 
 	Context "unit tests" -Tag "Unit" {
 		It 'Script file exists' {
-			Test-ScriptFileExists -PSScriptRoot $PSScriptRoot -ScriptRelativePath $ScriptRelativePath
+			Test-ScriptFileIsPresent -PSScriptRoot $PSScriptRoot -ScriptRelativePath $ScriptRelativePath
 		}
 	}
 
 	Context "integration tests" -Tag "Integration" {
 		It 'Start-MinecraftServer throws when required parameters are missing' {
-			Test-CmdletThrowWithNoParameters -FilePath $ScriptPath -CmdletName 'Start-MinecraftServer'
+			Test-CmdletThrowWithNoParameter -FilePath $ScriptPath -CmdletName 'Start-MinecraftServer'
 		}
 	}
 }

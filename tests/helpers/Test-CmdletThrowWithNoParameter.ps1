@@ -1,4 +1,4 @@
-function Test-CmdletThrowWithNoParameters {
+function Test-CmdletThrowWithNoParameter {
     param(
         [Parameter(Mandatory = $true)][string]$FilePath,
         [Parameter(Mandatory = $true)][string]$CmdletName

@@ -1,4 +1,4 @@
-function Test-ScriptFileExists {
+function Test-ScriptFileIsPresent {
     param(
         [Parameter(Mandatory = $true)][string]$PSScriptRoot,
         [Parameter(Mandatory = $true)][string]$ScriptRelativePath
