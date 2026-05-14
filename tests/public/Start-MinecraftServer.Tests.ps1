@@ -1,6 +1,5 @@
 BeforeAll {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '',Justification='False positive due to how Pester works.')]
-
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification='False positive due to how Pester works.')]
     $Helpers = Get-ChildItem -Path "$PSScriptRoot\..\Helpers\" -Recurse -Filter "*.ps1" -ErrorAction Stop
     foreach ($Helper in $Helpers) {
         . $Helper.FullName
