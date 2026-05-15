@@ -36,6 +36,7 @@ jobs:
         $analyzerModule = Get-Module -ListAvailable -Name PSScriptAnalyzer
         if ($null -eq $analyzerModule) {
           Install-Module -Name PSScriptAnalyzer -Force
+          Get-Module -ListAvailable -Name PSScriptAnalyzer
         }
         
         $sarifModule = Get-Module -ListAvailable -Name ConvertToSARIF
@@ -58,7 +59,8 @@ jobs:
         if(![string]::IsNullOrEmpty('')) { $htPSA.add('Settings', '') }
         $htCTS = [ordered]@{ FilePath = 'results.sarif'; }
         if(![string]::IsNullOrEmpty('')) { $htCTS.add('IgnorePattern', '') }
-        Invoke-ScriptAnalyzer @htPSA | ConvertTo-SARIF @htCTS
+        #Invoke-ScriptAnalyzer @htPSA | ConvertTo-SARIF @htCTS
+        Invoke-ScriptAnalyzer @htPSA
 
 #      - uses: actions/checkout@v4
 #
