@@ -60,7 +60,7 @@ jobs:
         $htCTS = [ordered]@{ FilePath = 'results.sarif'; }
         if(![string]::IsNullOrEmpty('')) { $htCTS.add('IgnorePattern', '') }
         #Invoke-ScriptAnalyzer @htPSA | ConvertTo-SARIF @htCTS
-        Invoke-ScriptAnalyzer @htPSA
+        Invoke-ScriptAnalyzer @htPSA | Out-String
 
 #      - uses: actions/checkout@v4
 #
