@@ -5,7 +5,7 @@ BeforeAll {
     }
 
 	$ScriptRelativePath = "..\..\src\public\Start-MinecraftServer.ps1"
-	
+
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification='False positive due to how Pester works.')]
 	$ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
 }
