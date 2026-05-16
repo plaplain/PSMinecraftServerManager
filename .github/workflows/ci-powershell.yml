@@ -60,7 +60,7 @@ jobs:
         $htCTS = [ordered]@{ FilePath = '/home/runner/work/results.sarif'; }
         if(![string]::IsNullOrEmpty('')) { $htCTS.add('IgnorePattern', '') }
         Invoke-ScriptAnalyzer @htPSA | ConvertTo-SARIF @htCTS
-        #$ScriptAnalysis =Invoke-ScriptAnalyzer @htPSA
+        $ScriptAnalysis =Invoke-ScriptAnalyzer @htPSA
         Write-Output "Results: $($ScriptAnalysis | Out-String)"
         Write-Output "Script Analyzer completed."
 
