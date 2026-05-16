@@ -64,7 +64,7 @@ jobs:
         Write-Output "Results: $($ScriptAnalysis | Out-String)"
         Write-Output "Script Analyzer completed."
 
-#      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 #
 #      - name: Run PSScriptAnalyzer
 #        uses: microsoft/psscriptanalyzer-action@6b2948b1944407914a58661c49941824d149734f
@@ -78,8 +78,8 @@ jobs:
 #          #includeRule: '"PSAvoidGlobalAliases", "PSAvoidUsingConvertToSecureStringWithPlainText"'
 #          output: results.sarif
 #
-#      # Upload the SARIF file generated in the previous step
-#      - name: Upload SARIF results file
-#        uses: github/codeql-action/upload-sarif@v3
-#        with:
-#          sarif_file: results.sarif
+      # Upload the SARIF file generated in the previous step
+    - name: Upload SARIF results file
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: results.sarif
