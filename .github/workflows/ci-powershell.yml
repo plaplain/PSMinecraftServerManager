@@ -57,7 +57,7 @@ jobs:
         if(![string]::IsNullOrEmpty('')) { $htPSA.add('Fix', $true) }
         if(![string]::IsNullOrEmpty('')) { $htPSA.add('EnableExit', $true) }
         if(![string]::IsNullOrEmpty('')) { $htPSA.add('Settings', '') }
-        $htCTS = [ordered]@{ FilePath = 'results.sarif'; }
+        $htCTS = [ordered]@{ FilePath = '/home/runner/work/results.sarif'; }
         if(![string]::IsNullOrEmpty('')) { $htCTS.add('IgnorePattern', '') }
         Invoke-ScriptAnalyzer @htPSA | ConvertTo-SARIF @htCTS
         #$ScriptAnalysis =Invoke-ScriptAnalyzer @htPSA
@@ -82,4 +82,4 @@ jobs:
     - name: Upload SARIF results file
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: results.sarif
+        sarif_file: /home/runner/work/results.sarif
