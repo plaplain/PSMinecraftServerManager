@@ -45,7 +45,7 @@ jobs:
         }
         Import-Module -Name ConvertToSARIF -Force
         
-        $htPSA = [ordered]@{ Path = '/home/runner/work/PSMinecraftServerManager/PSMinecraftServerManager'; }
+        $htPSA = [ordered]@{ Path = '/home/runner/work/PSMinecraftServerManager/'; }
         Write-Output "Modules installed, now running tests."
         if(![string]::IsNullOrEmpty('')) { $htPSA.add('CustomRulePath', @()) }
         if(![string]::IsNullOrEmpty('')) { $htPSA.add('RecurseCustomRulePath', $true) }
