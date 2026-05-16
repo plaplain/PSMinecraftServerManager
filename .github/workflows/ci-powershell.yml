@@ -59,8 +59,8 @@ jobs:
         if(![string]::IsNullOrEmpty('')) { $htPSA.add('Settings', '') }
         $htCTS = [ordered]@{ FilePath = 'results.sarif'; }
         if(![string]::IsNullOrEmpty('')) { $htCTS.add('IgnorePattern', '') }
-        #Invoke-ScriptAnalyzer @htPSA | ConvertTo-SARIF @htCTS
-        $ScriptAnalysis =Invoke-ScriptAnalyzer @htPSA
+        Invoke-ScriptAnalyzer @htPSA | ConvertTo-SARIF @htCTS
+        #$ScriptAnalysis =Invoke-ScriptAnalyzer @htPSA
         Write-Output "Results: $($ScriptAnalysis | Out-String)"
         Write-Output "Script Analyzer completed."
 
