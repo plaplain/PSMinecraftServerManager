@@ -34,7 +34,7 @@ jobs:
 
       - name: Run PSScriptAnalyzer
         #uses: microsoft/psscriptanalyzer-action@6b2948b1944407914a58661c49941824d149734f
-        uses: /tooling/scripts/workflowtroubleshooting.yml
+        uses: ./tooling/scripts/workflowtroubleshooting.yml
         with:
           severity: '"Error", "Warning"'
           # Check https://github.com/microsoft/action-psscriptanalyzer for more info about the options.
