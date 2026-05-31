@@ -1,8 +1,10 @@
 function Remove-Cmdlet {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)][string]$CmdletName
     )
 
-    Remove-Module -Name "TestPs1Module_$CmdletName"
+    if($PSCmdlet.ShouldProcess("Remove cmdlet $CmdletName")) {
+        Remove-Module -Name "TestPs1Module_$CmdletName"
+    }    
 }
