@@ -1,0 +1,53 @@
+name: Build and Publish PowerShell Module
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup PowerShell
+      uses: actions/setup-powershell@v1
+      with:
+        powershell-version: '7.x'
+
+    - name: Get Latest Tag and Update Module
+      id: version
+      shell: pwsh
+      run: |
+        .\tooling\set-tag.ps1
+
+    - name: Create Artifact
+      shell: pwsh
+      run: |
+        .\tooling\new-artifact.ps1
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      if: github.ref == 'refs/heads/main'
+      with:
+        name: PSMinecraftServerManager
+        path: PSMinecraftServerManager.zip
+        retention-days: 1
+
+    - name: Push Changes
+      if: github.ref == 'refs/heads/main'
+      shell: pwsh
+      run: |
+        # Only proceed if we're on main branch
+        if ($env:GITHUB_REF -ne "refs/heads/main") {
+          Write-Output "Not on main branch, skipping push"
+          exit 0
+        }
+        
+        # Push tag and changes
+        git push origin --tags
+        git push origin main
