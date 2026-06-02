@@ -16,11 +16,17 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Get Latest Tag and Update Module
+    - name: Set Latest Tag and Update Module
       id: version
       shell: pwsh
       run: |
-        & ${{ github.workspace }}\tools\set-tag.ps1
+        & ${{ github.workspace }}\tools\set-version.ps1
+
+    - name: Build PS Manifest
+      id: psmanifest
+      shell: pwsh
+      run: |
+        & ${{ github.workspace }}\tools\set-version.ps1
 
     - name: Create Artifact
       shell: pwsh
