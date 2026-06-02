@@ -31,7 +31,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: PSMinecraftServerManager
-        path: PSMinecraftServerManager.zip
+        path: ${{ github.workspace }}\src
         retention-days: 1
 
     - name: Push Changes
