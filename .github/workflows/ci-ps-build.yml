@@ -20,12 +20,12 @@ jobs:
       id: version
       shell: pwsh
       run: |
-        .${{ github.workspace }}\tooling\set-tag.ps1
+        & ${{ github.workspace }}\tooling\set-tag.ps1
 
     - name: Create Artifact
       shell: pwsh
       run: |
-        .${{ github.workspace }}\tooling\new-artifact.ps1
+        & ${{ github.workspace }}\tooling\new-artifact.ps1
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
