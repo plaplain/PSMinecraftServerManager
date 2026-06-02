@@ -16,7 +16,7 @@ jobs:
         fetch-depth: 0
 
     - name: Setup PowerShell
-      uses: actions/setup-powershell@v1
+      uses: PowerShell/setup-powershell@v1
       with:
         powershell-version: '7.x'
 
