@@ -29,14 +29,12 @@ jobs:
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
-      if: github.ref == 'refs/heads/main'
       with:
         name: PSMinecraftServerManager
         path: PSMinecraftServerManager.zip
         retention-days: 1
 
     - name: Push Changes
-      if: github.ref == 'refs/heads/main'
       shell: pwsh
       run: |
         # Only proceed if we're on main branch
