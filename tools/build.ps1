@@ -8,7 +8,7 @@ foreach ($Helper in $Helpers) {
 }
 
 # Get-ModuleManifest
-$ModuleManifestPath = Get-ModuleManifest -ModulePath $ModulePath
+$ModuleManifestPath = Get-ModuleManifestPath -ModulePath $ModulePath
 $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath
 
 # Get-Version
