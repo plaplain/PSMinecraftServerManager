@@ -2,7 +2,7 @@ param(
   [Parameter(Mandatory=$true)][string]$ModulePath
 )
 
-$Helpers = Get-ChildItem -Path build\*.ps1 -Recurse
+$Helpers = Get-ChildItem -Path tools\build\*.ps1 -Recurse
 foreach ($Helper in $Helpers) {
     . $Helper.FullName
 }
