@@ -20,7 +20,7 @@ jobs:
       id: build
       shell: pwsh
       run: |
-        .${{ github.workspace }}\tools\build.ps1 -ModulePath "${{ github.workspace }}\src"
+        .\${{ github.workspace }}\tools\build.ps1 -ModulePath "${{ github.workspace }}\src"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
