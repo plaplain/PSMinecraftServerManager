@@ -16,22 +16,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set Latest Tag and Update Module
-      id: version
-      shell: pwsh
-      run: |
-        & ${{ github.workspace }}\tools\set-version.ps1
-
     - name: Build PS Manifest
-      id: psmanifest
+      id: build
       shell: pwsh
       run: |
-        & ${{ github.workspace }}\tools\set-version.ps1
-
-    - name: Create Artifact
-      shell: pwsh
-      run: |
-        & ${{ github.workspace }}\tools\new-artifact.ps1
+        & ${{ github.workspace }}\tools\build.ps1 -ModulePath "${{ github.workspace }}\src"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -40,15 +29,9 @@ jobs:
         path: ${{ github.workspace }}\src
         retention-days: 1
 
-    - name: Push Changes
+    - name: Publish Git Tag
+      if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
+      id: gittagging
       shell: pwsh
       run: |
-        # Only proceed if we're on main branch
-        if ($env:GITHUB_REF -ne "refs/heads/main") {
-          Write-Output "Not on main branch, skipping push"
-          exit 0
-        }
-        
-        # Push tag and changes
-        git push origin --tags
-        git push origin main
+        & ${{ github.workspace }}\tools\publish-gittag.ps1 -ModulePath "${{ github.workspace }}\src"
