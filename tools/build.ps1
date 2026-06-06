@@ -18,7 +18,7 @@ $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath
 
 # Get-Version
 Write-Output "Calculating new version based on module manifest and git tags"
-$Version = Get-Version -ModuleManifest $ModuleManifest
+#$Version = Get-Version -ModuleManifest $ModuleManifest
 
 # Update-Manifest
 Write-Output "Updating module manifest for version: $Version"
