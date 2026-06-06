@@ -20,7 +20,7 @@ function Update-Manifest {
     }
 
     # Get private functions
-    $PrivateFunctions= Get-ChildItem -Path "$ModulePath\Private" -Filter "*.ps1" -Recurse -ErrorAction SilentlyContinue
+    $PrivateFunctions = Get-ChildItem -Path "$ModulePath\Private" -Filter "*.ps1" -Recurse -ErrorAction Stop
     $NestedModules = @()
 
     foreach($Function in $PrivateFunctions){
@@ -28,12 +28,12 @@ function Update-Manifest {
     }
 
     # Get public cmdlets
-    $PublicCmdlets = Get-ChildItem -Path "$ModulePath\Public" -Filter "*.ps1" -Recurse -ErrorAction SilentlyContinue
+    $PublicCmdlets = Get-ChildItem -Path "$ModulePath\Public" -Filter "*.ps1" -Recurse -ErrorAction Stop
 
     foreach($Cmdlet in $PublicCmdlets){
         $NestedModules += $Cmdlet.FullName.TrimStart($ModulePath + "\")
     }
 
     Write-Debug "Calling Update-ModuleManifest with: Path=$ModuleManifestPath, NestedModules=$($NestedModules -join ','), CmdletsToExport=$($PublicCmdlets.BaseName -join ','), ModuleVersion=$Version"
-    #Update-ModuleManifest -Path $ModuleManifestPath -NestedModules $NestedModules -CmdletsToExport $PublicCmdlets.BaseName -ModuleVersion $Version
+    Update-ModuleManifest -Path $ModuleManifestPath -NestedModules $NestedModules -CmdletsToExport $PublicCmdlets.BaseName -ModuleVersion $Version -ErrorAction Stop
 }
