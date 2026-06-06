@@ -34,5 +34,5 @@ function Update-Manifest {
         $NestedModules += $Cmdlet.FullName.TrimStart($ModulePath + "\")
     }
 
-    Update-ModuleManifest -Path $ModuleManifestPath -NestedModules $NestedModules -CmdletsToExport $PublicCmdlets.BaseName -Version $Version
+    Update-ModuleManifest -Path $ModuleManifestPath -NestedModules $NestedModules -CmdletsToExport $PublicCmdlets.BaseName -ModuleVersion $Version
 }
