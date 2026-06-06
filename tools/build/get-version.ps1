@@ -10,13 +10,11 @@ function Get-Version {
 
     if ($LatestTag.GetType().Name -eq "ErrorRecord" -and $LatestTag.Exception.Message -eq "fatal: No names found, cannot describe anything.") {
         Write-Verbose "No tags found in git repository."
-        $LatestTag = $null
-        
-    }elseif ($LatestTag.GetType().Name -eq "ErrorRecord") {
+        $LatestTag = $null   
+    }
+    elseif ($LatestTag.GetType().Name -eq "ErrorRecord") {
         throw($LatestTag.Exception.Message)
     }
-
-    
 
     $ModuleVersion = $ModuleManifest.ModuleVersion
 
