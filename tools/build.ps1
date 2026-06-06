@@ -22,6 +22,6 @@ $Version = Get-Version -ModuleManifest $ModuleManifest
 
 # Update-Manifest
 Write-Output "Updating module manifest for version: $Version"
-Update-Manifest -ModulePath $ModulePath -ModuleManifestPath $ModuleManifestPath -Version $Version
+#Update-Manifest -ModulePath $ModulePath -ModuleManifestPath $ModuleManifestPath -Version $Version
 
 Write-Output "Build process completed successfully for module at path: $ModulePath with version: $Version"

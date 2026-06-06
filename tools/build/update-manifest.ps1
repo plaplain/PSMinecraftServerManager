@@ -1,4 +1,5 @@
 function Update-Manifest {
+    [cmdletbinding()]
     param(
         [Parameter(Mandatory=$true)]
         [string]$ModulePath,

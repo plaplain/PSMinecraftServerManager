@@ -1,4 +1,5 @@
 function Get-ModuleManifestPath {
+    [cmdletbinding()]
     param(
         [Parameter(Mandatory = $true)][string]$ModulePath
     )
