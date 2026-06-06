@@ -15,4 +15,4 @@ $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath
 $Version = Get-Version -ModuleManifest $ModuleManifest
 
 # Update-Manifest
-Update-Manifest -ModulePath $ModulePath -ManifestPath $ModuleManifestPath -Version $Version
+Update-Manifest -ModulePath $ModulePath -ModuleManifestPath $ModuleManifestPath -Version $Version
