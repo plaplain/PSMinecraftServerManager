@@ -4,7 +4,16 @@ function Get-Version {
         [Parameter(Mandatory = $true)][hashtable]$ModuleManifest
     )
 
-    $LatestTag = git describe --tags --abbrev=0 --match "v[0-9]*.[0-9]*.[0-9]*" 2>$null
+    $LatestTag = git describe --tags --abbrev=0 --match "v[0-9]*.[0-9]*.[0-9]*" 2>&1
+
+    if ($LatestTag.GetType().Name -eq "ErrorRecord" -and $LatestTag.Exception.Message -eq "fatal: No names found, cannot describe anything.") {
+        Write-Verbose "No tags found in git repository."
+        $LatestTag = $null
+    }
+    elseif ($LatestTag.GetType().Name -eq "ErrorRecord") {
+        throw($LatestTag.Exception.Message)
+    }
+
     $ModuleVersion = $ModuleManifest.ModuleVersion
 
     # Extract version components
@@ -34,7 +43,7 @@ function Get-Version {
 
     Write-Verbose "Module version components: Major=$ModuleMajor, Minor=$ModuleMinor"
 
-    if($ModuleMajor -gt $GitMajor -or $ModuleMinor -gt $GitMinor) {
+    if ($ModuleMajor -gt $GitMajor -or $ModuleMinor -gt $GitMinor) {
         [version]::new($ModuleMajor, $ModuleMinor, 0)
     }
     else {
