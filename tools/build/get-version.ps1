@@ -3,9 +3,9 @@ function Get-Version {
     param(
         [Parameter(Mandatory = $true)][hashtable]$ModuleManifest
     )
-
-    # Running pwsh seperately to prevent LASTEXITCODE from being overwritten by git commands
-    $LatestTag = pwsh -Command 'git describe --tags --abbrev=0 --match "v[0-9]*.[0-9]*.[0-9]*"'
+    
+    # Get the latest git tag that matches the version pattern
+    git describe --tags --abbrev=0 --match "v[0-9]*.[0-9]*.[0-9]*"
 
     $ModuleVersion = $ModuleManifest.ModuleVersion
 
