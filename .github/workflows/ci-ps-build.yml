@@ -34,4 +34,4 @@ jobs:
       id: gittagging
       shell: pwsh
       run: |
-        & ${{ github.workspace }}\tools\publish-gittag.ps1 -ModulePath "${{ github.workspace }}\src"
+        pwsh -File ${{ github.workspace }}\tools\publish-gittag.ps1 -ModulePath "${{ github.workspace }}\src"
