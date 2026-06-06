@@ -8,6 +8,6 @@ function Test-FunctionCallsExportModuleMember {
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'EscapedFunctionName', Justification='False positive due to how Pester works.')]
     $EscapedFunctionName = [regex]::Escape($FunctionName)
-    $Pattern = "(?i)^\s*[^#]*\bExport-ModuleMember\b"
-    Select-String -InputObject $FileContent -Pattern $Pattern | Should -Not -BeNullOrEmpty
+    $Pattern = "(?<!#(?:\s*))Export-ModuleMember '$EscapedFunctionName'"
+    $FileContent -match $Pattern | Should -BeTrue
 }
