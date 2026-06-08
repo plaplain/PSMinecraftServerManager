@@ -20,7 +20,7 @@ jobs:
       id: UnitTests
       shell: pwsh
       run: |
-        pwsh -File .\tools\pester.ps1 -Tags "Unit" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src" -OutputPath "${{ runner.temp }}\test-results\unit-tests.NUnitXml"
+        .\tools\pester.ps1 -Tags "Unit" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src" -OutputPath "${{ runner.temp }}\test-results\unit-tests.NUnitXml"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
