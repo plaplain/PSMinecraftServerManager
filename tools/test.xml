@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="6" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-06-08" time="19:23:02">
+  <environment cwd="C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\tools" os-version="10.0.26200" machine-name="LAPDT01" nunit-version="2.5.8.0" platform="Microsoft Windows 11 Business|C:\WINDOWS|\Device\Harddisk3\Partition2" user-domain="AzureAD" user="PeterLaplain" clr-version="9.0.14" />
+  <culture-info current-culture="en-GB" current-uiculture="en-GB" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="0.1504" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\tests\MinecraftServerManager.Tests.ps1" executed="True" result="Success" success="True" time="0.0831" asserts="0" description="C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\tests\MinecraftServerManager.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Module Manifest Tests" executed="True" result="Success" success="True" time="0.007" asserts="0" description="Module Manifest Tests">
+            <results>
+              <test-suite type="TestFixture" name="Module Manifest Tests.module manifest validation" executed="True" result="Success" success="True" time="0.0049" asserts="0" description="Module Manifest Tests.module manifest validation">
+                <results>
+                  <test-case description="Passes Test-ModuleManifest" name="Module Manifest Tests.module manifest validation.Passes Test-ModuleManifest" time="0.0023" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Base Function Tests" executed="True" result="Success" success="True" time="0.0208" asserts="0" description="Base Function Tests">
+            <results>
+              <test-suite type="TestFixture" name="Base Function Tests.Private functions are defined" executed="True" result="Success" success="True" time="0.0067" asserts="0" description="Base Function Tests.Private functions are defined">
+                <results>
+                  <test-suite type="ParameterizedTest" name="Base Function Tests.Private functions are defined.Function is defined: Get-PaperMcDownloadUrl" executed="True" result="Success" success="True" time="0.0047" asserts="0" description="Function is defined: Get-PaperMcDownloadUrl">
+                    <results>
+                      <test-case description="Function is defined: Get-PaperMcDownloadUrl" name="Base Function Tests.Private functions are defined.Function is defined: Get-PaperMcDownloadUrl(C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\src\private\Get-PaperMcDownloadUrl.ps1)" time="0.0047" asserts="0" success="True" result="Success" executed="True" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Base Function Tests.Public functions are defined" executed="True" result="Success" success="True" time="0.0118" asserts="0" description="Base Function Tests.Public functions are defined">
+                <results>
+                  <test-suite type="ParameterizedTest" name="Base Function Tests.Public functions are defined.Function is defined: Start-MinecraftServer" executed="True" result="Success" success="True" time="0.0016" asserts="0" description="Function is defined: Start-MinecraftServer">
+                    <results>
+                      <test-case description="Function is defined: Start-MinecraftServer" name="Base Function Tests.Public functions are defined.Function is defined: Start-MinecraftServer(C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\src\public\Start-MinecraftServer.ps1)" time="0.0016" asserts="0" success="True" result="Success" executed="True" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="ParameterizedTest" name="Base Function Tests.Public functions are defined.Export-ModuleMember is defined &amp; uncommented: Start-MinecraftServer" executed="True" result="Success" success="True" time="0.0014" asserts="0" description="Export-ModuleMember is defined &amp; uncommented: Start-MinecraftServer">
+                    <results>
+                      <test-case description="Export-ModuleMember is defined &amp; uncommented: Start-MinecraftServer" name="Base Function Tests.Public functions are defined.Export-ModuleMember is defined &amp; uncommented: Start-MinecraftServer(C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\src\public\Start-MinecraftServer.ps1)" time="0.0014" asserts="0" success="True" result="Success" executed="True" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\tests\public\Start-MinecraftServer.Tests.ps1" executed="True" result="Success" success="True" time="0.0661" asserts="0" description="C:\Users\PeterLaplain\GIT\PSMinecraftServerManager\tests\public\Start-MinecraftServer.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Start-MinecraftServer Tests" executed="True" result="Success" success="True" time="0.009" asserts="0" description="Start-MinecraftServer Tests">
+            <results>
+              <test-suite type="TestFixture" name="Start-MinecraftServer Tests.unit tests" executed="True" result="Success" success="True" time="0.0032" asserts="0" description="Start-MinecraftServer Tests.unit tests">
+                <results>
+                  <test-case description="Script file exists" name="Start-MinecraftServer Tests.unit tests.Script file exists" time="0.0012" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="Start-MinecraftServer Tests.integration tests" executed="True" result="Success" success="True" time="0.0068" asserts="0" description="Start-MinecraftServer Tests.integration tests">
+                <results>
+                  <test-case description="Start-MinecraftServer throws when required parameters are missing" name="Start-MinecraftServer Tests.integration tests.Start-MinecraftServer throws when required parameters are missing" time="0.0016" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
