@@ -7,6 +7,8 @@ param(
     [Parameter(Mandatory = $true)][string[]]$Tags
 )
 
+Import-Module Pester -Force
+
 $PesterConfiguration = [PesterConfiguration]@{
     Run = @{
          Path = $TestPath
