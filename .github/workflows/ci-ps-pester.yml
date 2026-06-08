@@ -20,11 +20,11 @@ jobs:
       id: UnitTests
       shell: pwsh
       run: |
-        pwsh -File .\tools\pester.ps1 -Tags "Unit" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src" -OutputPath "${{ runner.temp }}\test-results"
+        pwsh -File .\tools\pester.ps1 -Tags "Unit" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src" -OutputPath "${{ runner.temp }}\test-results\unit-tests.xml"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: pester-results
-        path: ${{ runner.temp }}\test-results\*.xml
+        path: ${{ runner.temp }}\test-results\unit-tests.xml
         retention-days: 1
