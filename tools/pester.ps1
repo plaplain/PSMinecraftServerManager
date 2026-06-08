@@ -35,4 +35,9 @@ $PesterConfiguration = [PesterConfiguration]@{
     }
 }
 
-Invoke-Pester -Configuration $PesterConfiguration
+$PesterResult = Invoke-Pester -Configuration $PesterConfiguration
+
+if ($PesterResult.FailedCount -gt 0) {
+    Write-Error "Pester tests failed. Failed count: $($PesterResult.FailedCount)"
+    exit 1
+}
