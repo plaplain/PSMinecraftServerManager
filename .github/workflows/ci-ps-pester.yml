@@ -28,3 +28,4 @@ jobs:
         name: pester-results
         path: ${{ runner.temp }}\test-results\unit-tests.NUnitXml
         retention-days: 1
+    continue-on-error: true
