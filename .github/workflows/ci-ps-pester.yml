@@ -7,7 +7,7 @@ on:
       - 'feature/**'
 
 jobs:
-  build:
+  tests:
     runs-on: windows-latest
     
     steps:
