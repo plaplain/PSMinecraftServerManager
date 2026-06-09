@@ -10,4 +10,4 @@ Function Start-MinecraftServer {
     Start-Job
 }
 
-#Export-ModuleMember 'Start-MinecraftServer'
+Export-ModuleMember 'Start-MinecraftServer'
