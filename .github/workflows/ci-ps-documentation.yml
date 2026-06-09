@@ -1,0 +1,47 @@
+name: Generate PowerShell Documentation
+on:
+  push:
+    branches:
+      - 'feature/**'
+    paths:
+      - 'src/**'
+      - '.github/workflows/ci-ps-docs.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  generate-docs:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download Module Artifact
+        uses: actions/download-artifact@v4
+        with:
+          workflow: ci-ps-build.yml
+          name: PSMinecraftServerManager
+          path: ${{ runner.temp }}/module-artifact
+       
+      - name: Generate Documentation
+        id: GenerateDocs
+        shell: pwsh
+        run: |
+          .\tools\ps-documentation.ps1 -OutputPath "${{ github.workspace }}/docs" -ModulePsdPath "${{ runner.temp }}/module-artifact/PSMinecraftServerManager.psd1"
+          
+      - name: Commit Documentation
+        if: github.ref != 'refs/heads/main'  # Only run if NOT on main branch
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          if (Test-Path "${{ github.workspace }}/docs") {
+            git add ${{ github.workspace }}/docs/
+            $commitMessage = "PSDocs: Update generated documentation"
+            git commit -m "$commitMessage" || echo "No changes to commit"
+            
+            # Push without triggering CI
+            git push origin HEAD:${{ github.ref }} --no-verify
+          }
