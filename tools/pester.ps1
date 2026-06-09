@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory = $true)][string]$TestPath,
     [Parameter(Mandatory = $true)][string]$CodePath,
-    [Parameter(Mandatory = $true)][string]$OutputPath,
+    [Parameter(Mandatory = $false)][string]$OutputPath,
 
     [ValidateSet('Unit', 'Integration')]
     [Parameter(Mandatory = $true)][string[]]$Tags
