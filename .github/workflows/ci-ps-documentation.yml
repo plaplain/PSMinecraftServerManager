@@ -34,11 +34,6 @@ jobs:
           run-id: ${{ steps.getRunId.outputs.run_id }}
           name: PSMinecraftServerManager
           path: ${{ runner.temp }}/module-artifact
-
-      - name: Extract Module Artifact
-        run: |
-          Expand-Archive -Path "${{ runner.temp }}/module-artifact/PSMinecraftServerManager.zip" -DestinationPath "${{ runner.temp }}/module-artifact/PSMinecraftServerManager" -Force
-
        
       - name: Generate Documentation
         id: GenerateDocs
