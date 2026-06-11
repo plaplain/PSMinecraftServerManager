@@ -11,9 +11,9 @@ Import-Module Microsoft.PowerShell.PlatyPS -Force -ErrorAction Stop
 Write-Output "Importing module from path: $ModulePsdPath"
 Import-Module $ModulePsdPath
 
-Write-Output "Testing if output path '$OutputPath' and module path '$ModulePsdPath' exist"
-if(!(Test-Path -Path $OutputPath) -or !(Test-Path -Path $ModulePsdPath)) {
-    Write-Error "Output path '$OutputPath' or module path '$ModulePsdPath' does not exist."
+Write-Output "Testing if output path '$OutputPath'"
+if(!(Test-Path -Path $OutputPath)) {
+    Write-Error "Output path '$OutputPath' does not exist."
     exit 1
 }
 

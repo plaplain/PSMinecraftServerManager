@@ -33,13 +33,13 @@ jobs:
           github-token: ${{ github.token }}
           run-id: ${{ steps.getRunId.outputs.run_id }}
           name: PSMinecraftServerManager
-          path: ${{ runner.temp }}\module-artifact
+          path: ${{ runner.temp }}\MinecraftServerManager
        
       - name: Generate Documentation
         id: GenerateDocs
         shell: pwsh
         run: |
-          .\tools\ps-documentation.ps1 -OutputPath "${{ github.workspace }}\docs" -ModulePsdPath "${{ runner.temp }}\module-artifact\MinecraftServerManager.psd1" -ModuleName "MinecraftServerManager"
+          .\tools\ps-documentation.ps1 -OutputPath "${{ github.workspace }}\docs" -ModulePsdPath "${{ runner.temp }}\MinecraftServerManager\MinecraftServerManager.psd1" -ModuleName "MinecraftServerManager"
           
       - name: Commit Documentation
         if: github.ref != 'refs/heads/main'  # Only run if NOT on main branch
