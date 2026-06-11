@@ -6,7 +6,7 @@
  .PARAMETER ServerDirectory
      The directory where the Minecraft server is located.
  .EXAMPLE
-     Start-MinecraftServer -ServerDirectory "C:\Minecraft\Server" 
+     Start-MinecraftServer -ServerDirectory "C:\Minecraft\Server"
 #>
 Function Start-MinecraftServer {
     [CmdletBinding(SupportsShouldProcess = $true)]
