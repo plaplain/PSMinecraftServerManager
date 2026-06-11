@@ -7,7 +7,7 @@ param(
 Install-Module -Name Microsoft.PowerShell.PlatyPS -Force -ErrorAction Stop
 Import-Module Microsoft.PowerShell.PlatyPS -Force -ErrorAction Stop
 
-Import-Module -Path $ModulePath
+Import-Module $ModulePath
 
 if(!(Test-Path -Path $OutputPath) -or !(Test-Path -Path $CodePath)) {
     Write-Error "Output path '$OutputPath' or code path '$CodePath' does not exist."
