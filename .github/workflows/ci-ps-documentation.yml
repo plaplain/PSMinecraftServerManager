@@ -22,7 +22,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ci-ps-build.yml
           name: PSMinecraftServerManager
           path: ${{ runner.temp }}/module-artifact
 
