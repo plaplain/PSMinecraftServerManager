@@ -18,11 +18,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Generate Documentation
+      - name: Get Build Run Id
         id: getRunId
         shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          gh auth login --with-token ${{ github.token }}
+          gh auth login --with-token $env:GITHUB_TOKEN
           $RunId = gh run list --workflow ci-ps-build.yml --repo plaplain/PSMinecraftServerManager --status success --limit 1 --jq '[.[] | select(.conclusion=="success")] | .[0].databaseId' --json databaseId,conclusion
           "run_id=$runId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8        
       - name: Download Module Artifact
