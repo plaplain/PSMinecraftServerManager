@@ -22,13 +22,13 @@ jobs:
         id: getRunId
         shell: pwsh
         run: |
-          gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+          gh auth login --with-token ${{ github.token }}
           $RunId = gh run list --workflow ci-ps-build.yml --repo plaplain/PSMinecraftServerManager --status success --limit 1 --jq '[.[] | select(.conclusion=="success")] | .[0].databaseId' --json databaseId,conclusion
           "run_id=$runId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8        
       - name: Download Module Artifact
         uses: actions/download-artifact@v8
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ github.token }}
           run-id: ${{ steps.getRunId.outputs.run_id }}
           name: PSMinecraftServerManager
           path: ${{ runner.temp }}/module-artifact
