@@ -4,16 +4,20 @@ param(
     [Parameter(Mandatory = $true)][string]$ModuleName
 )
 
+Write-Output "Installing and importing PlatyPS module"
 Install-Module -Name Microsoft.PowerShell.PlatyPS -Force -ErrorAction Stop
 Import-Module Microsoft.PowerShell.PlatyPS -Force -ErrorAction Stop
 
-Import-Module $ModulePath
+Write-Output "Importing module from path: $ModulePsdPath"
+Import-Module $ModulePsdPath
 
-if(!(Test-Path -Path $OutputPath) -or !(Test-Path -Path $CodePath)) {
-    Write-Error "Output path '$OutputPath' or code path '$CodePath' does not exist."
+Write-Output "Testing if output path '$OutputPath' and module path '$ModulePsdPath' exist"
+if(!(Test-Path -Path $OutputPath) -or !(Test-Path -Path $ModulePsdPath)) {
+    Write-Error "Output path '$OutputPath' or module path '$ModulePsdPath' does not exist."
     exit 1
 }
 
+Write-Output "Generating markdown help for module '$ModuleName' at output path '$OutputPath'"
 $NewMarkdownCommandHelpParams = @{
     ModuleInfo = Get-Module -Name $ModuleName
     OutputFolder = $OutputPath
