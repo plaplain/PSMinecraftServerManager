@@ -25,3 +25,13 @@ $NewMarkdownCommandHelpParams = @{
 }
 
 New-MarkdownCommandHelp @NewMarkdownCommandHelpParams
+
+New-HelpDocument `
+    -Path $OutputPath\index.md `
+    -Title $ModuleName `
+    -Contents @(
+        # Add custom introductory text (optional)
+        @{'type'='text';'value'='## Overview`nThis module provides the following cmdlets:'}
+        # Auto‑list all exported commands and link to their markdown files
+        @{'type'='commandlist';'module'=$ModuleName}
+    )
