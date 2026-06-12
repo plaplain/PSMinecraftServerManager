@@ -12,16 +12,17 @@ Write-Output "Importing module from path: $ModulePsdPath"
 Import-Module $ModulePsdPath
 
 Write-Output "Testing if output path '$OutputPath'"
-if(!(Test-Path -Path $OutputPath)) {
+if (!(Test-Path -Path $OutputPath)) {
     Write-Error "Output path '$OutputPath' does not exist."
     exit 1
 }
 
 Write-Output "Generating markdown help for module '$ModuleName' at output path '$OutputPath'"
 $NewMarkdownCommandHelpParams = @{
-    ModuleInfo = Get-Module -Name $ModuleName
-    OutputFolder = $OutputPath
+    ModuleInfo     = Get-Module -Name $ModuleName
+    OutputFolder   = $OutputPath
     WithModulePage = $true
+    Force          = $true
 }
 
 New-MarkdownCommandHelp @NewMarkdownCommandHelpParams
@@ -33,7 +34,7 @@ Get-ChildItem -Path $MarkdownPath | Move-Item -Destination $OutputPath
 #Rename module page to index.md for GitHub Pages compatibility
 $ModulePagePath = Join-Path -Path $OutputPath -ChildPath "$ModuleName.md"
 
-if(!(Test-Path -Path $ModulePagePath)) {
+if (!(Test-Path -Path $ModulePagePath)) {
     Write-Error "Module page '$ModulePagePath' was not created."
     exit 1
 }
