@@ -26,6 +26,11 @@ $NewMarkdownCommandHelpParams = @{
 
 New-MarkdownCommandHelp @NewMarkdownCommandHelpParams
 
+#Move files
+$MarkdownPath = Join-Path -Path $OutputPath -ChildPath $ModuleName
+Get-ChildItem -Path $MarkdownPath | Move-Item -Destination $OutputPath
+
+#Rename module page to index.md for GitHub Pages compatibility
 $ModulePagePath = Join-Path -Path $OutputPath -ChildPath "$ModuleName.md"
 
 if(!(Test-Path -Path $ModulePagePath)) {
