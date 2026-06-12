@@ -1,7 +1,7 @@
 ---
 document type: module
 Help Version: 1.0.0.0
-HelpInfoUri: 
+HelpInfoUri: https://plaplain.github.io/PSMinecraftServerManager
 Locale: en-US
 Module Guid: 716b516b-8d31-4e15-97bd-2798229e592f
 Module Name: MinecraftServerManager
@@ -14,7 +14,7 @@ title: MinecraftServerManager Module
 
 ## Description
 
-{{ Fill in the Description }}
+An unofficial PowerShell module to be able to manage your Minecraft Server.
 
 ## MinecraftServerManager
 
