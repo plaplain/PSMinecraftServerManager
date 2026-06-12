@@ -1,4 +1,5 @@
 function Update-Manifest {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification='Not required for workflow')] 
     [cmdletbinding()]
     param(
         [Parameter(Mandatory=$true)]

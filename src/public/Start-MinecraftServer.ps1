@@ -15,7 +15,7 @@ Function Start-MinecraftServer {
         [Parameter(Mandatory = $true)][string]$ServerDirectory
     )
 
-    #Change
+    $ServerDirectory
 
     Start-Job
 }
