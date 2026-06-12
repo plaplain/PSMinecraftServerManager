@@ -30,7 +30,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) PeterLaplain. All rights reserved.'
 
 # Description of the functionality provided by this module
-# Description = ''
+ Description = 'An unofficial PowerShell module to be able to manage your Minecraft Server.'
 
 # Minimum version of the PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -102,7 +102,7 @@ PrivateData = @{
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/plaplain/PSMinecraftServerManager'
 
         # A URL to an icon representing this module.
         # IconUri = ''
@@ -124,7 +124,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+ HelpInfoURI = 'https://plaplain.github.io/PSMinecraftServerManager'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
