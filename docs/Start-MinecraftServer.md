@@ -4,7 +4,7 @@ external help file: MinecraftServerManager-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: MinecraftServerManager
-ms.date: 06/11/2026
+ms.date: 06/12/2026
 PlatyPS schema version: 2024-05-01
 title: Start-MinecraftServer
 ---
