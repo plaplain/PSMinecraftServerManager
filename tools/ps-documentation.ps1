@@ -26,12 +26,11 @@ $NewMarkdownCommandHelpParams = @{
 
 New-MarkdownCommandHelp @NewMarkdownCommandHelpParams
 
-New-HelpDocument `
-    -Path $OutputPath\index.md `
-    -Title $ModuleName `
-    -Contents @(
-        # Add custom introductory text (optional)
-        @{'type'='text';'value'='## Overview`nThis module provides the following cmdlets:'}
-        # Auto‑list all exported commands and link to their markdown files
-        @{'type'='commandlist';'module'=$ModuleName}
-    )
+$ModulePagePath = Join-Path -Path $OutputPath -ChildPath "$ModuleName.md"
+
+if(!(Test-Path -Path $ModulePagePath)) {
+    Write-Error "Module page '$ModulePagePath' was not created."
+    exit 1
+}
+
+Rename-Item -Path $ModulePagePath -NewName "index.md"
