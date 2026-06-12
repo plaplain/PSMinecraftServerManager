@@ -27,7 +27,9 @@ $NewMarkdownCommandHelpParams = @{
 
 New-MarkdownCommandHelp @NewMarkdownCommandHelpParams
 
-#Move files
+#Remove old files and move new files
+Get-ChildItem -Path $OutputPath -File | Remove-Item -Force
+
 $MarkdownPath = Join-Path -Path $OutputPath -ChildPath $ModuleName
 Get-ChildItem -Path $MarkdownPath | Move-Item -Destination $OutputPath -Force
 
