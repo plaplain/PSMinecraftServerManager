@@ -1,23 +1,21 @@
 <#
-.SYNOPSIS
-Short description
+    .SYNOPSIS
+    Queries the PaperMC API to list the available versions.
 
-.DESCRIPTION
-Long description
+    .DESCRIPTION
+    Can be used to list the latest version, and defaults to the STABLE channel.
 
-.PARAMETER Latest
-Parameter description
+    .PARAMETER Latest
+    Get only the latest version.
 
-.PARAMETER Channel
-Parameter description
+    .PARAMETER Channel
+    Defaults to the 'STABLE' channel, can be used with test channels.
 
-.EXAMPLE
-An example
-
-.NOTES
-General notes
+    .NOTES
+    See the following PaperMC documentation:
+    https://docs.papermc.io/misc/downloads-service/
 #>
-Function Get-PaperMcDownloadUrl {
+function Get-PaperMcDownloadUrl {
     param(
         [Parameter(Mandatory = $false)][switch]$Latest,
         [Parameter(Mandatory = $false)][string]$Channel = 'STABLE'
