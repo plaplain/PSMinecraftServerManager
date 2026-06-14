@@ -4,7 +4,9 @@ function Import-Function {
         [Parameter(Mandatory = $true)][string]$FunctionName
     )
 
-    $File = Get-Item -Path $FilePath -ErrorAction Stop
+    if(!(Test-Path -Path $FilePath)){
+        Throw('Invalid file path.')
+    }
 
     . $File.FullName
 
