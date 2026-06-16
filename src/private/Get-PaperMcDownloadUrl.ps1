@@ -18,45 +18,53 @@
 function Get-PaperMcDownloadUrl {
     param(
         [Parameter(Mandatory = $false)][switch]$Latest,
+
+        [ValidateSet('ALPHA', 'BETA', 'STABLE')]
         [Parameter(Mandatory = $false)][string]$Channel = 'STABLE'
     )
 
     $PaperMcApiUri = 'https://fill.papermc.io/v3/projects/paper'
     Write-Debug "Getting: $PaperMcApiUri"
-    $VersionApi = Invoke-RESTMethod -Uri 'https://fill.papermc.io/v3/projects/paper'
+    $VersionApi = Invoke-RESTMethod -Uri 'https://fill.papermc.io/v3/projects/paper' -ErrorAction Stop
 
     Write-Debug $VersionApi
 
-    if ($Latest) {
-        Write-Debug "Getting latest version."
-        $VersionApiVersions = $VersionApi.versions
-        $VersionNames = ($VersionApiVersions | Get-Member -Type NoteProperty).Name
-        $TopLevelVersionName = ($VersionNames | Sort-Object { $_ -as [Version] } -Descending)[0]
-        Write-Debug "Latest Top Level Version: $Versions"
-        $Versions = $VersionApiVersions.$TopLevelVersionName[0]
-        Write-Debug "Latest Version: $Versions"
-    }
-    else {
-        $Versions = ($VersionApi.versions | Get-Member -Type NoteProperty).Name
-    }
+    $VersionApiVersions = $VersionApi.versions
+    $MajorMinorVersions = ($VersionApiVersions | Get-Member -Type NoteProperty).Name | Sort-Object { $_ -as [Version] } -Descending
 
-    foreach ($Version in $Versions) {
+    foreach ($Version in $MajorMinorVersions) {
 
-        try {
-            $BuildApi = Invoke-RESTMethod -Uri "https://fill.papermc.io/v3/projects/paper/versions/$Version/builds" -StatusCodeVariable BuildApiResponseCode -ErrorAction Stop
-        }
-        catch {
-            $ResponseError = $_
-            switch ($_.Exception.Response.StatusCode) {
-                "NotFound" {
-                    Write-Warning "No build for version: $Version"
-                }
+        $BuildVersions = $VersionApiVersions.$Version
 
-                default {
-                    throw($ResponseError)
+        $Builds = @()
+
+        foreach ($BuildVersion in $BuildVersions) {
+            try {
+                $BuildApi = Invoke-RESTMethod -Uri "https://fill.papermc.io/v3/projects/paper/versions/$BuildVersion/builds" -ErrorAction Stop
+            }
+            catch {
+                $ResponseError = $_
+                switch ($_.Exception.Response.StatusCode) {
+                    "NotFound" {
+                        Write-Warning "No build for version: $Version"
+                    }
+
+                    default {
+                        throw($ResponseError)
+                    }
                 }
             }
+
+            $Builds = $BuildApi | Sort-Object -Descending id | Where-Object { $_.channel -eq $Channel }
+
+            if($Latest -and $Null -ne $Builds){
+                Write-Verbose "Latest build found"
+                $Builds[0]
+                Break
+            }
         }
+
+
         $Builds = $BuildApi | Sort-Object -Descending id | Where-Object { $_.channel -eq $Channel }
 
         if ($Latest) {
