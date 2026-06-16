@@ -1,5 +1,5 @@
 BeforeAll {
-    $HelperPath = Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers\'
+    $HelperPath = Join-Path -Path $PSScriptRoot -ChildPath 'helpers\'
     $Helpers = Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop
     foreach ($Helper in $Helpers) {
         . $Helper.FullName
