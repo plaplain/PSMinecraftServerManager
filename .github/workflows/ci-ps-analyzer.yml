@@ -13,11 +13,7 @@ on:
   workflow_dispatch: 
   push:
     branches: [ '**' ]
-  pull_request:
-    branches: [ "main" , "dev" ]
-  schedule:
-    - cron: '33 1 * * 6'
-
+    
 permissions:
   contents: read
 
