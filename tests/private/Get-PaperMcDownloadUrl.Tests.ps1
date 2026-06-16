@@ -17,7 +17,7 @@ BeforeAll {
 Describe 'Get-PaperMcDownloadUrl Tests' {
     BeforeAll {
         $MockVersionResponses = @{
-            '26.2' = @(
+            '26.2-rc-2' = @(
                 [PSCustomObject]@{
                     id        = 70
                     time      = (Get-Date '06/01/2026')
@@ -64,7 +64,7 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
                     }
                 }
             )
-            '26.1' = @(
+            '26.1.2' = @(
                 [PSCustomObject]@{
                     id = 60
                     time = (Get-Date '11/12/2025')
@@ -112,6 +112,54 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
                     }
                 }
             )
+            '26.1.1' = @(
+                [PSCustomObject]@{
+                    id = 57
+                    time = (Get-Date '05/12/2025')
+                    channel = 'STABLE'
+                    commits = @{
+                        sha = '70eaed653d2260e42e510ea15e8fcb50152aa5ef'
+                        time = (Get-Date '04/12/2025')
+                        message = 'Soft limit projectile list size (#13953)'
+                    }
+                    downloads = @{
+                        'server:default' = @{
+                            Url = 'https://fakeUrl.com/26.1/Stable'
+                        }
+                    }
+                },
+                [PSCustomObject]@{
+                    id        = 56
+                    time      = (Get-Date '03/12/2025')
+                    channel   = 'BETA'
+                    commits   = @{
+                        sha     = '76d2ac758cb3abe75aceeed88207443768f585c6'
+                        time    = (Get-Date '02/12/2025')
+                        message = 'Soft limit projectile list size (#13952)'
+                    }
+                    downloads = @{
+                        'server:default' = @{
+                            Url = 'https://fakeUrl.com/26.1/Beta'
+                        }
+                    }
+                },
+                [PSCustomObject]@{
+                    id        = 55
+                    time      = (Get-Date '01/12/2025')
+                    channel   = 'ALPHA'
+                    commits   = @{
+                        sha     = '3580fa4066c0081b96c4b5a2fb3a5ca2214a98c0'
+                        time    = (Get-Date '06/11/2025')
+                        message = 'Soft limit projectile list size (#13951)'
+                    }
+                    downloads = @{
+                        'server:default' = @{
+                            Url = 'https://fakeUrl.com/26.1/Alpha'
+                        }
+                    
+                    }
+                }
+            )
         }
 
         Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -eq 'https://fill.papermc.io/v3/projects/paper' } -MockWith {
@@ -132,12 +180,16 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
             }
         }
 
-        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.1/builds" } -MockWith {
-            $MockVersionResponses['26.1']
+        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.2-rc-2/builds" } -MockWith {
+            $MockVersionResponses['26.2-rc-2']
         }
 
-        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.2/builds" } -MockWith {
-            $MockVersionResponses['26.2']
+        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.1.2/builds" } -MockWith {
+            $MockVersionResponses['26.1.2']
+        }
+
+        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.1.1/builds" } -MockWith {
+            $MockVersionResponses['26.1.1']
         }
     }
 
@@ -157,7 +209,7 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
             $DownloadUrls | Should -Contain 'https://fakeUrl.com/26.1/Stable'
         }
 
-        It  'Get-PaperMcDownloadUrl should not be numm or empty.' {
+        It  'Get-PaperMcDownloadUrl should not be null or empty.' {
             $DownloadUrls | Should -Not -BeNullOrEmpty
         }
 
@@ -177,7 +229,7 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
 
     Context "Test 'Get-PaperMcDownloadUrl -Latest'" -Tag "Unit" {
         It  'Get-PaperMcDownloadUrl -Latest should return a string' {
-            (Get-PaperMcDownloadUrl -Latest).GetType().BaseType.Name | Should -Be String
+            Get-PaperMcDownloadUrl -Latest | Should -BeOfType [string]
         }
     }
 
@@ -187,7 +239,7 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
             $DownloadUrls = Get-PaperMcDownloadUrl -Channel Beta
         }
 
-        It 'Get-PaperMcDownloadUrl should contain a sha https://fakeUrl.com/26.1/Beta' {
+        It 'Get-PaperMcDownloadUrl response should contain https://fakeUrl.com/26.1/Beta' {
             $DownloadUrls | Should -Contain 'https://fakeUrl.com/26.1/Beta'
         }
     }

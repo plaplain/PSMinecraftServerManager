@@ -36,8 +36,6 @@ function Get-PaperMcDownloadUrl {
 
         $BuildVersions = $VersionApiVersions.$Version
 
-        $Builds = @()
-
         foreach ($BuildVersion in $BuildVersions) {
             try {
                 $BuildApi = Invoke-RESTMethod -Uri "https://fill.papermc.io/v3/projects/paper/versions/$BuildVersion/builds" -ErrorAction Stop
@@ -61,8 +59,8 @@ function Get-PaperMcDownloadUrl {
                 Write-Verbose "Latest build found"
                 return $VersionBuilds[0].downloads.'server:default'.Url
             }
-            else{
-                $Builds += $VersionBuilds.downloads.'server:default'.Url
+            elseif(!$Latest){
+                $VersionBuilds.downloads.'server:default'.Url
             }
         }
     }
