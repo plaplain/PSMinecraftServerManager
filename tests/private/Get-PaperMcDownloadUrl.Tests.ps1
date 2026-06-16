@@ -1,5 +1,6 @@
 BeforeAll {
-    $Helpers = Get-ChildItem -Path "$PSScriptRoot\..\Helpers\" -Recurse -Filter "*.ps1" -ErrorAction Stop
+    $HelperPath = Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers\'
+    $Helpers = Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop
     foreach ($Helper in $Helpers) {
         . $Helper.FullName
     }
@@ -66,11 +67,11 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
             '26.1' = @(
                 [PSCustomObject]@{
                     id = 60
-                    time = (Get-Date '15/12/2025')
+                    time = (Get-Date '11/12/2025')
                     channel = 'STABLE'
                     commits = @{
                         sha = '70eaed653d2260e42e510ea15e8fcb50152aa5ef'
-                        time = (Get-Date '14/12/2025')
+                        time = (Get-Date '10/12/2025')
                         message = 'Soft limit projectile list size (#13953)'
                     }
                     downloads = @{
@@ -81,11 +82,11 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
                 },
                 [PSCustomObject]@{
                     id        = 59
-                    time      = (Get-Date '13/12/2025')
+                    time      = (Get-Date '09/12/2025')
                     channel   = 'BETA'
                     commits   = @{
                         sha     = '76d2ac758cb3abe75aceeed88207443768f585c6'
-                        time    = (Get-Date '12/12/2025')
+                        time    = (Get-Date '08/12/2025')
                         message = 'Soft limit projectile list size (#13952)'
                     }
                     downloads = @{
@@ -96,11 +97,11 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
                 },
                 [PSCustomObject]@{
                     id        = 58
-                    time      = (Get-Date '11/12/2025')
+                    time      = (Get-Date '07/12/2025')
                     channel   = 'ALPHA'
                     commits   = @{
                         sha     = '3580fa4066c0081b96c4b5a2fb3a5ca2214a98c0'
-                        time    = (Get-Date '10/12/2025')
+                        time    = (Get-Date '06/12/2025')
                         message = 'Soft limit projectile list size (#13951)'
                     }
                     downloads = @{

@@ -55,23 +55,15 @@ function Get-PaperMcDownloadUrl {
                 }
             }
 
-            $Builds = $BuildApi | Sort-Object -Descending id | Where-Object { $_.channel -eq $Channel }
+            $VersionBuilds = $BuildApi | Sort-Object -Descending id | Where-Object { $_.channel -eq $Channel }
 
-            if($Latest -and $Null -ne $Builds){
+            if($Latest -and $Null -ne $VersionBuilds){
                 Write-Verbose "Latest build found"
-                $Builds[0]
-                Break
+                return $VersionBuilds[0].downloads.'server:default'.Url
             }
-        }
-
-
-        $Builds = $BuildApi | Sort-Object -Descending id | Where-Object { $_.channel -eq $Channel }
-
-        if ($Latest) {
-            $Builds[0].downloads.'server:default'.Url
-        }
-        else {
-            $Builds.downloads.'server:default'.Url
+            else{
+                $Builds += $VersionBuilds.downloads.'server:default'.Url
+            }
         }
     }
 }
