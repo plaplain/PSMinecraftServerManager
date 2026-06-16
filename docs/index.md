@@ -5,7 +5,7 @@ HelpInfoUri: https://plaplain.github.io/PSMinecraftServerManager
 Locale: en-US
 Module Guid: 716b516b-8d31-4e15-97bd-2798229e592f
 Module Name: MinecraftServerManager
-ms.date: 06/12/2026
+ms.date: 06/16/2026
 PlatyPS schema version: 2024-05-01
 title: MinecraftServerManager Module
 ---
