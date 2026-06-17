@@ -5,62 +5,58 @@ BeforeAll {
         . $Helper.FullName
     }
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptRelativePath', Justification = 'False positive due to how Pester works.')]
-    $ScriptRelativePath = "..\..\src\private\installation\Get-InstallationConfigurationPathl.ps1"
-
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification = 'False positive due to how Pester works.')]
+    $ScriptRelativePath = "..\..\..\src\private\installation\Get-InstallationConfigurationPath.ps1"
     $ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
 
     . $ScriptPath
 
-    $Tests = {
-        It 'Should return a hashtable' {
-            $InstallationConfigurationPath | Should -BeOfType [hashtable]
-        }
+    $IsLinuxRelativePath = "..\..\..\src\private\Get-IsLinux.ps1"
+    $IsLinuxPath = Join-Path -Path $PSScriptRoot -ChildPath $IsLinuxRelativePath
 
-        It 'Should contain the keys FullPath and Parent Path' {
-            $InstallationConfigurationPath.Keys | Should -Contain 'FullPath'
-            $InstallationConfigurationPath.Keys | Should -Contain 'ParentPath'
-        }
-
-        It 'The value of keys FullPath and ParentPath should not be null or empty.' {
-            $InstallationConfigurationPath.FullPath | Should -Not -BeNullOrEmpty
-            $InstallationConfigurationPath.ParentPath | Should -Not -BeNullOrEmpty
-        }
-    }
+    . $IsLinuxPath
 }
 
 Describe 'Get-InstallationConfiguration Tests' {
-    BeforeEach {
+    BeforeAll {
         $Env:APPDATA = 'C:\Users\Username\AppData\Roaming'
         $Env:HOME = '/home/Username'
-        
     }
 
-    Context "'Get-InstallationConfiguration'" -Foreach @(
-        @{ IsLinux = $true}
-        @{ IsLinux = $false}
-    ) {
+    Context "'Get-InstallationConfiguration'" {
         BeforeAll {
-            Mock Get-Variable -ParameterFilter { $Name -eq 'IsLinux' } -MockWith {
-                return $false
+            Mock Get-IsLinux -MockWith {
+                $false
             }
 
-            $InstallationConfigurationPath = Get-InstallationConfiguration
-        }
+            $InstallationConfigurationPathWindows = Get-InstallationConfigurationPath
 
-        Invoke-Command -ScriptBlock $Tests
-    }
-
-    Context "'Get-InstallationConfiguration' on Linux" {
-        BeforeAll {
-            Mock Get-Variable -ParameterFilter { $Name -eq 'IsLinux' } -MockWith {
-                return $true
+            Mock Get-IsLinux -MockWith {
+                $true
             }
 
-            $InstallationConfigurationPath = Get-InstallationConfiguration
+            $InstallationConfigurationPathLinux = Get-InstallationConfigurationPath
         }
 
-        Invoke-Command -ScriptBlock $Tests
+        It 'Should return a hashtable' {
+            $InstallationConfigurationPathWindows | Should -BeOfType [hashtable]
+            $InstallationConfigurationPathLinux | Should -BeOfType [hashtable]
+            
+        }
+
+        It 'Should contain the keys FullPath and Parent Path' {
+            $InstallationConfigurationPathWindows.Keys | Should -Contain 'FullPath'
+            $InstallationConfigurationPathWindows.Keys | Should -Contain 'ParentPath'
+
+            $InstallationConfigurationPathLinux.Keys | Should -Contain 'FullPath'
+            $InstallationConfigurationPathLinux.Keys | Should -Contain 'ParentPath'
+        }
+
+        It 'The value of keys FullPath and ParentPath should not be null or empty.' {
+            $InstallationConfigurationPathWindows.FullPath | Should -Not -BeNullOrEmpty
+            $InstallationConfigurationPathWindows.ParentPath | Should -Not -BeNullOrEmpty
+
+            $InstallationConfigurationPathLinux
+            $InstallationConfigurationPathLinux
+        }
     }
 }

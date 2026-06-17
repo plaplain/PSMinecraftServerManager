@@ -1,6 +1,6 @@
 function Get-InstallationConfigurationPath {
 
-    if($IsLinux){
+    if(Get-IsLinux){
         $ConfigurationLocation = Join-Path -Path $Env:HOME -ChildPath ".MinecraftServerManager"
     }
     else{
