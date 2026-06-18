@@ -6,7 +6,7 @@ param(
     [Parameter(Mandatory = $true)][string]$CodePath,
     [Parameter(Mandatory = $false)][string]$OutputPath,
 
-    [ValidateSet('Unit', 'Integration')]
+    [ValidateSet('Unit', 'Integration', 'Linux')]
     [Parameter(Mandatory = $true)][string[]]$Tags
 )
 
