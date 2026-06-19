@@ -102,8 +102,8 @@ Describe 'Get-MinecraftDownloadUrl Tests' {
             $DownloadUrls | Should -BeOfType [string]
         }
 
-        It 'Get-MinecraftDownloadUrl should contain an expected URL'{
-            $DownloadUrls | Should -Contain 'https://piston-meta.mojang.com/v1/packages/e3510ae9ff09fba9410cbbb8a02bfd819632155d/26.1.2.json'
+        It 'Get-MinecraftDownloadUrl -Latest should contain an expected URL'{
+            $DownloadUrls | Should -Contain 'https://piston-meta.mojang.com/v1/packages/4c3cd3500ce8b9ea104c358a784634fedb2a610f/26.2.json'
             $DownloadUrls | Should -Not -Contain 'https://piston-meta.mojang.com/v1/packages/020b103ce898979439db892c0c259d76936f559d/26.2-pre-6.json'
         }
     }
