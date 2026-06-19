@@ -26,14 +26,14 @@ function Update-Manifest {
     $NestedModules = @()
 
     foreach($Function in $PrivateFunctions){
-        $NestedModules += $Function.FullName.TrimStart($ModulePath + "\")
+        $NestedModules += ".$($Function.FullName.Replace($ModulePath + '').Replace('\','/'))"
     }
 
     # Get public cmdlets
     $PublicCmdlets = Get-ChildItem -Path "$ModulePath\Public" -Filter "*.ps1" -Recurse -ErrorAction Stop
 
     foreach($Cmdlet in $PublicCmdlets){
-        $NestedModules += $Cmdlet.FullName.TrimStart($ModulePath + "\")
+        $NestedModules += ".$($Cmdlet.FullName.Replace($ModulePath + '').Replace('\','/'))"
     }
 
     Update-ModuleManifest -Path $ModuleManifestPath -NestedModules $NestedModules -CmdletsToExport $PublicCmdlets.BaseName -ModuleVersion $Version -ErrorAction Stop
