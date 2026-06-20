@@ -9,6 +9,8 @@ BeforeAll {
     $ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
 
     . $ScriptPath
+
+
 }
 
 Describe 'Get-InstallationConfiguration Tests' -Tag 'Linux' {

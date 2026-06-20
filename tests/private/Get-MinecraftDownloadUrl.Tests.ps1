@@ -1,17 +1,29 @@
 BeforeAll {
-    $HelperPath = Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers\'
-    $Helpers = Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop
-    foreach ($Helper in $Helpers) {
-        . $Helper.FullName
-    }
+    #$HelperPath = Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers\'
+    #$Helpers = Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop
+    #foreach ($Helper in $Helpers) {
+    #    . $Helper.FullName
+    #}
+#
+    #[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptRelativePath', Justification = 'False positive due to how Pester works.')]
+    #$ScriptRelativePath = "..\..\src\private\Get-MinecraftDownloadUrl.ps1"
+#
+    #[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification = 'False positive due to how Pester works.')]
+    #$ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
+#
+    #. $ScriptPath
+
+    . (Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
+
+    $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptRelativePath', Justification = 'False positive due to how Pester works.')]
-    $ScriptRelativePath = "..\..\src\private\Get-MinecraftDownloadUrl.ps1"
+    $ScriptRelativePath = $DotSourceFiles.SourceFilePath
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification = 'False positive due to how Pester works.')]
-    $ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
-
-    . $ScriptPath
+    foreach ($File in $DotSourceFiles.FilesToDotSource) {
+        Write-Output "Importing '$File'"
+        . $File
+    }
 }
 
 Describe 'Get-MinecraftDownloadUrl Tests' {
@@ -60,7 +72,7 @@ Describe 'Get-MinecraftDownloadUrl Tests' {
 
     Context "Core Tests" {
         It 'Script file exists' {
-            Test-ScriptFileIsPresent -PSScriptRoot $PSScriptRoot -ScriptRelativePath $ScriptRelativePath
+            Test-Path $ScriptRelativePath | Should -Be $true
         }
     }
 
