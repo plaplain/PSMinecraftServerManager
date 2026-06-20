@@ -6,18 +6,26 @@ class InstallationConfiguration {
 
     }
 
-    InstallationConfiguration([string]$ConfigurationFilePath){
+    InstallationConfiguration([string]$ConfigurationFilePath) {
         $this.LoadConfiguration($ConfigurationFilePath)
     }
 
     [void]LoadConfiguration($Path) {
-        if(!(Test-Path $Path)){
+        if (!(Test-Path $Path)) {
             throw('Invalid path')
         }
 
         $Configuration = Get-Content -Path $Path | ConvertFrom-Json
 
-        $this.Servers = $Configuration.Servers
+        $ConfigurationMembers = $Configuration.Servers | Get-Member -MemberType NoteProperty
+
+        $ConfigurationHashtable =@{}
+
+        foreach($Member in $ConfigurationMembers){
+            $ConfigurationHashtable[$Member.Name] = $Configuration.Servers.($Member.Name)
+        }
+
+        $this.Servers = $ConfigurationHashtable
     }
 
     [PSCustomObject]GetServer([string]$ServerName) {
@@ -47,16 +55,18 @@ class InstallationConfiguration {
         $this.Servers.Remove($ServerName)
     }
 
-    [void]SetServer($ServerName,$ServerObject) {
-        $this.Servers[$ServerName] = $ServerObject
-
-        if($null -eq $this.Servers[$ServerName] ){
-
+    [void]SetServer($ServerName, $ServerObject) {
+        if ($null -eq $this.Servers[$ServerName] -and $null -eq $this.Servers[$ServerObject.Name]) {
+            throw("No configuration for server name '$ServerName' or '$($ServerObject.Name)'")
         }
 
-        if($ServerName -ne $ServerObject.Name){
+        if ($ServerName -ne $ServerObject.Name) {
+            $this.Servers[$ServerObject.Name] = $ServerObject
             $this.RemoveServer($ServerName)
-        }        
+        }
+        else {
+            $this.Server[$ServerName]
+        }
     }
 
     ExportConfigurationToFile($Path) {
