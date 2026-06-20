@@ -26,6 +26,7 @@ Describe 'InstallationConfiguration Class Tests' {
             }
         }
 
+        [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'JsonConfiguration', Justification = 'False positive due to how Pester works.')]
         $JsonConfiguration = $ExistingConfiguration | ConvertTo-Json
     }
 
