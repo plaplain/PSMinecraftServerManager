@@ -10,10 +10,6 @@ class InstallationConfiguration {
         $this.LoadConfiguration($ConfigurationFilePath)
     }
 
-    InitializeConfiguration() {
-        
-    }
-
     [void]LoadConfiguration($Path) {
         if(!(Test-Path $Path)){
             throw('Invalid path')
@@ -53,6 +49,10 @@ class InstallationConfiguration {
 
     [void]SetServer($ServerName,$ServerObject) {
         $this.Servers[$ServerName] = $ServerObject
+
+        if($null -eq $this.Servers[$ServerName] ){
+
+        }
 
         if($ServerName -ne $ServerObject.Name){
             $this.RemoveServer($ServerName)
