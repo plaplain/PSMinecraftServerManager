@@ -193,7 +193,7 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
 
     Context "Core Tests" {
         It 'Script file exists' {
-            Test-ScriptFileIsPresent -PSScriptRoot $PSScriptRoot -ScriptRelativePath $ScriptRelativePath
+            Test-Path $ScriptRelativePath | Should -Be $true
         }
     }
 

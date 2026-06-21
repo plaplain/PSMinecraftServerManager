@@ -18,6 +18,12 @@ Describe 'Get-InstallationConfiguration Tests' -Tag 'Linux' {
         $Env:HOME = '/home/Username'
     }
 
+    Context "Core Tests" {
+        It 'Script file exists' {
+            Test-Path $ScriptRelativePath | Should -Be $true
+        }
+    }
+
     Context "'Get-InstallationConfiguration'" {
         BeforeAll {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'InstallationConfigurationPath', Justification = 'False positive due to how Pester works.')]

@@ -14,11 +14,11 @@ BeforeAll {
 
 Describe 'Start-MinecraftServer Tests' {
 
-	Context "unit tests" -Tag "Unit" {
-		It 'Script file exists' {
-			Test-ScriptFileIsPresent -PSScriptRoot $PSScriptRoot -ScriptRelativePath $ScriptRelativePath
-		}
-	}
+    Context "Core Tests" {
+        It 'Script file exists' {
+            Test-Path $ScriptRelativePath | Should -Be $true
+        }
+    }
 
 	Context "integration tests" -Tag "Integration" {
 		It 'Start-MinecraftServer throws when required parameters are missing' {
