@@ -1,16 +1,15 @@
 BeforeAll {
-    $HelperPath = Join-Path -Path $PSScriptRoot -ChildPath '\..\..\helpers\'
-    $Helpers = Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop
-    foreach ($Helper in $Helpers) {
-        . $Helper.FullName
+    . (Join-Path -Path $PSScriptRoot -ChildPath '\..\..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
+
+    $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath
+
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptRelativePath', Justification = 'False positive due to how Pester works.')]
+    $ScriptRelativePath = $DotSourceFiles.SourceFilePath
+
+    foreach ($File in $DotSourceFiles.FilesToDotSource) {
+        Write-Output "Importing '$File'"
+        . $File
     }
-
-    $ScriptRelativePath = "..\..\..\src\private\installation\Get-InstallationConfigurationPath.ps1"
-    $ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
-
-    . $ScriptPath
-
-
 }
 
 Describe 'Get-InstallationConfiguration Tests' -Tag 'Linux' {

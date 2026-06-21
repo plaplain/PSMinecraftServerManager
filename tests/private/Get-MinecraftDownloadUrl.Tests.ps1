@@ -1,18 +1,4 @@
 BeforeAll {
-    #$HelperPath = Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers\'
-    #$Helpers = Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop
-    #foreach ($Helper in $Helpers) {
-    #    . $Helper.FullName
-    #}
-#
-    #[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptRelativePath', Justification = 'False positive due to how Pester works.')]
-    #$ScriptRelativePath = "..\..\src\private\Get-MinecraftDownloadUrl.ps1"
-#
-    #[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptPath', Justification = 'False positive due to how Pester works.')]
-    #$ScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $ScriptRelativePath
-#
-    #. $ScriptPath
-
     . (Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
 
     $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath
