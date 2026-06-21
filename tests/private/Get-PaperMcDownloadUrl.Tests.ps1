@@ -1,7 +1,7 @@
 BeforeAll {
     . (Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
 
-    $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath
+    $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -TestFile -HelperFiles
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptRelativePath', Justification = 'False positive due to how Pester works.')]
     $ScriptRelativePath = $DotSourceFiles.SourceFilePath
@@ -239,12 +239,6 @@ Describe 'Get-PaperMcDownloadUrl Tests' {
 
         It 'Get-PaperMcDownloadUrl response should contain https://fakeUrl.com/26.1/Beta' {
             $DownloadUrls | Should -Contain 'https://fakeUrl.com/26.1/Beta'
-        }
-    }
-
-    Context "integration tests" -Tag "Integration" {
-        It 'Start-MinecraftServer throws when required parameters are missing' {
-            Test-CmdletThrowWithNoParameter -FilePath $ScriptPath -CmdletName 'Start-MinecraftServer'
         }
     }
 }

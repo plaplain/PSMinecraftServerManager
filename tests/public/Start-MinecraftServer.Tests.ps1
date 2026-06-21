@@ -1,7 +1,7 @@
 BeforeAll {
     . (Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
 
-    $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath
+    $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -HelperFiles
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ScriptRelativePath', Justification = 'False positive due to how Pester works.')]
     $ScriptRelativePath = $DotSourceFiles.SourceFilePath
@@ -26,4 +26,3 @@ Describe 'Start-MinecraftServer Tests' {
 		}
 	}
 }
-
