@@ -28,6 +28,13 @@ Describe 'InstallationConfiguration Class Tests' {
 
         [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'JsonConfiguration', Justification = 'False positive due to how Pester works.')]
         $JsonConfiguration = $ExistingConfiguration | ConvertTo-Json
+
+        if($IsLinux){
+            $ConfigurationFolderPath = '/home/minecraft'
+        }
+        else{
+            $ConfigurationFolderPath = 'C:\Minecraft'
+        }
     }
 
     Context 'Expected values' {
@@ -36,7 +43,7 @@ Describe 'InstallationConfiguration Class Tests' {
         }
 
         It 'Should Add a server' {
-            $InstallationConfiguration.AddServer('PesterTest', 'C:\temp')
+            $InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath)
             $InstallationConfiguration.GetServer('PesterTest') | Should -Not -BeNullOrEmpty
         }
 
@@ -56,7 +63,7 @@ Describe 'InstallationConfiguration Class Tests' {
             $InstallationConfiguration.GetServer('PesterRename') | Should -BeNullOrEmpty
         }
 
-        It 'Should load existing configuration' {
+        It 'Should load existing configuration in Windows' -Tag 'Windows' {
             Mock -CommandName Get-Content -MockWith {
                 $JsonConfiguration
             }
@@ -65,7 +72,7 @@ Describe 'InstallationConfiguration Class Tests' {
                 $true
             }
 
-            $InstallationConfiguration.LoadConfiguration("C:\Temp")
+            $InstallationConfiguration.LoadConfiguration($ConfigurationFolderPath)
             $InstallationConfiguration.GetServer('PesterTestExisting') | Should -Not -BeNullOrEmpty
         }
     }
