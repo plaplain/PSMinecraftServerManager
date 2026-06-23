@@ -1,5 +1,5 @@
 BeforeAll {
-    . (Join-Path -Path $PSScriptRoot -ChildPath '\..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
+    . (Join-Path -Path $PSScriptRoot -ChildPath '..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
 
     $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -HelperFiles
 
