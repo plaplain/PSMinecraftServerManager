@@ -1,4 +1,5 @@
 function Get-DotSourceFilePath {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)][string]$TestFilePath,
         [Parameter(Mandatory = $false)][switch]$TestFile,
@@ -22,10 +23,12 @@ function Get-DotSourceFilePath {
 
     switch ($PSBoundParameters.Keys) {
         'TestFile' {
+            Write-Verbose 'Adding test file to FilesToDotSource'
             $DotSourceFiles.FilesToDotSource += $SrcFilePath
         }
 
         'HelperFiles' {
+            Write-Verbose 'Adding helper files to FilesToDotSource'
             $SplitTestFilePath = $TestFilePath -split '[\/\\]+'
 
             $Index = [Array]::IndexOf($SplitTestFilePath, 'tests')
@@ -34,9 +37,8 @@ function Get-DotSourceFilePath {
 
             $HelperPath = Join-Path -Path $RootPath -ChildPath 'helpers'
 
-            $DotSourceFiles.FilesToDotSource += (Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop).FullName
-
-            $DotSourceFiles
+            $DotSourceFiles.FilesToDotSource += (Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop).FullName           
         }
     }
+    $DotSourceFiles
 }
