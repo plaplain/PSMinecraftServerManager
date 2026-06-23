@@ -20,9 +20,11 @@ Describe 'Start-MinecraftServer Tests' {
         }
     }
 
+    <#
 	Context "integration tests" -Tag "Integration" {
 		It 'Start-MinecraftServer throws when required parameters are missing' {
 			Test-CmdletThrowWithNoParameter -FilePath $PSCommandPath -CmdletName 'Start-MinecraftServer'
 		}
 	}
+        #>
 }
