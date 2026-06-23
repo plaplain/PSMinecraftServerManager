@@ -1,5 +1,9 @@
 class InstallationConfiguration {
-    [hashtable]$Servers = @{}
+    hidden [string]$ConfigurationFileName = 'configuration.json'
+
+    hidden $Configuration = [PSCustomObject]@{
+        Servers = @{}
+    }
 
     # Constructor
     InstallationConfiguration() {
@@ -10,35 +14,37 @@ class InstallationConfiguration {
         $this.LoadConfiguration($ConfigurationFilePath)
     }
 
-    [void]LoadConfiguration($Path) {
+    [void]LoadConfiguration([string]$Path) {
         if (!(Test-Path $Path)) {
             throw('Invalid path')
         }
 
-        $Configuration = Get-Content -Path $Path | ConvertFrom-Json
+        $FilePath = Join-Path -Path $Path -ChildPath $this.ConfigurationFileName
 
-        $ConfigurationMembers = $Configuration.Servers | Get-Member -MemberType NoteProperty
+        $ConfigurationFile = Get-Content -Path $FilePath | ConvertFrom-Json
+
+        $ConfigurationServerMembers = $ConfigurationFile.Servers | Get-Member -MemberType NoteProperty
 
         $ConfigurationHashtable =@{}
 
-        foreach($Member in $ConfigurationMembers){
-            $ConfigurationHashtable[$Member.Name] = $Configuration.Servers.($Member.Name)
+        foreach($Member in $ConfigurationServerMembers){
+            $ConfigurationHashtable[$Member.Name] = $ConfigurationFile.Servers.($Member.Name)
         }
 
-        $this.Servers = $ConfigurationHashtable
+        $this.Configuration.Servers = $ConfigurationHashtable
     }
 
     [PSCustomObject]GetServer([string]$ServerName) {
-        return $this.Servers[$ServerName]
+        return $this.Configuration.Servers[$ServerName]
     }
 
     [PSCustomObject]GetAllServers() {
-        return $this.Servers
+        return $this.Configuration.Servers
     }
 
     # Add server
-    [void]AddServer($ServerName, $InstallationFolder) {
-        if ($null -ne $this.Servers[$ServerName]) {
+    [void]AddServer([string]$ServerName, [string]$InstallationFolder) {
+        if ($null -ne $this.Configuration.Servers[$ServerName]) {
             throw("A server by the name '$ServerName' already exists.")
         }
         
@@ -47,29 +53,39 @@ class InstallationConfiguration {
             InstallationFolder = $InstallationFolder
         }
 
-        $this.Servers.Add($ServerName, $ServerConfiguration)
+        $this.Configuration.Servers.Add($ServerName, $ServerConfiguration)
     }
 
     # Remove Server
     [void]RemoveServer($ServerName) {
-        $this.Servers.Remove($ServerName)
+        $this.Configuration.Servers.Remove($ServerName)
     }
 
-    [void]SetServer($ServerName, $ServerObject) {
-        if ($null -eq $this.Servers[$ServerName] -and $null -eq $this.Servers[$ServerObject.Name]) {
+    [void]SetServer([string]$ServerName, [PSCustomObject]$ServerObject) {
+        if ($null -eq $this.Configuration.Servers[$ServerName] -and $null -eq $this.Configuration.Servers[$ServerObject.Name]) {
             throw("No configuration for server name '$ServerName' or '$($ServerObject.Name)'")
         }
 
         if ($ServerName -ne $ServerObject.Name) {
-            $this.Servers[$ServerObject.Name] = $ServerObject
+            $this.Configuration.Servers[$ServerObject.Name] = $ServerObject
             $this.RemoveServer($ServerName)
         }
         else {
-            $this.Server[$ServerName]
+            $this.Configuration.Server[$ServerName]
         }
     }
 
-    ExportConfigurationToFile($Path) {
+    [void]ExportConfigurationToFile([string]$Path,[boolean]$Overwrite = $false) {
+        if (!(Test-Path -Path $Path)) {
+            throw('Invalid path')
+        }
 
+        $FilePath = Join-Path -Path $Path -ChildPath $this.ConfigurationFileName
+
+        if((Test-Path -Path $FilePath) -and $Overwrite -eq $false){
+            throw('Configuration file already exists.')
+        }
+
+        $this.Configuration | ConvertTo-Json -Depth 10 | Out-File -FilePath $FilePath
     }
 }
