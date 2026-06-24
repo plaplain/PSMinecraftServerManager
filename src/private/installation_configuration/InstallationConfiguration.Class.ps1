@@ -1,3 +1,7 @@
+<#
+    .SYNOPSIS
+    This class is responsible for managing the installation configuration file.
+#>
 class InstallationConfiguration {
     hidden [string]$ConfigurationFileName = 'configuration.json'
 
@@ -14,6 +18,13 @@ class InstallationConfiguration {
         $this.LoadConfiguration($ConfigurationFilePath)
     }
 
+    <#
+        .SYNOPSIS
+        Loads configuration.json from the passed path.
+
+        .INPUTS
+        [string]$Path - The folder path where the configuration file exists.
+    #>
     [void]LoadConfiguration([string]$Path) {
         if (!(Test-Path $Path)) {
             throw('Invalid path')
@@ -40,15 +51,39 @@ class InstallationConfiguration {
         $this.Configuration.Servers = $ConfigurationHashtable
     }
 
+    <#
+        .SYNOPSIS
+        Returns a server configuration using the server name
+
+        .INPUTS
+        [string]$ServerName - The name of the server.
+
+        .OUTPUTS
+        [PSCustomObject] - Contains the details of the server such as name, installation location.
+    #>
     [PSCustomObject]GetServer([string]$ServerName) {
         return $this.Configuration.Servers[$ServerName]
     }
 
+    <#
+        .SYNOPSIS
+        Returns aall server configurations.
+
+        .OUTPUTS
+        [PSCustomObject] - The configuration of all the servers.
+    #>
     [PSCustomObject]GetAllServers() {
         return $this.Configuration.Servers
     }
 
-    # Add server
+    <#
+        .SYNOPSIS
+        Adds a server to the configuration
+
+        .INPUTS
+        [string]$ServerName         - The name of the server to add.
+        [string]$InstallationFolder - The folder where the server is installed.
+    #>
     [void]AddServer([string]$ServerName, [string]$InstallationFolder) {
         if ($null -ne $this.Configuration.Servers[$ServerName]) {
             throw("A server by the name '$ServerName' already exists.")
@@ -62,11 +97,25 @@ class InstallationConfiguration {
         $this.Configuration.Servers.Add($ServerName, $ServerConfiguration)
     }
 
-    # Remove Server
+    <#
+        .SYNOPSIS
+        Removes a server from the configuration
+
+        .INPUTS
+        [string]$ServerName         - The name of the server to remove.
+    #>
     [void]RemoveServer($ServerName) {
         $this.Configuration.Servers.Remove($ServerName)
     }
 
+    <#
+        .SYNOPSIS
+        Sets an existing server to the configuration
+
+        .INPUTS
+        [string]$ServerName           - The name of the server to update.
+        [PSCustomObject]$ServerObject - A server object generated from GetServer or GetAllServers
+    #>
     [void]SetServer([string]$ServerName, [PSCustomObject]$ServerObject) {
         if ($null -eq $this.Configuration.Servers[$ServerName] -and $null -eq $this.Configuration.Servers[$ServerObject.Name]) {
             throw("No configuration for server name '$ServerName' or '$($ServerObject.Name)'")
@@ -81,6 +130,14 @@ class InstallationConfiguration {
         }
     }
 
+    <#
+        .SYNOPSIS
+        Exports the configuration to a configuration.json file to the passed path.
+
+        .INPUTS
+        [string]$Path       - The folder path where the server should be exported to.
+        [boolean]$Overwrite - Set to true to overwrite an existing configuration file.
+    #>
     [void]ExportConfigurationToFile([string]$Path,[boolean]$Overwrite = $false) {
         if (!(Test-Path -Path $Path)) {
             throw('Invalid path')
