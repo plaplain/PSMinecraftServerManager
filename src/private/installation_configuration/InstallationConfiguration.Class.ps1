@@ -21,7 +21,13 @@ class InstallationConfiguration {
 
         $FilePath = Join-Path -Path $Path -ChildPath $this.ConfigurationFileName
 
-        $ConfigurationFile = Get-Content -Path $FilePath | ConvertFrom-Json
+        $ConfigurationFile = Get-Content -Path $FilePath | ConvertFrom-Json -ErrorAction Stop
+
+        $ConfigurationFileMembers = $ConfigurationFile | Get-Member -MemberType NoteProperty
+
+        if($ConfigurationFileMembers.Name -notcontains 'Servers'){
+            throw('Invalid configuration file. Servers property missing.')
+        }
 
         $ConfigurationServerMembers = $ConfigurationFile.Servers | Get-Member -MemberType NoteProperty
 

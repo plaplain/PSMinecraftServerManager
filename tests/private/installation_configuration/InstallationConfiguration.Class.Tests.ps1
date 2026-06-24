@@ -78,6 +78,53 @@ Describe 'InstallationConfiguration Class Tests' {
     }
 
     Context 'Handle invalid values' {
+        It 'Should throw when adding the same server name' {
+            $InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath)
+            {$InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath)} | Should -Throw
+        }
 
+        It 'Should throw settinng a server with an invalid object' {
+            $InvalidData = [PSCustomObject]@{
+                Invalid = 'Data'
+            }
+
+            {$InstallationConfiguration.SetServer('PesterTest',$InvalidData)} | Should -Throw
+        }
+
+        It 'LoadConfiguration should thow with invalid Test-Path'{
+            Mock -CommandName Get-Content -MockWith {
+                $JsonConfiguration
+            }
+
+            Mock -CommandName Test-Path -MockWith {
+                $false
+            }
+
+            {$InstallationConfiguration.LoadConfiguration($ConfigurationFolderPath)} | Should -Throw
+        }
+
+        It 'LoadConfiguration should thow with invalid JSON'{
+            Mock -CommandName Get-Content -MockWith {
+                '{'
+            }
+
+            Mock -CommandName Test-Path -MockWith {
+                $true
+            }
+
+            {$InstallationConfiguration.LoadConfiguration($ConfigurationFolderPath)} | Should -Throw
+        }
+
+        It 'LoadConfiguration should thow with incorrectly structured JSON'{
+            Mock -CommandName Get-Content -MockWith {
+                '{}'
+            }
+
+            Mock -CommandName Test-Path -MockWith {
+                $true
+            }
+
+            {$InstallationConfiguration.LoadConfiguration($ConfigurationFolderPath)} | Should -Throw
+        }
     }
 }
