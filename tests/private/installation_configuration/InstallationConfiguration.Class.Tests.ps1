@@ -43,7 +43,7 @@ Describe 'InstallationConfiguration Class Tests' {
         }
 
         It 'Should Add a server' {
-            $InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath)
+            $InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath, $false)
             $InstallationConfiguration.GetServer('PesterTest') | Should -Not -BeNullOrEmpty
         }
 

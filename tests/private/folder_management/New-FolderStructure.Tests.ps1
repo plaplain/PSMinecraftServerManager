@@ -30,6 +30,14 @@ Describe 'New-FolderStructure Tests' -Tag 'Linux' {
 
     Context "New-FolderStructure Expected values" {
         BeforeAll {
+            function Get-FolderStructure {
+                @{
+                    Live   = 'Live'
+                    Backup = 'Backup'
+                    Logs   = 'Logs'
+                }
+            }
+
             Mock -CommandName Test-Path -MockWith {
                 $false
             }

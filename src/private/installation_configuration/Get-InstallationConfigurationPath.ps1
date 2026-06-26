@@ -10,5 +10,5 @@ function Get-InstallationConfigurationPath {
     @{
         FullPath = Join-Path -Path $ConfigurationLocation -ChildPath 'Install.json'
         ParentPath = $ConfigurationLocation
-    }    
+    }
 }

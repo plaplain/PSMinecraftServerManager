@@ -83,15 +83,24 @@ class InstallationConfiguration {
         .INPUTS
         [string]$ServerName         - The name of the server to add.
         [string]$InstallationFolder - The folder where the server is installed.
+        [switch]$PaperMc            - If the server runs PaperMc
     #>
-    [void]AddServer([string]$ServerName, [string]$InstallationFolder) {
+    [void]AddServer([string]$ServerName, [string]$InstallationFolder, [boolean]$PaperMc) {
         if ($null -ne $this.Configuration.Servers[$ServerName]) {
             throw("A server by the name '$ServerName' already exists.")
+        }
+
+        if($PaperMc){
+            $ServerType = 'PaperMc'
+        }
+        else{
+            $ServerType = 'Vanilla'
         }
         
         $ServerConfiguration = [PSCustomObject]@{
             Name               = $ServerName
             InstallationFolder = $InstallationFolder
+            ServerType         = $ServerType
         }
 
         $this.Configuration.Servers.Add($ServerName, $ServerConfiguration)

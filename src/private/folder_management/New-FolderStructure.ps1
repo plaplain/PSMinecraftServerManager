@@ -8,17 +8,12 @@ function New-FolderStructure {
         throw([System.IO.FileNotFoundException]::new("Invalid path '$Path'"))
     }
 
-    $FoldersToCreate = @(
-        'Configuration',
-        'Backup',
-        'Server'
-        'Logs'
-    )
+    $FoldersToCreate = Get-FolderStructure -InstallationPath $Path
 
     $FolderPaths = @()
 
-    foreach ($Folder in $FoldersToCreate) {
-        $GeneratedFolderPath = Join-Path -Path $Path -ChildPath $Folder
+    foreach ($Folder in $FoldersToCreate.GetEnumerator()) {
+        $GeneratedFolderPath = $Folder.Value
 
         if ((Test-Path -Path $GeneratedFolderPath) -and !$Force) {
             throw([DirectoryFound]::new($GeneratedFolderPath))
