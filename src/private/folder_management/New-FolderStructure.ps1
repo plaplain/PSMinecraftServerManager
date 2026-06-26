@@ -5,7 +5,7 @@ function New-FolderStructure {
     )
 
     if (!(Test-Path -Path $Path)) {
-        throw("Invalid path '$Path'")
+        throw([System.IO.FileNotFoundException]::new("Invalid path '$Path'"))
     }
 
     $FoldersToCreate = @(
@@ -21,7 +21,7 @@ function New-FolderStructure {
         $GeneratedFolderPath = Join-Path -Path $Path -ChildPath $Folder
 
         if ((Test-Path -Path $GeneratedFolderPath) -and !$Force) {
-            throw("The folder '$Folder' already exists in $Path. Use -Force to override or manually create it.")
+            throw([DirectoryFound]::new($GeneratedFolderPath))
         }
 
         $FolderPaths += $GeneratedFolderPath
@@ -34,6 +34,7 @@ function New-FolderStructure {
             ErrorAction = 'Stop'
             Force       = $Force
         }
+
         New-Item @NewItemParams | Out-Null
     }
 }
