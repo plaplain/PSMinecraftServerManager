@@ -15,6 +15,7 @@ BeforeAll {
 Describe 'New-FolderStructure Tests' -Tag 'Linux' {
     BeforeAll {
         if ($IsLinux) {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
             $FolderPath = '/home/minecraft'
         }
         else {
