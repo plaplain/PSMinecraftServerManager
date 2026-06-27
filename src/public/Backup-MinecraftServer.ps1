@@ -33,3 +33,5 @@ function Backup-MinecraftServer {
         throw("Unable to backup. Error: $($_.Exception.Message)")
     }    
 }
+
+Export-ModuleMember -Function Backup-MinecraftServer

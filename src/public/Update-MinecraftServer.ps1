@@ -29,3 +29,5 @@ function Update-MinecraftServer {
 
     Invoke-WebRequest -Uri $DownloadUrl -OutFile $LiveServerJar
 }
+
+Export-ModuleMember -Function Update-MinecraftServer
