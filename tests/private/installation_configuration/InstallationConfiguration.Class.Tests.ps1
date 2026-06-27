@@ -79,8 +79,8 @@ Describe 'InstallationConfiguration Class Tests' {
 
     Context 'Handle invalid values' {
         It 'Should throw when adding the same server name' {
-            $InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath)
-            {$InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath)} | Should -Throw
+            $InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath, $false)
+            {$InstallationConfiguration.AddServer('PesterTest', $ConfigurationFolderPath, $false)} | Should -Throw
         }
 
         It 'Should throw settinng a server with an invalid object' {
