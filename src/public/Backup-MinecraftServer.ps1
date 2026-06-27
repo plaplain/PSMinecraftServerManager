@@ -34,4 +34,4 @@ function Backup-MinecraftServer {
     }    
 }
 
-Export-ModuleMember -Function Backup-MinecraftServer
+Export-ModuleMember 'Backup-MinecraftServer'

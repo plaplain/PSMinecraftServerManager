@@ -66,4 +66,4 @@ function Install-MinecraftServer {
     Update-MinecraftServer -ServerName $ServerName -NoBackup    
 }
 
-Export-ModuleMember -Function Install-MinecraftServer
+Export-ModuleMember 'Install-MinecraftServer'

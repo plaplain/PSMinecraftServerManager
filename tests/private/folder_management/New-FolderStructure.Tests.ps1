@@ -36,6 +36,19 @@ Describe 'New-FolderStructure Tests' -Tag 'Linux' {
                     Backup = 'Backup'
                     Logs   = 'Logs'
                 }
+
+                class DirectoryFound : System.Exception {
+                    hidden $BaseErrorMessage = 'The directory exists when not expected to'
+
+                    DirectoryFound() : base("$BaseErrorMessage.") {}
+
+                    DirectoryFound([string]$DirectoryPath) : base("$BaseErrorMessage '$DirectoryPath'.") {}
+
+                    DirectoryFound([string]$DirectoryPath, [System.Exception]$InnerExceptionMessage) : base(
+                        "$BaseErrorMessage '$DirectoryPath'.",
+                        $InnerExceptionMessage) {
+                    }
+                }
             }
 
             Mock -CommandName Test-Path -MockWith {
@@ -64,7 +77,7 @@ Describe 'New-FolderStructure Tests' -Tag 'Linux' {
             { New-FolderStructure -Path $FolderPath } | Should -Throw
         }
 
-        It 'Should throw if folders already exist' {
+        It 'Should not throw if folders already exist' {
             $ExistingPath = Join-Path -Path $FolderPath -ChildPath 'Backup'
             Mock -CommandName Test-Path -ParameterFilter { $Path -like $ExistingPath } -MockWith {
                 $true
