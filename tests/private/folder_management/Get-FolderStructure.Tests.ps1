@@ -40,7 +40,8 @@ Describe 'Get-FolderStructure Tests' {
         }
 
         It 'Should return folder path' {
-            (Get-FolderStructure -InstallationPath $FolderPath)['Live'] | Should -EQ $FolderPath
+            $LivePath = Join-Path -Path $FolderPath -ChildPath 'Live'
+            (Get-FolderStructure -InstallationPath $FolderPath)['Live'] | Should -EQ $LivePath
         }
     }
 }
