@@ -13,6 +13,15 @@ BeforeAll {
 }
 
 Describe 'Get-FolderStructure Tests' {
+    BeforeAll{
+        if ($IsLinux) {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
+            $FolderPath = '/home/minecraft'
+        }
+        else {
+            $FolderPath = 'C:\Temp\'
+        }
+    }
 
     Context "Core Tests" {
         It 'Script file exists' {
@@ -23,7 +32,7 @@ Describe 'Get-FolderStructure Tests' {
     Context "Get-FolderStructure Expected values" {
         It 'Should not throw' {
             { Get-FolderStructure } | Should -Not -Throw
-            { Get-FolderStructure -InstallationPath "C:\Temp" } | Should -Not -Throw
+            { Get-FolderStructure -InstallationPath $FolderPath } | Should -Not -Throw
         }
 
         It 'Should return only folder names' {
@@ -31,7 +40,7 @@ Describe 'Get-FolderStructure Tests' {
         }
 
         It 'Should return folder path' {
-            (Get-FolderStructure -InstallationPath "C:\Temp\")['Live'] | Should -EQ 'C:\Temp\Live'
+            (Get-FolderStructure -InstallationPath $FolderPath)['Live'] | Should -EQ $FolderPath
         }
     }
 }
