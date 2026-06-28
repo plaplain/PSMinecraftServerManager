@@ -12,6 +12,8 @@ BeforeAll {
     }
 
     Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
+
+    function Get-InstallationConfigurationPath {}
 }
 
 Describe 'Backup-MinecraftServer Tests' {
@@ -33,9 +35,6 @@ Describe 'Backup-MinecraftServer Tests' {
 
     Context "Test 'Backup-MinecraftServer'" {
         BeforeAll {
-            
-            function Get-InstallationConfigurationPath {}
-
             function Get-FolderStructure {
                 @{
                     Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
@@ -46,7 +45,7 @@ Describe 'Backup-MinecraftServer Tests' {
 
             Mock -CommandName Copy-Item -MockWith {}
 
-            Mock -CommandName Test-Path -MockWith { $true }
+            Mock -CommandName Test-Path -MockWith { $true } 
 
             Mock -CommandName Get-InstallationConfigurationPath -MockWith {
                 if ($IsLinux) {
