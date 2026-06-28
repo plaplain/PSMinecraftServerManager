@@ -10,8 +10,6 @@ BeforeAll {
         Write-Output "Importing '$File'"
         . $File
     }
-
-    Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
 }
 
 Describe 'Backup-MinecraftServer Tests' {
@@ -52,7 +50,9 @@ Describe 'Backup-MinecraftServer Tests' {
 
             Mock -CommandName Copy-Item -MockWith {}
 
-            Mock -CommandName Test-Path -MockWith { $true } 
+            Mock -CommandName Test-Path -MockWith { $true }
+
+            Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
         }
 
         It 'Backup-MinecraftServer should not throw' {
