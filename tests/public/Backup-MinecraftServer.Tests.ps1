@@ -12,8 +12,6 @@ BeforeAll {
     }
 
     Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
-
-    function Get-InstallationConfigurationPath {}
 }
 
 Describe 'Backup-MinecraftServer Tests' {
@@ -43,11 +41,7 @@ Describe 'Backup-MinecraftServer Tests' {
                 }
             }
 
-            Mock -CommandName Copy-Item -MockWith {}
-
-            Mock -CommandName Test-Path -MockWith { $true } 
-
-            Mock -CommandName Get-InstallationConfigurationPath -MockWith {
+            function Get-InstallationConfigurationPath {
                 if ($IsLinux) {
                     "/home/minecraft"
                 }
@@ -55,6 +49,10 @@ Describe 'Backup-MinecraftServer Tests' {
                     "C:\Temp\MinecraftServerManager"
                 }
             }
+
+            Mock -CommandName Copy-Item -MockWith {}
+
+            Mock -CommandName Test-Path -MockWith { $true } 
         }
 
         It 'Backup-MinecraftServer should not throw' {
