@@ -21,6 +21,8 @@ Describe 'Backup-MinecraftServer Tests' {
         else {
             $FolderPath = 'C:\Temp\'
         }
+
+        $ModuleName = "TestPs1Module_Backup-MinecraftServer"
     }
 
     Context "Core Tests" {
@@ -51,6 +53,15 @@ Describe 'Backup-MinecraftServer Tests' {
             Mock -CommandName Copy-Item -MockWith {}
 
             Mock -CommandName Test-Path -MockWith { $true }
+
+            Mock -CommandName Get-InstallationConfigurationPath -ModuleName $ModuleName -MockWith {
+                 if ($IsLinux) {
+                    "/home/minecraft"
+                }
+                else {
+                    "C:\Temp\MinecraftServerManager"
+                }               
+            }
 
             Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
         }
