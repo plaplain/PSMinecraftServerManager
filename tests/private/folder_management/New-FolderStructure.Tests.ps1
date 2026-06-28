@@ -33,30 +33,13 @@ Describe 'New-FolderStructure Tests' -Tag 'Linux' {
         BeforeAll {
             function Get-FolderStructure {
                 @{
-                    Live   = 'Live'
-                    Backup = 'Backup'
-                    Logs   = 'Logs'
-                }
-
-                class DirectoryFound : System.Exception {
-                    hidden $BaseErrorMessage = 'The directory exists when not expected to'
-
-                    DirectoryFound() : base("$BaseErrorMessage.") {}
-
-                    DirectoryFound([string]$DirectoryPath) : base("$BaseErrorMessage '$DirectoryPath'.") {}
-
-                    DirectoryFound([string]$DirectoryPath, [System.Exception]$InnerExceptionMessage) : base(
-                        "$BaseErrorMessage '$DirectoryPath'.",
-                        $InnerExceptionMessage) {
-                    }
+                    Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
+                    Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
+                    Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
                 }
             }
 
             Mock -CommandName Test-Path -MockWith {
-                $false
-            }
-
-            Mock -CommandName Test-Path -ParameterFilter { $Path -like $FolderPath } -MockWith {
                 $true
             }
 
@@ -66,7 +49,30 @@ Describe 'New-FolderStructure Tests' -Tag 'Linux' {
         }
 
         It 'Should not throw' {
-            { New-FolderStructure -Path $FolderPath } | Should -Not -Throw        
+            $LivePath = Join-Path -Path $FolderPath -ChildPath 'Live'
+            $BackupPath = Join-Path -Path $FolderPath -ChildPath 'Backup'
+            $LogsPath = Join-Path -Path $FolderPath -ChildPath 'Logs'
+            
+            Mock -CommandName Test-Path -ParameterFilter { $Path -like $LivePath } -MockWith {
+                $false
+            }
+
+            Mock -CommandName Test-Path -ParameterFilter { $Path -like $BackupPath } -MockWith {
+                $false
+            }
+
+            Mock -CommandName Test-Path -ParameterFilter { $Path -like $LogsPath } -MockWith {
+                $false
+            }
+
+
+            { 
+                class DirectoryFound { 
+                    DirectoryFound([string]$DirectoryPath) {}
+                    DirectoryFound([string]$DirectoryPath, [System.Exception]$InnerExceptionMessage) {}
+                }
+                New-FolderStructure -Path $FolderPath 
+            } | Should -Not -Throw
         }
 
         It 'Should throw if folders already exist' {
