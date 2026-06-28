@@ -34,15 +34,7 @@ Describe 'Backup-MinecraftServer Tests' {
     Context "Test 'Backup-MinecraftServer'" {
         BeforeAll {
             
-
-            function Get-InstallationConfigurationPath {
-                if ($IsLinux) {
-                    "/home/minecraft"
-                }
-                else {
-                    "C:\Temp\MinecraftServerManager"
-                }
-            }
+            function Get-InstallationConfigurationPath {}
 
             function Get-FolderStructure {
                 @{
@@ -55,6 +47,15 @@ Describe 'Backup-MinecraftServer Tests' {
             Mock -CommandName Copy-Item -MockWith {}
 
             Mock -CommandName Test-Path -MockWith { $true }
+
+            Mock -CommandName Get-InstallationConfigurationPath -MockWith {
+                if ($IsLinux) {
+                    "/home/minecraft"
+                }
+                else {
+                    "C:\Temp\MinecraftServerManager"
+                }
+            }
         }
 
         It 'Backup-MinecraftServer should not throw' {
