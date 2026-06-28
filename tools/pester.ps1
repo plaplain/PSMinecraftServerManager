@@ -12,6 +12,13 @@ param(
 
 Import-Module Pester -Force
 
+if($OutputPath){
+    $TestResultsEnabled = $true
+}
+else {
+    $TestResultsEnabled = $false
+}
+
 $PesterConfiguration = [PesterConfiguration]@{
     Run = @{
          Path = $TestPath
@@ -28,7 +35,7 @@ $PesterConfiguration = [PesterConfiguration]@{
         Path = $CodePath
     }
     TestResult = @{
-        Enabled = $true
+        Enabled = $TestResultsEnabled
         OutputFormat = 'NUnitXml'
         OutputPath = $OutputPath
     }
