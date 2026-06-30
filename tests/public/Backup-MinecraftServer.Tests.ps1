@@ -1,4 +1,10 @@
 BeforeAll {
+    Class InstallationConfiguration {
+        InstallationConfiguration($InstallationConfigurationPath){}
+    }
+
+    New-MockObject -Type ([InstallationConfiguration])
+
     . (Join-Path -Path $PSScriptRoot -ChildPath '..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
 
     $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -HelperFiles 
@@ -10,6 +16,12 @@ BeforeAll {
         Write-Output "Importing '$File'"
         . $File
     }
+
+    $Dependencies = @(
+        'Get-FolderStructure',
+        'Get-InstallationConfigurationPath'
+    )
+    Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer' -FunctionsToMock $Dependencies
 }
 
 Describe 'Backup-MinecraftServer Tests' {
@@ -21,10 +33,6 @@ Describe 'Backup-MinecraftServer Tests' {
         else {
             $FolderPath = 'C:\Temp\'
         }
-
-        $ModuleName = "TestPs1Module_Backup-MinecraftServer"
-        "TestPs1Module_$CmdletName"
-        Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
     }
 
     Context "Core Tests" {
@@ -35,7 +43,9 @@ Describe 'Backup-MinecraftServer Tests' {
 
     Context "Test 'Backup-MinecraftServer'" {
         BeforeAll {
-            function Get-FolderStructure {
+            $ModuleName = "TestPs1Module_Backup-MinecraftServer"
+
+            Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
                 @{
                     Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
                     Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
@@ -43,21 +53,8 @@ Describe 'Backup-MinecraftServer Tests' {
                 }
             }
 
-            function Get-InstallationConfigurationPath {
+            Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
                 if ($IsLinux) {
-                    "/home/minecraft"
-                }
-                else {
-                    "C:\Temp\MinecraftServerManager"
-                }
-            }
-
-            Mock -CommandName Copy-Item -MockWith {}
-
-            Mock -CommandName Test-Path -MockWith { $true }
-
-            Mock -CommandName Get-InstallationConfigurationPath -MockWith {
-                 if ($IsLinux) {
                     "/home/minecraft"
                 }
                 else {
@@ -65,7 +62,10 @@ Describe 'Backup-MinecraftServer Tests' {
                 }               
             }
 
-            
+            Mock -CommandName Copy-Item -MockWith {}
+
+            Mock -CommandName Test-Path -MockWith { $true }
+         
         }
 
         It 'Backup-MinecraftServer should not throw' {
