@@ -7,5 +7,5 @@ function Import-Cmdlet {
     $ModuleName = "TestPs1Module_$CmdletName"
 	$Script = Get-Content -Path $FilePath -Raw
 	$CmdletCode = [ScriptBlock]::Create($script)
-	New-Module -Name $ModuleName -ScriptBlock $CmdletCode -ErrorAction Stop | Out-Null
+	New-Module -Name $ModuleName -ScriptBlock $CmdletCode -ErrorAction Stop | Import-Module -ErrorAction Stop
 }

@@ -23,6 +23,8 @@ Describe 'Backup-MinecraftServer Tests' {
         }
 
         $ModuleName = "TestPs1Module_Backup-MinecraftServer"
+        "TestPs1Module_$CmdletName"
+        Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
     }
 
     Context "Core Tests" {
@@ -54,7 +56,7 @@ Describe 'Backup-MinecraftServer Tests' {
 
             Mock -CommandName Test-Path -MockWith { $true }
 
-            Mock -CommandName Get-InstallationConfigurationPath -ModuleName $ModuleName -MockWith {
+            Mock -CommandName Get-InstallationConfigurationPath -MockWith {
                  if ($IsLinux) {
                     "/home/minecraft"
                 }
@@ -63,7 +65,7 @@ Describe 'Backup-MinecraftServer Tests' {
                 }               
             }
 
-            Import-Cmdlet -FilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer'
+            
         }
 
         It 'Backup-MinecraftServer should not throw' {
