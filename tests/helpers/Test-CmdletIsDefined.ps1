@@ -5,7 +5,7 @@ function Test-CmdletIsDefined {
     )
 
     try {
-        $Module = Import-Cmdlet -FilePath $FilePath -CmdletName $CmdletName
+        $Module = Import-Cmdlet -TestFilePath $FilePath -CmdletName $CmdletName
         Get-Command -Name $CmdletName -ErrorAction Stop | Should -Not -BeNullOrEmpty
     }
     finally {

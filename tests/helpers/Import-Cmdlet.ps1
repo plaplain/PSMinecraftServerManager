@@ -72,5 +72,7 @@ function Import-Cmdlet {
 
     $ScriptBlockCode = $Dependencies + $Script
 	$CmdletCode = [ScriptBlock]::Create($ScriptBlockCode)
-	New-Module -Name $ModuleName -ScriptBlock $CmdletCode -ErrorAction Stop | Import-Module -ErrorAction Stop
+	$Module = New-Module -Name $ModuleName -ScriptBlock $CmdletCode -ErrorAction Stop
+    $Module | Import-Module -ErrorAction Stop
+    $Module
 }

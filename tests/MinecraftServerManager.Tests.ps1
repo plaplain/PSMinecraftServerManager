@@ -51,7 +51,7 @@ Describe "Base Function & Class Tests" {
         }
     }
 
-    Context "Public functions are defined" -Tag "Unit" {
+    Context "Public Cmdlet are defined" -Tag "Unit" {
         foreach($File in $PublicFunctions){
             It "Function is defined: $($File.BaseName)" -TestCases @{ File = $File} {
                 Test-CmdletIsDefined -FilePath $File.FullName -CmdletName $File.BaseName
