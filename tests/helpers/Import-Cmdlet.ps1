@@ -1,8 +1,49 @@
+<#
+.SYNOPSIS
+Short description
+
+.DESCRIPTION
+Long description
+
+.PARAMETER TestFilePath
+Parameter description
+
+.PARAMETER CmdletName
+Parameter description
+
+.PARAMETER FunctionsToMock
+Parameter description
+
+.PARAMETER ClassesToMock
+[PSCustomObject]@{
+    ClassName = ''
+    Constructors = @(
+        [string],
+        [string];[int],
+        [string];[int];[string]
+    )
+    Methods = @(
+        [PSCustomObject]@{
+            Name = 'HelloWorld'
+            Inputs = [string];[int]
+            OutputType = 'void'
+            Output = 'HelloWorld'
+        }
+    )
+}
+
+.EXAMPLE
+An example
+
+.NOTES
+General notes
+#>
 function Import-Cmdlet {
     param (
         [Parameter(Mandatory = $true)][string]$TestFilePath,
         [Parameter(Mandatory = $true)][string]$CmdletName,
-        [Parameter(Mandatory = $false)][string[]]$FunctionsToMock
+        [Parameter(Mandatory = $false)][string[]]$FunctionsToMock,
+        [Parameter(Mandatory = $false)][array]$ClassesToMock
     )
 
     # Clean up
@@ -16,9 +57,13 @@ function Import-Cmdlet {
         $ExistingModule | Remove-Module -Force
     }
 
-    # Functions
+    
     $Dependencies = ""
 
+    #Classes
+    $Dependencies += New-ImportCmdletClassRawCode -ClassesToMock $ClassesToMock
+
+    # Functions
     foreach($Function in $FunctionsToMock){
         $Dependencies += "function $Function {}" + [System.Environment]::NewLine
     }

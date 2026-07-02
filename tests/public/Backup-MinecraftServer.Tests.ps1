@@ -1,6 +1,6 @@
 BeforeAll {
     Class InstallationConfiguration {
-        InstallationConfiguration($InstallationConfigurationPath){}
+        InstallationConfiguration($InstallationConfigurationPath) {}
     }
 
     New-MockObject -Type ([InstallationConfiguration])
@@ -17,11 +17,29 @@ BeforeAll {
         . $File
     }
 
-    $Dependencies = @(
+    $FunctionDependencies = @(
         'Get-FolderStructure',
         'Get-InstallationConfigurationPath'
     )
-    Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer' -FunctionsToMock $Dependencies
+
+    $ClassDependencies = @(
+        [PSCustomObject]@{
+            ClassName    = 'InstallationConfiguration'
+            Constructors = @('[string]')
+            Methods      = @(
+                [PSCustomObject]@{
+                    Name       = 'GetServer'
+                    Inputs     = '[string]'
+                    OutputType = 'PSCustomObject'
+                    Output     = '@{
+                        InstallationPath = "C:\Temp\Bob"
+                    }'
+                }
+            )
+        }
+    )
+
+    Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 }
 
 Describe 'Backup-MinecraftServer Tests' {
@@ -62,14 +80,14 @@ Describe 'Backup-MinecraftServer Tests' {
                 }               
             }
 
-            Mock -CommandName Copy-Item -MockWith {}
+            Mock -ModuleName $ModuleName -CommandName Copy-Item -MockWith {}
 
-            Mock -CommandName Test-Path -MockWith { $true }
+            Mock -ModuleName $ModuleName -CommandName Test-Path -MockWith { $true }
          
         }
 
         It 'Backup-MinecraftServer should not throw' {
-            Backup-MinecraftServer -ServerName "TestServer" | Should -Not -Throw
+            {Backup-MinecraftServer -ServerName "TestServer"} | Should -Not -Throw
         }
 
         It 'Backup-MinecraftServer invalid folder path should throw' -ForEach @(
@@ -81,15 +99,15 @@ Describe 'Backup-MinecraftServer Tests' {
             Mock -CommandName Test-Path -ParameterFilter { $Path -like $FolderPath } {
                 $false
             }
-            Backup-MinecraftServer -ServerName "TestServer" | Should -Not -Throw
+            {Backup-MinecraftServer -ServerName "TestServer"} | Should -Not -Throw
         }
 
         It 'Backup-MinecraftServer should throw if Copy-Item fails' {
-            Mock -CommandName Copy-Item -MockWith {
+            Mock -ModuleName $ModuleName -CommandName Copy-Item -MockWith {
                 throw('Failed to copy!')
             }
 
-            Backup-MinecraftServer -ServerName "TestServer" | Should -Throw
+            {Backup-MinecraftServer -ServerName "TestServer"} | Should -Throw
         }
     }
 }
