@@ -12,5 +12,3 @@ function Test-CmdletIsDefined {
         $Module | Remove-Module
     }
 }
-
-
