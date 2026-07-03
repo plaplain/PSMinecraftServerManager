@@ -1,10 +1,4 @@
 BeforeAll {
-    Class InstallationConfiguration {
-        InstallationConfiguration($InstallationConfigurationPath) {}
-    }
-
-    New-MockObject -Type ([InstallationConfiguration])
-
     . (Join-Path -Path $PSScriptRoot -ChildPath '..\helpers' -AdditionalChildPath 'Get-DotSourceFilePath.ps1')
 
     $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -HelperFiles 
