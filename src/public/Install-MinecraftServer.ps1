@@ -14,7 +14,7 @@ function Install-MinecraftServer {
         $NewFolderStructureParams = @{
             Path  = $InstallationPath
             Force = $Force
-            ErrorAction = Stop
+            ErrorAction = 'Stop'
         }
         New-FolderStructure @NewFolderStructureParams
     }

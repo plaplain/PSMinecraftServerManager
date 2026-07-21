@@ -43,17 +43,18 @@ function Import-Cmdlet {
         [Parameter(Mandatory = $true)][string]$TestFilePath,
         [Parameter(Mandatory = $true)][string]$CmdletName,
         [Parameter(Mandatory = $false)][string[]]$FunctionsToMock,
-        [Parameter(Mandatory = $false)][array]$ClassesToMock
+        [Parameter(Mandatory = $false)][array]$ClassesToMock,
+        [Parameter(Mandatory = $false)][switch]$OutputScriptBlockOnly
     )
 
     # Clean up
     $ModuleName = "TestPs1Module_$CmdletName"
 
-    $FilePath = ($TestFilePath.Replace('.Tests','')).Replace('tests','src')
+    $FilePath = ($TestFilePath.Replace('.Tests', '')).Replace('tests', 'src')
 
     $ExistingModule = Get-Module -Name $ModuleName
 
-    if($ExistingModule){
+    if ($ExistingModule) {
         $ExistingModule | Remove-Module -Force
     }
 
@@ -64,15 +65,23 @@ function Import-Cmdlet {
     $Dependencies += New-ImportCmdletClassRawCode -ClassesToMock $ClassesToMock
 
     # Functions
-    foreach($Function in $FunctionsToMock){
+    foreach ($Function in $FunctionsToMock) {
         $Dependencies += "function $Function {}" + [System.Environment]::NewLine
     }
 
-	$Script = Get-Content -Path $FilePath -Raw
+    $Script = Get-Content -Path $FilePath -Raw
 
     $ScriptBlockCode = $Dependencies + $Script
-	$CmdletCode = [ScriptBlock]::Create($ScriptBlockCode)
-	$Module = New-Module -Name $ModuleName -ScriptBlock $CmdletCode -ErrorAction Stop
-    $Module | Import-Module -ErrorAction Stop
-    $Module
+
+    if ($OutputScriptBlockOnly) {
+        $ScriptBlockCodeCleaned = ($ScriptBlockCode -split "`n" | Where-Object { $_ -notmatch "Export-ModuleMember" } | Join-String -Separator "`n")
+
+        [ScriptBlock]::Create($ScriptBlockCodeCleaned)
+    }
+    else {
+        $CmdletCode = [ScriptBlock]::Create($ScriptBlockCode)
+        $Module = New-Module -Name $ModuleName -ScriptBlock $CmdletCode -ErrorAction Stop
+        $Module | Import-Module -ErrorAction Stop
+        $Module
+    }
 }

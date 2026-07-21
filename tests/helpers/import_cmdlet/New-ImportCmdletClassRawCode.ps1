@@ -11,13 +11,15 @@ function New-ImportCmdletClassRawCode {
 
         # Constructors
         foreach($Constructor in $Class.Constructors){
-            $SplitParameters = $Constructor.Split(';')
+            if($null -ne $Constructor){
+                $SplitParameters = $Constructor.Split(';')
+                $ConstructorParams = New-ImportCmdletParameterString -SplitParameters $SplitParameters
+            }
+            else {
+                $ConstructorParams = ''
+            }
 
-            $RawClassCode += "$ClassName("
-
-            $RawClassCode += New-ImportCmdletParameterString -SplitParameters $SplitParameters
-
-            $RawClassCode += "){}" + [System.Environment]::NewLine
+            $RawClassCode += "$ClassName($ConstructorParams){}" + [System.Environment]::NewLine
         }
 
         # Methods
@@ -28,7 +30,12 @@ function New-ImportCmdletClassRawCode {
 
             $RawMethodCode += New-ImportCmdletParameterString -SplitParameters $SplitParameters
 
-            $RawMethodCode += "){return [$MethodOutputType]$($Method.Output)}" + [System.Environment]::NewLine
+            if($Method.OutputType -eq 'void'){
+                $RawMethodCode += "){}" + [System.Environment]::NewLine
+            }
+            else{
+                $RawMethodCode += "){return [$MethodOutputType]$($Method.Output)}" + [System.Environment]::NewLine
+            }
 
             $RawClassCode += $RawMethodCode
         }

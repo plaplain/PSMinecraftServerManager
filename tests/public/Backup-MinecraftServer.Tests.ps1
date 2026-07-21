@@ -67,10 +67,10 @@ Describe 'Backup-MinecraftServer Tests' {
 
             Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
                 if ($IsLinux) {
-                    "/home/minecraft"
+                    @{FullPath = "/home/minecraft"}
                 }
                 else {
-                    "C:\Temp\MinecraftServerManager"
+                    @{FullPath = "C:\Temp\MinecraftServerManager"}
                 }               
             }
 
