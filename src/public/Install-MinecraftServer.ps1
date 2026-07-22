@@ -7,7 +7,13 @@ function Install-MinecraftServer {
         [Parameter(Mandatory = $false)][switch]$Force
     )
 
-    #TODO: Check Java is installed.
+    # Check for Java
+    try{
+        Get-Command -Name 'java' -ErrorAction Stop
+    }
+    catch {
+        throw('Java not detected. Please install Java, this is a prerequisite.')
+    }
 
     # Directory creation.
     try {

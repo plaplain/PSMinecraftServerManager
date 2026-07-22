@@ -11,6 +11,7 @@ BeforeAll {
         . $File
     }
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ModuleName', Justification = 'False positive due to how Pester works.')]
     $ModuleName = "TestPs1Module_Install-MinecraftServer"
 }
 
@@ -80,6 +81,8 @@ Describe 'Install-MinecraftServer Tests' {
             }
 
             Mock -ModuleName $ModuleName -CommandName Update-MinecraftServer -MockWith {}
+
+            Mock -ModuleName $ModuleName -CommandName Get-Command -MockWith {$true}
         }
 
         It 'Should not throw installing vanilla' {
@@ -121,6 +124,14 @@ Describe 'Install-MinecraftServer Tests' {
             }
 
             { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath -Force } | Should -Not -Throw
+        }
+
+        It 'Should throw if Java not found' {
+            Mock -ModuleName $ModuleName -CommandName Get-Command -MockWith {
+                throw('Java not found')
+            }
+
+            { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath } | Should -Throw
         }
     }
 }
