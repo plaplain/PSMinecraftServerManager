@@ -8,10 +8,7 @@ function Install-MinecraftServer {
     )
 
     # Check for Java
-    try{
-        Get-Command -Name 'java' -ErrorAction Stop
-    }
-    catch {
+    if(!(Test-JavaInstallation)){
         throw('Java not detected. Please install Java, this is a prerequisite.')
     }
 

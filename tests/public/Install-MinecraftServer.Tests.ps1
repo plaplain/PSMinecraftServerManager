@@ -38,7 +38,8 @@ Describe 'Install-MinecraftServer Tests' {
             $FunctionDependencies = @(
                 'New-FolderStructure',
                 'Get-InstallationConfigurationPath',
-                'Update-MinecraftServer'
+                'Update-MinecraftServer',
+                'Test-JavaInstallation'
             )
 
             $ClassDependencies = @(
@@ -83,6 +84,8 @@ Describe 'Install-MinecraftServer Tests' {
             Mock -ModuleName $ModuleName -CommandName Update-MinecraftServer -MockWith {}
 
             Mock -ModuleName $ModuleName -CommandName Get-Command -MockWith {$true}
+
+            Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith {$true}
         }
 
         It 'Should not throw installing vanilla' {
@@ -109,10 +112,18 @@ Describe 'Install-MinecraftServer Tests' {
             { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath } | Should -Throw
         }
 
+        It 'Should throw if Java not found' {
+            Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith {$false}
+
+            { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath } | Should -Throw
+        }
+
         It 'Should not throw if directory found' {
             $ScriptBlock = Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Install-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies -OutputScriptBlockOnly
 
             . $ScriptBlock
+
+            Mock -CommandName Test-JavaInstallation -MockWith {$true}
 
             Mock -CommandName Get-InstallationConfigurationPath -MockWith {
                 if ($IsLinux) {
@@ -124,14 +135,6 @@ Describe 'Install-MinecraftServer Tests' {
             }
 
             { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath -Force } | Should -Not -Throw
-        }
-
-        It 'Should throw if Java not found' {
-            Mock -ModuleName $ModuleName -CommandName Get-Command -MockWith {
-                throw('Java not found')
-            }
-
-            { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath } | Should -Throw
         }
     }
 }
