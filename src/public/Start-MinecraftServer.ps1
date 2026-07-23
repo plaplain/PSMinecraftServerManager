@@ -28,7 +28,7 @@ function Start-MinecraftServer {
         $LaunchScriptBlock = {java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui}
     }
     else {
-        $LaunchScriptBlock = {& $JavaExePath -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui}
+        $LaunchScriptBlock = {java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui}
     }
 
     $EulaFilePath = Join-Path -Path $LivePath -ChildPath "eula.txt"
@@ -51,5 +51,10 @@ function Start-MinecraftServer {
         $EulaFile | Out-File -FilePath $EulaFilePath -Encoding utf8
     }
 
-    $Job = Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
+    if($InterativeMode){
+        Invoke-Command -ScriptBlock $LaunchScriptBlock
+    }
+    else {
+        $Job = Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
+    }    
 }
