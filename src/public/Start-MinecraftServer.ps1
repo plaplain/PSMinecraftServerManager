@@ -1,7 +1,7 @@
 function Start-MinecraftServer {
     param(
         [Parameter(Mandatory = $true)][string]$ServerName,
-        [Parameter(Mandatory = $true)][switch]$InterativeMode
+        [Parameter(Mandatory = $false)][switch]$InterativeMode
     )
 
     $InstallationConfigurationPath = Get-InstallationConfigurationPath
@@ -32,7 +32,7 @@ function Start-MinecraftServer {
     }
 
     $EulaFilePath = Join-Path -Path $LivePath -ChildPath "eula.txt"
-    if (!(Test-Path $EulaFilePath)) {
+    if (!(Test-Path -Path $EulaFilePath)) {
         Write-Output "First run detected. Starting the server to generate the eula file. The server will stop, this is expected."
         $Job = Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
 
@@ -58,3 +58,5 @@ function Start-MinecraftServer {
         $Job = Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
     }    
 }
+
+Export-ModuleMember 'Start-MinecraftServer'
