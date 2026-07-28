@@ -115,7 +115,12 @@ Describe 'Start-MinecraftServer Tests' {
 
         It 'Should run Invoke-Command 1 times' {
             Start-MinecraftServer -ServerName "TestServer" -InterativeMode
-            Should -Invoke Invoke-Command -Times 2 -ModuleName $ModuleName
+            Should -Invoke Invoke-Command -Times 1 -ModuleName $ModuleName
+        }
+
+        It 'Should run Invoke-Command 0 times' {
+            Start-MinecraftServer -ServerName "TestServer"
+            Should -Invoke Invoke-Command -Times 0 -ModuleName $ModuleName
         }
 
         It 'Should run Start-Job 1 times' {
