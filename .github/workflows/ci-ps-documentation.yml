@@ -1,11 +1,11 @@
 name: Generate PowerShell Documentation
-on: 
- workflow_dispatch:
- workflow_run:
-   workflows: ["Build and Publish PowerShell Module"]
-   types: [completed]
- pull_request:
-   branches: [ main ]
+on:
+  workflow_run:
+    workflows: ["Build and Publish PowerShell Module"]
+    types: [completed]
+  pull_request:
+    branches: [ "main" ]
+    types: [ closed ]
 
 permissions:
   contents: write
