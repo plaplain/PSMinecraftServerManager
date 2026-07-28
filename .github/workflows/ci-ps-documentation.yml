@@ -41,7 +41,7 @@ jobs:
         id: GenerateDocs
         shell: pwsh
         run: |
-          .\tools\ps-documentation.ps1 -OutputPath "${{ github.workspace }}\docs" -ModulePsdPath "${{ runner.temp }}\PSMinecraftServerManager\MinecraftServerManager.psd1" -ModuleName "MinecraftServerManager"
+          .\tools\ps-documentation.ps1 -OutputPath "${{ github.workspace }}\docs" -ModulePsdPath "${{ runner.temp }}\MinecraftServerManager\PSMinecraftServerManager\MinecraftServerManager.psd1" -ModuleName "MinecraftServerManager"
           
       - name: Commit Documentation
         if: github.ref != 'refs/heads/main'  # Only run if NOT on main branch
