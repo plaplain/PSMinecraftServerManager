@@ -2,7 +2,7 @@ name: Build and Publish PowerShell Module
 
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, dev ]
     types: [ opened, synchronize, reopened ]
 
 jobs:
