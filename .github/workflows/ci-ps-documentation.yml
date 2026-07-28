@@ -1,0 +1,59 @@
+name: Generate PowerShell Documentation
+on: 
+ workflow_dispatch:
+ workflow_run:
+   workflows: ["Build and Publish PowerShell Module"]
+   types: [completed]
+ pull_request:
+   branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  generate-docs:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+
+      - name: Get Build Run Id
+        id: getRunId
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          gh auth login --with-token $env:GITHUB_TOKEN
+          $RunId = gh run list --workflow ci-ps-build.yml --repo plaplain/PSMinecraftServerManager --status success --limit 1 --jq '[.[] | select(.conclusion=="success")] | .[0].databaseId' --json databaseId,conclusion
+          "run_id=$runId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8        
+      - name: Download Module Artifact
+        uses: actions/download-artifact@v8
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.getRunId.outputs.run_id }}
+          name: PSMinecraftServerManager
+          path: ${{ runner.temp }}\MinecraftServerManager
+
+      - name: Generate Documentation
+        id: GenerateDocs
+        shell: pwsh
+        run: |
+          .\tools\ps-documentation.ps1 -OutputPath "${{ github.workspace }}\docs" -ModulePsdPath "${{ runner.temp }}\MinecraftServerManager\MinecraftServerManager.psd1" -ModuleName "MinecraftServerManager"
+          
+      - name: Commit Documentation
+        if: github.ref != 'refs/heads/main'  # Only run if NOT on main branch
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          if (Test-Path "${{ github.workspace }}/docs") {
+            git add ${{ github.workspace }}/docs/
+            $commitMessage = "PSDocs: Update generated documentation"
+            git commit -m "$commitMessage" || echo "No changes to commit"
+            
+            # Push without triggering CI
+            git push origin HEAD:${{ github.ref }} --no-verify
+          }
