@@ -1,3 +1,16 @@
+<#
+.SYNOPSIS
+Backs up a configured Minecraft server
+
+.DESCRIPTION
+Backs up your configured Minecraft server to the Backup folder in the installation directory.
+
+.PARAMETER ServerName
+The name of the server, this is the same name you used when running Install-MinecraftServer.
+
+.EXAMPLE
+Backup-MinecraftServer -ServerName "MyServer"
+#>
 function Backup-MinecraftServer {
     [CmdletBinding()]
     param(

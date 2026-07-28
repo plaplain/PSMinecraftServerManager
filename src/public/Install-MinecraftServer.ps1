@@ -1,3 +1,25 @@
+<#
+.SYNOPSIS
+Installs Minecraft Server
+
+.DESCRIPTION
+Installs Minecraft Server to a custom installationn path.
+
+.PARAMETER ServerName
+The name of the server. You will use the name later on to start, update, and backup the server.
+
+.PARAMETER InstallationPath
+The path you want to install the server to.
+
+.PARAMETER PaperMc
+If you want the server to be installed using PaperMc instead of vanilla Minecraft.
+
+.PARAMETER Force
+Specify this if you are wanting to overwrite and existing installation.
+
+.EXAMPLE
+Install-MinecraftServer -ServerName "MyServer" -InstallationPath "C:\MinecraftServer" -PaperMc
+#>
 function Install-MinecraftServer {
     [CmdletBinding()]
     param(

@@ -1,3 +1,19 @@
+<#
+.SYNOPSIS
+Updates a configured Minecraft server.
+
+.DESCRIPTION
+Updates a minecraft server
+
+.PARAMETER ServerName
+The name of the configured server. You will hahve set this when using Install-MinecraftServer
+
+.PARAMETER NoBackup
+Specify if you don't want the command to backup the server before updating.
+
+.EXAMPLE
+Update-MinecraftServer -ServerName "MyServer"
+#>
 function Update-MinecraftServer {
     [CmdletBinding()]
     param(
