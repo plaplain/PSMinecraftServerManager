@@ -48,7 +48,7 @@ function Start-MinecraftServer {
         Write-Output "Accepting the Eula file"
         $EulaFile = Get-Content -Path $EulaFilePath -Raw
         $EulaFile = $EulaFile.replace("false", "true")
-        $EulaFile | Out-File -FilePath $EulaFilePath -Encoding utf8
+        $EulaFile | Out-File -FilePath $EulaFilePath -Encoding ([System.Text.Encoding]::UTF8)
     }
 
     if($InterativeMode){

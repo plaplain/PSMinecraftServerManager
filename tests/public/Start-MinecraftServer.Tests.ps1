@@ -73,8 +73,8 @@ Describe 'Start-MinecraftServer Tests' {
 
             Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $FolderPath } -MockWith { $true }
 
-            $LivePath = Join-Path -Path $FolderPath -ChildPath 'Live'
-            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $LivePath } -MockWith { $false }
+            $EulaPath = Join-Path -Path $FolderPath -ChildPath 'Live' -AdditionalChildPath 'eula.txt'
+            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaPath } -MockWith { $false }
 
             Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
 
@@ -85,7 +85,7 @@ Describe 'Start-MinecraftServer Tests' {
             }
 
             Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
-            Mock -ModuleName $ModuleName -CommandName Get-Content -MockWith {}
+            Mock -ModuleName $ModuleName -CommandName Get-Content -MockWith {'false'}
             Mock -ModuleName $ModuleName -CommandName Start-Sleep -MockWith {}
         }
 
@@ -93,25 +93,34 @@ Describe 'Start-MinecraftServer Tests' {
             { Start-MinecraftServer -ServerName "TestServer" } | Should -Not -Throw
         }
 
-        It 'Shoud run Test-Path 2 times' {
-            Start-MinecraftServer -ServerName "TestServer" | Should -Invoke Test-Path -ParameterFilter $Path -eq "C:\Temp\MinecraftServerManager"   -Times 1 -ModuleName $ModuleName
+        It 'Shoud run Test-Path 1 times' {
+            Start-MinecraftServer -ServerName "TestServer"
+            Should -Invoke Test-Path -ParameterFilter {$Path -eq $FolderPath} -Times 1 -ModuleName $ModuleName
         }
 
         It 'Shoud run Test-Path 2 times' {
-            Start-MinecraftServer -ServerName "TestServer" | Should -Invoke Start-Job -Times 2 -ModuleName $ModuleName
+            Start-MinecraftServer -ServerName "TestServer"
+            Should -Invoke Test-Path -Times 2 -ModuleName $ModuleName
         }
 
         It 'Should run Out-File 1 times' {
-            Start-MinecraftServer -ServerName "TestServer" | Should -Invoke Out-File -Times 1 -ModuleName $ModuleName
+            Start-MinecraftServer -ServerName "TestServer"
+            Should -Invoke Out-File -Times 1 -ModuleName $ModuleName
         }
 
         It 'Should run Get-Content 1 times' {
-            Start-MinecraftServer -ServerName "TestServer" | Should -Invoke Get-Content -Times 1 -ModuleName $ModuleName
+            Start-MinecraftServer -ServerName "TestServer"
+            Should -Invoke Get-Content -Times 1 -ModuleName $ModuleName
         }
 
-        It 'Should run Start-Sleep 1 times' {
-            Start-MinecraftServer -ServerName "TestServer" | Should -Invoke Start-Sleep -Times 1 -ModuleName $ModuleName
+        It 'Should run Invoke-Command 1 times' {
+            Start-MinecraftServer -ServerName "TestServer" -InterativeMode
+            Should -Invoke Invoke-Command -Times 2 -ModuleName $ModuleName
         }
 
+        It 'Should run Start-Job 1 times' {
+            Start-MinecraftServer -ServerName "TestServer"
+            Should -Invoke Start-Job -Times 1 -ModuleName $ModuleName
+        }
     }
 }
