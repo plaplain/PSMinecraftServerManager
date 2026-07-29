@@ -6,21 +6,21 @@ Locale: en-US
 Module Name: MinecraftServerManager
 ms.date: 07/29/2026
 PlatyPS schema version: 2024-05-01
-title: Start-MinecraftServer
+title: Backup-MinecraftServer
 ---
 
-# Start-MinecraftServer
+# Backup-MinecraftServer
 
 ## SYNOPSIS
 
-{{ Fill in the Synopsis }}
+Backs up a configured Minecraft server
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Start-MinecraftServer [-ServerName] <string> [-InterativeMode]
+Backup-MinecraftServer [-ServerName] <string>
 ```
 
 ## ALIASES
@@ -30,40 +30,19 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-{{ Fill in the Description }}
+Backs up your configured Minecraft server to the Backup folder in the installation directory.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 
-{{ Add example description here }}
+Backup-MinecraftServer -ServerName "MyServer"
 
 ## PARAMETERS
 
-### -InterativeMode
-
-{{ Fill InterativeMode Description }}
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
 ### -ServerName
 
-{{ Fill ServerName Description }}
+The name of the server, this is the same name you used when running Install-MinecraftServer.
 
 ```yaml
 Type: System.String
@@ -93,13 +72,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
-
-{{ Fill in the Description }}
-
 ## NOTES
-
-{{ Fill in the Notes }}
 
 ## RELATED LINKS
 

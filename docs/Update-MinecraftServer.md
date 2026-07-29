@@ -6,21 +6,21 @@ Locale: en-US
 Module Name: MinecraftServerManager
 ms.date: 07/29/2026
 PlatyPS schema version: 2024-05-01
-title: Start-MinecraftServer
+title: Update-MinecraftServer
 ---
 
-# Start-MinecraftServer
+# Update-MinecraftServer
 
 ## SYNOPSIS
 
-{{ Fill in the Synopsis }}
+Updates a configured Minecraft server.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Start-MinecraftServer [-ServerName] <string> [-InterativeMode]
+Update-MinecraftServer [-ServerName] <string> [-NoBackup]
 ```
 
 ## ALIASES
@@ -30,23 +30,23 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-{{ Fill in the Description }}
+Updates a minecraft server
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 
-{{ Add example description here }}
+Update-MinecraftServer -ServerName "MyServer"
 
 ## PARAMETERS
 
-### -InterativeMode
+### -NoBackup
 
-{{ Fill InterativeMode Description }}
+Specify if you don't want the command to backup the server before updating.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-DefaultValue: ''
+DefaultValue: False
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -63,7 +63,8 @@ HelpMessage: ''
 
 ### -ServerName
 
-{{ Fill ServerName Description }}
+The name of the configured server.
+You will hahve set this when using Install-MinecraftServer
 
 ```yaml
 Type: System.String
@@ -93,13 +94,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
-
-{{ Fill in the Description }}
-
 ## NOTES
-
-{{ Fill in the Notes }}
 
 ## RELATED LINKS
 

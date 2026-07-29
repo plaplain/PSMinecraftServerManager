@@ -6,21 +6,21 @@ Locale: en-US
 Module Name: MinecraftServerManager
 ms.date: 07/29/2026
 PlatyPS schema version: 2024-05-01
-title: Start-MinecraftServer
+title: Install-MinecraftServer
 ---
 
-# Start-MinecraftServer
+# Install-MinecraftServer
 
 ## SYNOPSIS
 
-{{ Fill in the Synopsis }}
+Installs Minecraft Server
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Start-MinecraftServer [-ServerName] <string> [-InterativeMode]
+Install-MinecraftServer [-ServerName] <string> [-InstallationPath] <string> [-PaperMc] [-Force]
 ```
 
 ## ALIASES
@@ -30,23 +30,65 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-{{ Fill in the Description }}
+Installs Minecraft Server to a custom installationn path.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 
-{{ Add example description here }}
+Install-MinecraftServer -ServerName "MyServer" -InstallationPath "C:\MinecraftServer" -PaperMc
 
 ## PARAMETERS
 
-### -InterativeMode
+### -Force
 
-{{ Fill InterativeMode Description }}
+Specify this if you are wanting to overwrite and existing installation.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -InstallationPath
+
+The path you want to install the server to.
+
+```yaml
+Type: System.String
 DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 1
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -PaperMc
+
+If you want the server to be installed using PaperMc instead of vanilla Minecraft.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -63,7 +105,8 @@ HelpMessage: ''
 
 ### -ServerName
 
-{{ Fill ServerName Description }}
+The name of the server.
+You will use the name later on to start, update, and backup the server.
 
 ```yaml
 Type: System.String
@@ -93,13 +136,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
-
-{{ Fill in the Description }}
-
 ## NOTES
-
-{{ Fill in the Notes }}
 
 ## RELATED LINKS
 
