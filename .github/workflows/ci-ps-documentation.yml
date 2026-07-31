@@ -1,7 +1,7 @@
 name: Generate PowerShell Documentation
 on:
   workflow_run:
-    workflows: [Build and Publish PowerShell Module]
+    workflows: [Build PowerShell Module]
     types:
       - completed
   #pull_request:

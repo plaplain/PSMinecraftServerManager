@@ -1,4 +1,4 @@
-name: Build and Publish PowerShell Module
+name: Build PowerShell Module
 
 on:
   push:
