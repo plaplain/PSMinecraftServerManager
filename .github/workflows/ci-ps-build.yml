@@ -1,8 +1,9 @@
 name: Build and Publish PowerShell Module
 
 on:
-  push:
+  pull_request_target:
     branches: [ main, dev ]
+    types: [ closed ]
 
 jobs:
   build:
