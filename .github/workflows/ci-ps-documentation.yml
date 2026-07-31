@@ -1,7 +1,7 @@
 name: Generate PowerShell Documentation
 on:
   workflow_run:
-    workflows: [ci-ps-build.yml]
+    workflows: [Build PowerShell Module]
     types: [completed]
 
 permissions:
