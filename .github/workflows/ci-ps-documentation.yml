@@ -2,6 +2,7 @@ name: Generate PowerShell Documentation
 on:
   workflow_run:
     workflows: [Build PowerShell Module]
+    types: [completed]
 
 permissions:
   contents: write
