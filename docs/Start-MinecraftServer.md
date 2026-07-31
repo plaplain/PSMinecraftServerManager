@@ -4,7 +4,7 @@ external help file: MinecraftServerManager-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: MinecraftServerManager
-ms.date: 07/29/2026
+ms.date: 07/31/2026
 PlatyPS schema version: 2024-05-01
 title: Start-MinecraftServer
 ---
@@ -13,7 +13,7 @@ title: Start-MinecraftServer
 
 ## SYNOPSIS
 
-{{ Fill in the Synopsis }}
+Starts a configured Minecraft server.
 
 ## SYNTAX
 
@@ -30,23 +30,23 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-{{ Fill in the Description }}
+Starts a Minecraft server using the configured server name.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 
-{{ Add example description here }}
+Start-MinecraftServer -ServerName 'MyServer'
 
 ## PARAMETERS
 
 ### -InterativeMode
 
-{{ Fill InterativeMode Description }}
+Run in an interactive mode where you can see the server console.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-DefaultValue: ''
+DefaultValue: False
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -63,7 +63,7 @@ HelpMessage: ''
 
 ### -ServerName
 
-{{ Fill ServerName Description }}
+The server name you used when running Install-MinecraftServer
 
 ```yaml
 Type: System.String
@@ -93,13 +93,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
-
-{{ Fill in the Description }}
-
 ## NOTES
-
-{{ Fill in the Notes }}
 
 ## RELATED LINKS
 

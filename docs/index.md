@@ -5,7 +5,7 @@ HelpInfoUri: https://plaplain.github.io/PSMinecraftServerManager
 Locale: en-US
 Module Guid: 716b516b-8d31-4e15-97bd-2798229e592f
 Module Name: MinecraftServerManager
-ms.date: 07/29/2026
+ms.date: 07/31/2026
 PlatyPS schema version: 2024-05-01
 title: MinecraftServerManager Module
 ---
@@ -28,7 +28,7 @@ Installs Minecraft Server
 
 ### [Start-MinecraftServer](Start-MinecraftServer.md)
 
-{{ Fill in the Synopsis }}
+Starts a configured Minecraft server.
 
 ### [Update-MinecraftServer](Update-MinecraftServer.md)
 

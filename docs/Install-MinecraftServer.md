@@ -4,7 +4,7 @@ external help file: MinecraftServerManager-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: MinecraftServerManager
-ms.date: 07/29/2026
+ms.date: 07/31/2026
 PlatyPS schema version: 2024-05-01
 title: Install-MinecraftServer
 ---
