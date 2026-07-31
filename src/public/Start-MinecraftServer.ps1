@@ -1,3 +1,19 @@
+<#
+.SYNOPSIS
+Starts a configured Minecraft server.
+
+.DESCRIPTION
+Starts a Minecraft server using the configured server name.
+
+.PARAMETER ServerName
+The server name you used when running Install-MinecraftServer
+
+.PARAMETER InterativeMode
+Run in an interactive mode where you can see the server console.
+
+.EXAMPLE
+Start-MinecraftServer -ServerName 'MyServer'
+#>
 function Start-MinecraftServer {
     param(
         [Parameter(Mandatory = $true)][string]$ServerName,
