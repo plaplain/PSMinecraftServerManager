@@ -19,7 +19,7 @@ function Stop-MinecraftServer {
     $Job = Get-Job -Name $ServerName
 
     if($null -eq $Job){
-        return "No Minecraft server detected. Is it running?"
+        throw("No Minecraft server detected. Is it running?")
     }
 
     if($Job.State -eq 'Running'){
