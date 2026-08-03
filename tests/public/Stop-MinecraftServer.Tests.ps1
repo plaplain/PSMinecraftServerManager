@@ -23,13 +23,14 @@ Describe 'Stop-MinecraftServer Tests' {
 
     Context "Test 'Start-MinecraftServer'" {
         BeforeAll {
-            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Start-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
+            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Stop-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 
             $ModuleName = "TestPs1Module_Stop-MinecraftServer"
 
             Mock -CommandName Get-Job -ModuleName $ModuleName -MockWith {
                 [PSCustomObject]@{
                     State = 'Running'
+                    Id = 1234
                 }
             }
 
