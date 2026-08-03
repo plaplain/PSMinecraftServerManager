@@ -23,7 +23,7 @@ $PesterConfiguration = [PesterConfiguration]@{
     Run = @{
          Path = $TestPath
     }
-    Filters = @{
+    Filter = @{
         Tag = $Tags
     }
     Should = @{ # <- Should configuration.

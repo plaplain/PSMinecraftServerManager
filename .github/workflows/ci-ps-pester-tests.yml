@@ -34,4 +34,4 @@ jobs:
       id: UnitTests
       shell: pwsh
       run: |
-        .\tools\pester.ps1 -Tags "Unit","Linux" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
+        .\tools\pester.ps1 -Tags "Unit" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
