@@ -12,7 +12,7 @@ BeforeAll {
     }
 }
 
-Describe 'Stop-MinecraftServer Tests' {
+Describe 'Stop-MinecraftServer Unit Tests' -Tag 'Unit' {
     BeforeAll {}
 
     Context "Core Tests" {

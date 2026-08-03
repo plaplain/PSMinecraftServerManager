@@ -15,7 +15,7 @@ BeforeAll {
     $ModuleName = "TestPs1Module_Install-MinecraftServer"
 }
 
-Describe 'Install-MinecraftServer Tests' {
+Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
     BeforeAll {
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]

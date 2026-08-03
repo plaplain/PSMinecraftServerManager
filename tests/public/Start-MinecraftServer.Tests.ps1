@@ -12,7 +12,7 @@ BeforeAll {
     }
 }
 
-Describe 'Start-MinecraftServer Tests' {
+Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
     BeforeAll {
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]

@@ -12,7 +12,7 @@ BeforeAll {
     }
 }
 
-Describe 'InstallationConfiguration Class Tests' {
+Describe 'InstallationConfiguration Class Unit Tests' -Tag 'Unit' {
     BeforeAll {
         [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'InstallationConfiguration', Justification = 'False positive due to how Pester works.')]
         $InstallationConfiguration = New-Object -Type 'InstallationConfiguration'

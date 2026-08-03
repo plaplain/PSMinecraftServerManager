@@ -36,7 +36,7 @@ BeforeAll {
     Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Backup-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 }
 
-Describe 'Backup-MinecraftServer Tests' {
+Describe 'Backup-MinecraftServer Unit Tests' -Tag 'Unit' {
     BeforeAll {
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]

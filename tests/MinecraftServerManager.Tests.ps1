@@ -33,7 +33,7 @@ Describe 'Module Manifest Tests' {
     }
 }
 
-Describe "Base Function & Class Tests" {
+Describe "Base Function & Class Tests" -Tag 'Unit' {
     Context "Private functions are defined" -Tag "Unit" {
         foreach($File in $PrivateFunctions){
             It "Function is defined: $($File.BaseName)" -TestCases @{ File = $File} {
@@ -42,7 +42,7 @@ Describe "Base Function & Class Tests" {
         }
     }
 
-    Context "Classes are defined" {
+    Context "Classes are defined" -Tag 'Unit'{
         foreach($File in $Classes){
             $ClassName = ($File.BaseName).Replace('.Class','')
             It "Class is defined $ClassName" -TestCases @{ File = $File; ClassName = $ClassName} {

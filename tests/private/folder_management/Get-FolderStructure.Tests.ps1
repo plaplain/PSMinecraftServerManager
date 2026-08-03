@@ -12,7 +12,7 @@ BeforeAll {
     }
 }
 
-Describe 'Get-FolderStructure Tests' {
+Describe 'Get-FolderStructure Unit Tests' -Tag 'Unit' {
     BeforeAll{
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]

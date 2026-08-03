@@ -12,7 +12,7 @@ BeforeAll {
     }
 }
 
-Describe 'Get-MinecraftDownloadUrl Tests' {
+Describe 'Get-MinecraftDownloadUrl Unit Tests' -Tag 'Unit' {
     BeforeAll {
         Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like 'https://launchermeta.mojang.com/mc/game/version_manifest_v2.json' } -MockWith {
             [PSCustomObject]@{

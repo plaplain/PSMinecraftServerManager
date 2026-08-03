@@ -12,7 +12,7 @@ BeforeAll {
     }
 }
 
-Describe 'Get-InstallationConfiguration Tests' -Tag 'Linux' {
+Describe 'Get-InstallationConfiguration Unit Tests' -Tag 'Unit' {
     BeforeAll {
         $Env:APPDATA = 'C:\Users\Username\AppData\Roaming'
         $Env:HOME = '/home/Username'

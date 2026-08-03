@@ -12,7 +12,7 @@ BeforeAll {
     }
 }
 
-Describe 'Get-PaperMcDownloadUrl Tests' {
+Describe 'Get-PaperMcDownloadUrl Unit Tests' -Tag 'Unit' {
     BeforeAll {
         $MockVersionResponses = @{
             '26.2-rc-2' = @(
