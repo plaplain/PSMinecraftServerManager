@@ -21,7 +21,7 @@ Describe 'Stop-MinecraftServer Tests' {
         }
     }
 
-    Context "Test 'Start-MinecraftServer'" {
+    Context "Test 'Start-MinecraftServer'" -Tag 'Testing' {
         BeforeAll {
             Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Stop-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 
