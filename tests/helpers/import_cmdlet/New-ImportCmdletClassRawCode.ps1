@@ -1,9 +1,9 @@
+
 function New-ImportCmdletClassRawCode {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Exception for a Pester function')]
     param(
         [Parameter(Mandatory = $false)][array]$ClassesToMock
     )
-
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Exception for a Pester function')]
 
     $RawClassCode = ''
 
