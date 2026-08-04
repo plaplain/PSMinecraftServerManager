@@ -1,9 +1,8 @@
 function New-ImportCmdletParameterString {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Exception for a Pester function')]
     param(
         [Parameter(Mandatory = $true)][array]$SplitParameters
     )
-
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Exception for a Pester function')]
 
     $ParameterIndex = 0
     $OutputString = ''

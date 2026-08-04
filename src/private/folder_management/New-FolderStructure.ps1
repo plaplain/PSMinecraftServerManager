@@ -1,4 +1,5 @@
 function New-FolderStructure {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)][string]$Path,
         [Parameter(Mandatory = $false)][switch]$Force
@@ -30,6 +31,8 @@ function New-FolderStructure {
             Force       = $Force
         }
 
-        New-Item @NewItemParams | Out-Null
+        if ($PSCmdlet.ShouldProcess($SelectedFolderPath)) {
+            New-Item @NewItemParams | Out-Null
+        }
     }
 }
