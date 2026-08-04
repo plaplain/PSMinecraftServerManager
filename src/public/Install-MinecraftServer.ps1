@@ -69,7 +69,7 @@ function Install-MinecraftServer {
     $ServerAdded = $false
 
     try{
-        $Configuration.AddServer($ServerName,$InstallationPath)
+        $Configuration.AddServer($ServerName,$InstallationPath,$PaperMc)
         $ServerAdded = $true
     }
     catch{
