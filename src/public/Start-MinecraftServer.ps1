@@ -15,6 +15,7 @@ Run in an interactive mode where you can see the server console.
 Start-MinecraftServer -ServerName 'MyServer'
 #>
 function Start-MinecraftServer {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)][string]$ServerName,
         [Parameter(Mandatory = $false)][switch]$InterativeMode
@@ -48,8 +49,9 @@ function Start-MinecraftServer {
     }
 
     $EulaFilePath = Join-Path -Path $LivePath -ChildPath "eula.txt"
-    if (!(Test-Path -Path $EulaFilePath)) {
+    if (!(Test-Path -Path $EulaFilePath) -and $PSCmdlet.ShouldProcess("Generate EULA for '$ServerName'")) {
         Write-Output "First run detected. Starting the server to generate the eula file. The server will stop, this is expected."
+
         $Job = Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
 
         $RunTime = 0
@@ -67,7 +69,7 @@ function Start-MinecraftServer {
         $EulaFile | Out-File -FilePath $EulaFilePath -Encoding ([System.Text.Encoding]::UTF8)
     }
 
-    if($InterativeMode){
+    if($InterativeMode -and $PSCmdlet.ShouldProcess($ServerName)){
         Invoke-Command -ScriptBlock $LaunchScriptBlock
     }
     else {

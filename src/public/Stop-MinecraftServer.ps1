@@ -12,21 +12,24 @@ The server name you used when running Install-MinecraftServer
 Stop-MinecraftServer -ServerName 'MyServer'
 #>
 function Stop-MinecraftServer {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)][string]$ServerName
     )
 
     $Job = Get-Job -Name $ServerName
 
-    if($null -eq $Job){
+    if ($null -eq $Job) {
         throw("No Minecraft server detected. Is it running?")
     }
 
-    if($Job.State -eq 'Running'){
-        Stop-Job -Id $Job.Id -ErrorAction Stop | Out-Null
-        return "Server stopped."
+    if ($Job.State -eq 'Running') {
+        if ($PSCmdlet.ShouldProcess($ServerName)) {
+            Stop-Job -Id $Job.Id -ErrorAction Stop | Out-Null
+            return "Server stopped."
+        }
     }
-    else{
+    else {
         return "Server no longer running in a stable state."
     }
 }

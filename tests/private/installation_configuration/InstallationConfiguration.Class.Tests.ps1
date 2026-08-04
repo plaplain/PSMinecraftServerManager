@@ -30,6 +30,7 @@ Describe 'InstallationConfiguration Class Unit Tests' -Tag 'Unit' {
         $JsonConfiguration = $ExistingConfiguration | ConvertTo-Json
 
         if($IsLinux){
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', 'ConfigurationFolderPath', Justification = 'False positive due to how Pester works.')]
             $ConfigurationFolderPath = '/home/minecraft'
         }
         else{

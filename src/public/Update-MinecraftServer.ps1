@@ -15,7 +15,7 @@ Specify if you don't want the command to backup the server before updating.
 Update-MinecraftServer -ServerName "MyServer"
 #>
 function Update-MinecraftServer {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)][string]$ServerName,
         [Parameter(Mandatory = $false)][switch]$NoBackup
@@ -26,12 +26,12 @@ function Update-MinecraftServer {
     $Configuration = [InstallationConfiguration]::new($InstallationConfigurationPath)
     $ServerConfiguration = $Configuration.GetServer($ServerName)
 
-    if(!$NoBackup){
+    if (!$NoBackup) {
         Backup-MinecraftServer -ServerName $ServerName -ErrorAction Stop
     }
 
-    switch($ServerConfiguration.ServerType){
-        'PaperMc'{
+    switch ($ServerConfiguration.ServerType) {
+        'PaperMc' {
             $DownloadUrl = Get-PaperMcDownloadUrl -Latest
         }
         Default {
@@ -43,7 +43,9 @@ function Update-MinecraftServer {
 
     $LiveServerJar = Join-Path -Path $FolderStructure['Live'] -ChildPath 'minecraft_server.jar'
 
-    Invoke-WebRequest -Uri $DownloadUrl -OutFile $LiveServerJar
+    if ($PSCmdlet.ShouldProcess($LiveServerJar)) {
+        Invoke-WebRequest -Uri $DownloadUrl -OutFile $LiveServerJar
+    }
 }
 
 Export-ModuleMember 'Update-MinecraftServer'
