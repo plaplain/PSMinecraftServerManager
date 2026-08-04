@@ -53,7 +53,7 @@ Describe 'Backup-MinecraftServer Unit Tests' -Tag 'Unit' {
         }
     }
 
-    Context "Test 'Backup-MinecraftServer'" {
+    Context "Test 'Backup-MinecraftServer' Unit Tests" -Tag "Unit" {
         BeforeAll {
             $ModuleName = "TestPs1Module_Backup-MinecraftServer"
 
