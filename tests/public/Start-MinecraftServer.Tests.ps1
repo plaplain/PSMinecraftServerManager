@@ -21,72 +21,68 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
         else {
             $FolderPath = 'C:\Temp\'
         }
-    }
 
-    Context "Core Tests" {
-        It 'Script file exists' {
-            Test-Path $ScriptRelativePath | Should -Be $true
-        }
-    }
+        $FunctionDependencies = @(
+            'Get-FolderStructure',
+            'Get-InstallationConfigurationPath'
+        )
 
-    Context "Test 'Start-MinecraftServer'" {
-        BeforeAll {
-            $FunctionDependencies = @(
-                'Get-FolderStructure',
-                'Get-InstallationConfigurationPath'
-            )
-
-            $ClassDependencies = @(
-                [PSCustomObject]@{
-                    ClassName    = 'InstallationConfiguration'
-                    Constructors = @('[string]')
-                    Methods      = @(
-                        [PSCustomObject]@{
-                            Name       = 'GetServer'
-                            Inputs     = '[string]'
-                            OutputType = 'PSCustomObject'
-                            Output     = "@{
+        $ClassDependencies = @(
+            [PSCustomObject]@{
+                ClassName    = 'InstallationConfiguration'
+                Constructors = @('[string]')
+                Methods      = @(
+                    [PSCustomObject]@{
+                        Name       = 'GetServer'
+                        Inputs     = '[string]'
+                        OutputType = 'PSCustomObject'
+                        Output     = "@{
                                 InstallationPath = '$FolderPath'
                             }"
-                        }
-                    )
-                }
-            )
-
-            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Start-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
-
-            $ModuleName = "TestPs1Module_Start-MinecraftServer"
-
-            Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
-                @{
-                    Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
-                    Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
-                    Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
-                }
+                    }
+                )
             }
+        )
 
-            Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
-                [PSCustomObject]@{
-                    FullPath = $FolderPath
-                }            
+        Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Start-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
+
+        $ModuleName = "TestPs1Module_Start-MinecraftServer"
+
+        Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
+            @{
+                Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
+                Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
+                Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
             }
+        }
 
-            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $FolderPath } -MockWith { $true }
+        Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
+            [PSCustomObject]@{
+                FullPath = $FolderPath
+            }            
+        }
 
-            $EulaPath = Join-Path -Path $FolderPath -ChildPath 'Live' -AdditionalChildPath 'eula.txt'
-            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaPath } -MockWith { $false }
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $FolderPath } -MockWith { $true }
 
-            Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
+        $EulaPath = Join-Path -Path $FolderPath -ChildPath 'Live' -AdditionalChildPath 'eula.txt'
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaPath } -MockWith { $false }
 
-            Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {
-                [PSCustomObject]@{
-                    State = 'Complete'
-                }
+        Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
+
+        Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {
+            [PSCustomObject]@{
+                State = 'Complete'
             }
+        }
 
-            Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
-            Mock -ModuleName $ModuleName -CommandName Get-Content -MockWith {'false'}
-            Mock -ModuleName $ModuleName -CommandName Start-Sleep -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Get-Content -MockWith { 'false' }
+        Mock -ModuleName $ModuleName -CommandName Start-Sleep -MockWith {}
+    }
+
+    Context "When input is valid" {
+        It 'Script file exists' {
+            Test-Path $ScriptRelativePath | Should -Be $true
         }
 
         It 'Should not throw' {
@@ -95,7 +91,7 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
 
         It 'Shoud run Test-Path 1 times' {
             Start-MinecraftServer -ServerName "TestServer"
-            Should -Invoke Test-Path -ParameterFilter {$Path -eq $FolderPath} -Times 1 -ModuleName $ModuleName
+            Should -Invoke Test-Path -ParameterFilter { $Path -eq $FolderPath } -Times 1 -ModuleName $ModuleName
         }
 
         It 'Shoud run Test-Path 2 times' {

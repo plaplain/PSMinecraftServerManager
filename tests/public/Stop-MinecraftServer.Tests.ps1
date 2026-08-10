@@ -13,28 +13,24 @@ BeforeAll {
 }
 
 Describe 'Stop-MinecraftServer Unit Tests' -Tag 'Unit' {
-    BeforeAll {}
+    BeforeAll {
+        Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Stop-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 
-    Context "Core Tests" {
-        It 'Script file exists' {
-            Test-Path $ScriptRelativePath | Should -Be $true
+        $ModuleName = "TestPs1Module_Stop-MinecraftServer"
+
+        Mock -CommandName Get-Job -ModuleName $ModuleName -MockWith {
+            [PSCustomObject]@{
+                State = 'Running'
+                Id    = 1234
+            }
         }
+
+        Mock -CommandName Stop-Job -ModuleName $ModuleName -MockWith {}
     }
 
-    Context "Test 'Start-MinecraftServer'" -Tag 'Testing' {
-        BeforeAll {
-            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Stop-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
-
-            $ModuleName = "TestPs1Module_Stop-MinecraftServer"
-
-            Mock -CommandName Get-Job -ModuleName $ModuleName -MockWith {
-                [PSCustomObject]@{
-                    State = 'Running'
-                    Id = 1234
-                }
-            }
-
-            Mock -CommandName Stop-Job -ModuleName $ModuleName -MockWith {}
+    Context "When input is valid" {
+        It 'Script file exists' {
+            Test-Path $ScriptRelativePath | Should -Be $true
         }
 
         It 'Should not throw' {
@@ -50,8 +46,10 @@ Describe 'Stop-MinecraftServer Unit Tests' -Tag 'Unit' {
             Stop-MinecraftServer -ServerName "TestServer"
             Should -Invoke Get-Job -Times 1 -ModuleName $ModuleName
         }
+    }
 
-        It 'Should throw if no job'{
+    Context "When input is invalid" {
+        It 'Should throw if no job' {
             Mock -CommandName Get-Job -ModuleName $ModuleName -MockWith {}
             { Stop-MinecraftServer -ServerName "TestServer" } | Should -Throw
         }

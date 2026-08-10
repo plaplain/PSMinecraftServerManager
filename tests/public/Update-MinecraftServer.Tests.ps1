@@ -10,6 +10,9 @@ BeforeAll {
         Write-Output "Importing '$File'"
         . $File
     }
+
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'ModuleName', Justification = 'False positive due to how Pester works.')]
+    $ModuleName = "TestPs1Module_Update-MinecraftServer"
 }
 
 Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
@@ -21,24 +24,56 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
         else {
             $FolderPath = 'C:\Temp\'
         }
+        <#
+        $FunctionDependencies = @(
+            'Get-FolderStructure',
+            'Get-InstallationConfigurationPath',
+            'Backup-MinecraftServer',
+            'Get-PaperMcDownloadUrl',
+            'Get-MinecraftDownloadUrl'
+        )
+
+        Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Update-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
+
+        Mock -ModuleName $ModuleName -CommandName Backup-MinecraftServer -MockWith {}
+
+        Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
+            if ($IsLinux) {
+                "/home/minecraft"
+            }
+            else {
+                "C:\Temp\MinecraftServerManager"
+            }               
+        }
+
+        Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
+            @{
+                Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
+                Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
+                Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
+            }
+        }
+
+        Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}
+
+        Mock -ModuleName $ModuleName -CommandName Get-PaperMcDownloadUrl -MockWith {
+            "https://test-papermc-url.com"
+        }
+
+        Mock -ModuleName $ModuleName -CommandName Get-MinecraftDownloadUrl -MockWith {
+            "https://test-minecraft-url.com"
+        }
+            #>
     }
 
-    Context "Core Tests" {
+    Context "When input is valid" {
         It 'Script file exists' {
             Test-Path $ScriptRelativePath | Should -Be $true
         }
     }
 
-    Context "Test 'Update-MinecraftServer with vanilla Minecraft'" {
+    Context "Input is valid with vanilla Minecraft'" {
         BeforeAll {
-            $FunctionDependencies = @(
-                'Get-FolderStructure',
-                'Get-InstallationConfigurationPath',
-                'Backup-MinecraftServer',
-                'Get-PaperMcDownloadUrl',
-                'Get-MinecraftDownloadUrl'
-            )
-
             $ClassDependencies = @(
                 [PSCustomObject]@{
                     ClassName    = 'InstallationConfiguration'
@@ -49,7 +84,7 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
                             Inputs     = '[string]'
                             OutputType = 'PSCustomObject'
                             Output     = '@{
-                        InstallationPath = "C:\Temp\Bob"
+                        InstallationPath = "C:\Temp\"
                     }'
                         }
                     )
@@ -58,15 +93,17 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
 
             Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Update-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 
-            $ModuleName = "TestPs1Module_Update-MinecraftServer"
+            $FunctionDependencies = @(
+                'Get-FolderStructure',
+                'Get-InstallationConfigurationPath',
+                'Backup-MinecraftServer',
+                'Get-PaperMcDownloadUrl',
+                'Get-MinecraftDownloadUrl'
+            )
 
-            Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
-                @{
-                    Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
-                    Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
-                    Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
-                }
-            }
+            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Update-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
+
+            Mock -ModuleName $ModuleName -CommandName Backup-MinecraftServer -MockWith {}
 
             Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
                 if ($IsLinux) {
@@ -77,7 +114,15 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
                 }               
             }
 
-            Mock -ModuleName $ModuleName -CommandName Backup-MinecraftServer -MockWith {}
+            Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
+                @{
+                    Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
+                    Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
+                    Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
+                }
+            }
+
+            Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}
 
             Mock -ModuleName $ModuleName -CommandName Get-PaperMcDownloadUrl -MockWith {
                 "https://test-papermc-url.com"
@@ -87,7 +132,6 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
                 "https://test-minecraft-url.com"
             }
 
-            Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}         
         }
 
         It 'Should not throw' {
@@ -116,7 +160,7 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
         }
     }
 
-    Context "Test Update-MinecraftServer with PaperMc" {
+    Context "Input is valid  with PaperMc" {
         BeforeAll {
             $FunctionDependencies = @(
                 'Get-FolderStructure',
@@ -136,7 +180,7 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
                             Inputs     = '[string]'
                             OutputType = 'PSCustomObject'
                             Output     = '@{
-                        InstallationPath = "C:\Temp\Bob"
+                        InstallationPath = "C:\Temp\"
                         ServerType = "PaperMc"
                     }'
                         }
@@ -146,15 +190,17 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
 
             Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Update-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 
-            $ModuleName = "TestPs1Module_Update-MinecraftServer"
+            $FunctionDependencies = @(
+                'Get-FolderStructure',
+                'Get-InstallationConfigurationPath',
+                'Backup-MinecraftServer',
+                'Get-PaperMcDownloadUrl',
+                'Get-MinecraftDownloadUrl'
+            )
 
-            Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
-                @{
-                    Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
-                    Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
-                    Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
-                }
-            }
+            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Update-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
+
+            Mock -ModuleName $ModuleName -CommandName Backup-MinecraftServer -MockWith {}
 
             Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
                 if ($IsLinux) {
@@ -165,7 +211,15 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
                 }               
             }
 
-            Mock -ModuleName $ModuleName -CommandName Backup-MinecraftServer -MockWith {}
+            Mock -ModuleName $ModuleName -CommandName Get-FolderStructure -MockWith {
+                @{
+                    Live   = Join-Path -Path $FolderPath -ChildPath 'Live'
+                    Backup = Join-Path -Path $FolderPath -ChildPath 'Backup'
+                    Logs   = Join-Path -Path $FolderPath -ChildPath 'Logs'
+                }
+            }
+
+            Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}
 
             Mock -ModuleName $ModuleName -CommandName Get-PaperMcDownloadUrl -MockWith {
                 "https://test-papermc-url.com"
@@ -174,8 +228,6 @@ Describe 'Update-MinecraftServer Unit Tests' -Tag 'Unit' {
             Mock -ModuleName $ModuleName -CommandName Get-MinecraftDownloadUrl -MockWith {
                 "https://test-minecraft-url.com"
             }
-
-            Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}         
         }
 
         It 'Should call only Get-PaperMcDownloadUrl' {

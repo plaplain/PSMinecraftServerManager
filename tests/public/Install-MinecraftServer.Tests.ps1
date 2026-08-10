@@ -24,17 +24,7 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
         else {
             $InstallationPath = 'C:\Temp\'
         }
-    }
 
-    Context "Core Tests" {
-        It 'Script file exists' {
-            Test-Path $ScriptRelativePath | Should -Be $true
-        }
-    }
-
-    Context "Test 'Install-MinecraftServer' for new server" {
-        BeforeAll {
-  
             $FunctionDependencies = @(
                 'New-FolderStructure',
                 'Get-InstallationConfigurationPath',
@@ -49,7 +39,7 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
                     Methods      = @(
                         [PSCustomObject]@{
                             Name       = 'AddServer'
-                            Inputs     = '[string];[string]'
+                            Inputs     = '[string];[string];[boolean]'
                             OutputType = 'void'
                             Output     = $null
                         },
@@ -86,6 +76,11 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
             Mock -ModuleName $ModuleName -CommandName Get-Command -MockWith {$true}
 
             Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith {$true}
+    }
+
+    Context "When input is valid" {
+        It 'Script file exists' {
+            Test-Path $ScriptRelativePath | Should -Be $true
         }
 
         It 'Should not throw installing vanilla' {
@@ -96,6 +91,31 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
             { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath -PaperMc } | Should -Not -Throw
         }
 
+        It 'Should not throw if directory found' {
+            $ScriptBlock = Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Install-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies -OutputScriptBlockOnly
+
+            . $ScriptBlock
+
+            Mock -CommandName Test-JavaInstallation -MockWith {$true}
+
+            Mock -CommandName Get-InstallationConfigurationPath -MockWith {
+                if ($IsLinux) {
+                    @{FullPath = "/home/minecraft" }
+                }
+                else {
+                    @{FullPath = "C:\Temp\MinecraftServerManager" }
+                }
+            }
+
+            { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath -Force } | Should -Not -Throw
+        }
+    }
+
+    Context "When input is invalid" {
+        BeforeAll{
+            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Install-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
+        }
+  
         It 'Should throw if install path not found' {
             Mock -ModuleName $ModuleName -CommandName New-FolderStructure -MockWith {
                 throw [System.IO.FileNotFoundException]::new("File not found.")
@@ -116,25 +136,6 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
             Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith {$false}
 
             { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath } | Should -Throw
-        }
-
-        It 'Should not throw if directory found' {
-            $ScriptBlock = Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Install-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies -OutputScriptBlockOnly
-
-            . $ScriptBlock
-
-            Mock -CommandName Test-JavaInstallation -MockWith {$true}
-
-            Mock -CommandName Get-InstallationConfigurationPath -MockWith {
-                if ($IsLinux) {
-                    @{FullPath = "/home/minecraft" }
-                }
-                else {
-                    @{FullPath = "C:\Temp\MinecraftServerManager" }
-                }
-            }
-
-            { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath -Force } | Should -Not -Throw
         }
     }
 }
