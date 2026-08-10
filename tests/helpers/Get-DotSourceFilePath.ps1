@@ -3,7 +3,8 @@ function Get-DotSourceFilePath {
     param(
         [Parameter(Mandatory = $true)][string]$TestFilePath,
         [Parameter(Mandatory = $false)][switch]$TestFile,
-        [Parameter(Mandatory = $false)][switch]$HelperFiles
+        [Parameter(Mandatory = $false)][switch]$HelperFiles,
+        [Parameter(Mandatory = $false)][switch]$AllModuleFiles
     )
 
     $DotSourceFiles = [PSCustomObject]@{
@@ -37,7 +38,20 @@ function Get-DotSourceFilePath {
 
             $HelperPath = Join-Path -Path $RootPath -ChildPath 'helpers'
 
-            $DotSourceFiles.FilesToDotSource += (Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop).FullName           
+            $DotSourceFiles.FilesToDotSource += (Get-ChildItem -Path $HelperPath -Recurse -Filter "*.ps1" -ErrorAction Stop).FullName
+        }
+
+        'AllModulesFiles' {
+            Write-Verbose 'Dot sourcing all module files.'
+            $SplitTestFilePath = $TestFilePath -split '[\/\\]+'
+
+            $Index = ([Array]::IndexOf($SplitTestFilePath, 'tests')) - 1
+
+            $RootPath = $SplitTestFilePath[0..$Index] -join [IO.Path]::DirectorySeparatorChar
+
+            $SrcFolderPath = Join-Path -Path $RootPath -ChildPath 'src'
+
+            $DotSourceFiles.FilesToDotSource += (Get-ChildItem -Path $SrcFolderPath -Recurse -Filter "*.ps1" -ErrorAction Stop).FullName
         }
     }
     $DotSourceFiles
