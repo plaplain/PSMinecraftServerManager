@@ -125,16 +125,3 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
         }
     }
 }
-
-Describe 'Start-MinecraftServer Integration Tests' -Tag 'Integration' {
-    BeforeAll{
-        #Here we need to dot source dependencies.
-
-    $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -HelperFiles 
-
-    foreach ($File in $DotSourceFiles.FilesToDotSource) {
-        Write-Output "Importing '$File'"
-        . $File
-    }
-    }
-}
