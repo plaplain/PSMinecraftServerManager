@@ -1,0 +1,43 @@
+name: Pester Integration Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ 'feature/*', 'enhancement/*', 'bug/*', 'dev' ]
+
+jobs:
+  tests-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Trigger Build
+      run: |
+        gh workflow run ci-ps-build.yml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Unit Tests
+      id: UnitTests
+      shell: pwsh
+      run: |
+        .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
+  tests-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Unit Tests
+      id: UnitTests
+      shell: pwsh
+      run: |
+        .\tools\pester.ps1 -Tags "Unit" -Integration "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
