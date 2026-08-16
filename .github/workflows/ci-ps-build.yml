@@ -1,6 +1,7 @@
 name: Build PowerShell Module
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main, dev ]
 
