@@ -22,7 +22,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: PSMinecraftServerManager
-          path: .${{ github.workspace }}\src
+          path: \src
 
       - name: Install Module
         shell: pwsh
