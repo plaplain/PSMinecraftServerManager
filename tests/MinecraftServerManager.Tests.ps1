@@ -67,7 +67,9 @@ Describe "Base Function & Class Tests" -Tag 'Unit' {
 Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
     BeforeAll {}
 
-    Context "Install-Minecraft Ingegration Tests" {
-        Get-Module MinecraftServerManager | Should -Not -BeNullOrEmpty
+    Context "Module can load" {
+        It "Get-Module returns a value" {
+            Get-Module MinecraftServerManager | Should -Not -BeNullOrEmpty
+        }
     }
 }
