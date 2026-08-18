@@ -1,0 +1,34 @@
+name: shared build
+
+on:
+    workflow_call:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Build PS Manifest
+      id: build
+      shell: pwsh
+      run: |
+        pwsh -File .\tools\build.ps1 -ModulePath "${{ github.workspace }}\src"
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PSMinecraftServerManager
+        path: ${{ github.workspace }}\src
+        retention-days: 1
+
+    - name: Publish Git Tag
+      if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
+      id: gittagging
+      shell: pwsh
+      run: |
+        pwsh -File ${{ github.workspace }}\tools\publish-gittag.ps1 -ModulePath "${{ github.workspace }}\src"

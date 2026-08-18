@@ -17,10 +17,7 @@ jobs:
         fetch-depth: 0
 
     - name: Trigger Build
-      run: |
-        gh workflow run ci-ps-build.yml
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: ./.github/workflows/ci-ps-shared-build.yml
 
     - name: Unit Tests
       id: UnitTests

@@ -25,57 +25,57 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
             $InstallationPath = 'C:\Temp\'
         }
 
-            $FunctionDependencies = @(
-                'New-FolderStructure',
-                'Get-InstallationConfigurationPath',
-                'Update-MinecraftServer',
-                'Test-JavaInstallation'
-            )
+        $FunctionDependencies = @(
+            'New-FolderStructure',
+            'Get-InstallationConfigurationPath',
+            'Update-MinecraftServer',
+            'Test-JavaInstallation'
+        )
 
-            $ClassDependencies = @(
-                [PSCustomObject]@{
-                    ClassName    = 'InstallationConfiguration'
-                    Constructors = @($null, '[string]')
-                    Methods      = @(
-                        [PSCustomObject]@{
-                            Name       = 'AddServer'
-                            Inputs     = '[string];[string];[boolean]'
-                            OutputType = 'void'
-                            Output     = $null
-                        },
-                        [PSCustomObject]@{
-                            Name       = 'ExportConfigurationToFile'
-                            Inputs     = '[string]'
-                            OutputType = 'void'
-                            Output     = $null
-                        }
-                    )
-                },
-                [PSCustomObject]@{
-                    ClassName    = 'DirectoryFound'
-                    Constructors = @($null)
-                    Methods      = @()
-                }
-            )
-
-            Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Install-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
-
-            Mock -ModuleName $ModuleName -CommandName New-FolderStructure -MockWith {}
-
-            Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
-                if ($IsLinux) {
-                    @{FullPath = "/home/minecraft" }
-                }
-                else {
-                    @{FullPath = "C:\Temp\MinecraftServerManager" }
-                }
+        $ClassDependencies = @(
+            [PSCustomObject]@{
+                ClassName    = 'InstallationConfiguration'
+                Constructors = @($null, '[string]')
+                Methods      = @(
+                    [PSCustomObject]@{
+                        Name       = 'AddServer'
+                        Inputs     = '[string];[string];[boolean]'
+                        OutputType = 'void'
+                        Output     = $null
+                    },
+                    [PSCustomObject]@{
+                        Name       = 'ExportConfigurationToFile'
+                        Inputs     = '[string]'
+                        OutputType = 'void'
+                        Output     = $null
+                    }
+                )
+            },
+            [PSCustomObject]@{
+                ClassName    = 'DirectoryFound'
+                Constructors = @($null)
+                Methods      = @()
             }
+        )
 
-            Mock -ModuleName $ModuleName -CommandName Update-MinecraftServer -MockWith {}
+        Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Install-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
 
-            Mock -ModuleName $ModuleName -CommandName Get-Command -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName New-FolderStructure -MockWith {}
 
-            Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
+            if ($IsLinux) {
+                @{FullPath = "/home/minecraft" }
+            }
+            else {
+                @{FullPath = "C:\Temp\MinecraftServerManager" }
+            }
+        }
+
+        Mock -ModuleName $ModuleName -CommandName Update-MinecraftServer -MockWith {}
+
+        Mock -ModuleName $ModuleName -CommandName Get-Command -MockWith { $true }
+
+        Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith { $true }
     }
 
     Context "When input is valid" {
@@ -96,7 +96,7 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
 
             . $ScriptBlock
 
-            Mock -CommandName Test-JavaInstallation -MockWith {$true}
+            Mock -CommandName Test-JavaInstallation -MockWith { $true }
 
             Mock -CommandName Get-InstallationConfigurationPath -MockWith {
                 if ($IsLinux) {
@@ -112,7 +112,7 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
     }
 
     Context "When input is invalid" {
-        BeforeAll{
+        BeforeAll {
             Import-Cmdlet -TestFilePath $PSCommandPath -CmdletName 'Install-MinecraftServer' -FunctionsToMock $FunctionDependencies -ClassesToMock $ClassDependencies
         }
   
@@ -133,9 +133,35 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
         }
 
         It 'Should throw if Java not found' {
-            Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith {$false}
+            Mock -ModuleName $ModuleName -CommandName Test-JavaInstallation -MockWith { $false }
 
             { Install-MinecraftServer -ServerName "TestServer" -InstallationPath $InstallationPath } | Should -Throw
         }
+    }
+}
+
+Describe 'Install-MinecraftServer Integration Tests' -Tag 'Integration' {
+    BeforeAll {
+        $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -AllModuleFiles
+
+        foreach ($File in $DotSourceFiles.FilesToDotSource) {
+            Write-Output "Importing '$File'"
+            . $File
+        }
+
+        if ($IsLinux) {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
+            $InstallationPath = '/home/minecraft'
+        }
+        else {
+            $InstallationPath = 'C:\Temp\'
+        }
+
+        Mock Invoke-WebRequest -MockWith {}
+        Mock New-Item -MockWith {}
+    }
+
+    Context "When input is valid" {
+        Install-MinecraftServer | Should -Not -Throw
     }
 }
