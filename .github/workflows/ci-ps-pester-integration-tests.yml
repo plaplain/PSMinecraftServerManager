@@ -37,8 +37,8 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Unit Tests
-      id: UnitTests
+    - name: Integration Tests
+      id: IntegrationTests
       shell: pwsh
       run: |
         .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"

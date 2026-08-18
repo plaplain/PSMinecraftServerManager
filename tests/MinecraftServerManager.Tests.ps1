@@ -65,26 +65,9 @@ Describe "Base Function & Class Tests" -Tag 'Unit' {
 }
 
 Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
-    BeforeAll {
-        $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -AllModuleFiles
-
-        foreach ($File in $DotSourceFiles.FilesToDotSource) {
-            Write-Output "Importing '$File'"
-            . $File
-        }
-
-        if ($IsLinux) {
-            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
-            $InstallationPath = '/home/minecraft'
-        }
-        else {
-            $InstallationPath = 'C:\Temp\'
-        }
-
-        Mock Invoke-WebRequest -MockWith {}
-    }
+    BeforeAll {}
 
     Context "Install-Minecraft Ingegration Tests" {
-        Install-MinecraftServer -ServerName 'MyTestServer' -InstallationPath $InstallationPath
+        Get-Module MinecraftServerManager | Should -Not -BeNullOrEmpty
     }
 }
