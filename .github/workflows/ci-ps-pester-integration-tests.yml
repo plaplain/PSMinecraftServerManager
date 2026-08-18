@@ -22,6 +22,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: PSMinecraftServerManager
+          path: ${{ runner.temp }}\MinecraftServerManager
 
       - name: Install Module
         shell: pwsh
