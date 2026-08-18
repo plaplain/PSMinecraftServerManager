@@ -1,0 +1,40 @@
+name: shared pester
+
+on:
+    workflow_call:
+        inputs:
+          runsOn:
+            description: 'The type of agent to run on'
+            type: string
+            required: true
+          artifactPath:
+            description: 'The path where the module is downloaded to'
+            type: string
+            required: true
+          testType:
+            description: 'The type of test, i.e unit. integration etc'
+            type: string
+            required: true
+
+jobs:
+  Pester-Tests:
+    runs-on: runsOn
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: PSMinecraftServerManager
+          path: ${{ inputs.artifactPath }}
+
+      - name: ${{ inputs.testType }} Tests
+        id: IntegrationTests
+        shell: pwsh
+        run: |
+            Import-Module "${{ inputs.artifactPath }}\MinecraftServerManager\MinecraftServerManager.psd1"
+            .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
