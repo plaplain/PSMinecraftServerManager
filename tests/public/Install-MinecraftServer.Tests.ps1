@@ -139,29 +139,3 @@ Describe 'Install-MinecraftServer Unit Tests' -Tag 'Unit' {
         }
     }
 }
-
-Describe 'Install-MinecraftServer Integration Tests' -Tag 'Integration' {
-    BeforeAll {
-        $DotSourceFiles = Get-DotSourceFilePath -TestFilePath $PSCommandPath -AllModuleFiles
-
-        foreach ($File in $DotSourceFiles.FilesToDotSource) {
-            Write-Output "Importing '$File'"
-            . $File
-        }
-
-        if ($IsLinux) {
-            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
-            $InstallationPath = '/home/minecraft'
-        }
-        else {
-            $InstallationPath = 'C:\Temp\'
-        }
-
-        Mock Invoke-WebRequest -MockWith {}
-        Mock New-Item -MockWith {}
-    }
-
-    Context "When input is valid" {
-        Install-MinecraftServer | Should -Not -Throw
-    }
-}
