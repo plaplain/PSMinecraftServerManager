@@ -10,7 +10,7 @@ jobs:
   build:
     uses: ./.github/workflows/ci-ps-shared-build.yml
 
-  install-module:
+  download-build:
     runs-on: windows-latest
     needs: build
     steps:
@@ -23,13 +23,8 @@ jobs:
         with:
           name: PSMinecraftServerManager
           path: ${{ runner.temp }}\MinecraftServerManager
-
-      - name: Install Module
-        shell: pwsh
-        run: |
-          Import-Module "${{ runner.temp }}\MinecraftServerManager\MinecraftServerManager.psd1"
   tests-windows:
-    needs: install-module
+    needs: download-build
     runs-on: windows-latest
     
     steps:
@@ -41,9 +36,10 @@ jobs:
       id: IntegrationTests
       shell: pwsh
       run: |
+        Import-Module "${{ runner.temp }}\MinecraftServerManager\MinecraftServerManager.psd1"
         .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
   tests-linux:
-    needs: install-module
+    needs: download-build
     runs-on: ubuntu-latest
     
     steps:
@@ -56,4 +52,5 @@ jobs:
       id: UnitTests
       shell: pwsh
       run: |
-        .\tools\pester.ps1 -Tags "Unit" -Integration "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
+        Import-Module "${{ runner.temp }}\MinecraftServerManager\MinecraftServerManager.psd1"
+        .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
