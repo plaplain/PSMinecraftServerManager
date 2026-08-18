@@ -12,6 +12,7 @@ jobs:
 
   install-module:
     runs-on: windows-latest
+    needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,6 +41,7 @@ jobs:
         run: |
           Import-Module "${{ runner.temp }}\MinecraftServerManager\MinecraftServerManager.psd1"
   tests-windows:
+    needs: install-module
     runs-on: windows-latest
     
     steps:
@@ -53,6 +55,7 @@ jobs:
       run: |
         .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
   tests-linux:
+    needs: install-module
     runs-on: ubuntu-latest
     
     steps:
