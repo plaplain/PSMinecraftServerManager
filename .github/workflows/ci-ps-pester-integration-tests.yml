@@ -12,6 +12,7 @@ jobs:
 
   tests-windows:
     uses: './.github/workflows/ci-ps-shared-pester.yml'
+    needs: build
     with:
       runsOn: 'windows-latest'
       testType: 'integration'
@@ -19,6 +20,7 @@ jobs:
       
   tests-linux:
     uses: './.github/workflows/ci-ps-shared-pester.yml'
+    needs: build
     with:
       runsOn: 'linux-latest'
       testType: 'integration'
