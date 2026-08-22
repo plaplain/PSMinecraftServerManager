@@ -24,4 +24,4 @@ jobs:
     with:
       runsOn: 'ubuntu-latest'
       testType: 'integration'
-      artifactPath: ${{ github.workspace }}\temp
+      artifactPath: ${{ github.workspace }}/temp
