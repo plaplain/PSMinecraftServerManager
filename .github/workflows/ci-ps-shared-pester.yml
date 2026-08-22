@@ -36,5 +36,5 @@ jobs:
         id: IntegrationTests
         shell: pwsh
         run: |
-            Import-Module "${{ inputs.artifactPath }}\PSMinecraftServerManager \MinecraftServerManager.psd1"
+            Import-Module "${{ inputs.artifactPath }}\PSMinecraftServerManager\MinecraftServerManager.psd1"
             .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
