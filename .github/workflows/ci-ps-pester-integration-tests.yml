@@ -22,6 +22,6 @@ jobs:
     uses: './.github/workflows/ci-ps-shared-pester.yml'
     needs: build
     with:
-      runsOn: 'linux-latest'
+      runsOn: 'ubuntu-latest'
       testType: 'integration'
       artifactPath: ${{ github.workspace }}\temp
