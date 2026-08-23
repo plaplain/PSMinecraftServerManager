@@ -68,8 +68,26 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
     BeforeAll {}
 
     Context "Module can load" {
+        BeforeAll{
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'GetModule', Justification = 'False positive due to how Pester works.')]
+            $GetModule = Get-Module MinecraftServerManager
+
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'Cmdlets', Justification = 'False positive due to how Pester works.')]
+            $Cmdlets = @(
+                @{Cmdlet ='Install-MinecraftServer'}
+                @{Cmdlet ='Update-MinecraftServer'},
+                @{Cmdlet ='Start-MinecraftServer'},
+                @{Cmdlet ='Stop-MinecraftServer'},
+                @{Cmdlet ='Backup-MinecraftServer'}
+            )
+        }
+
         It "Get-Module returns a value" {
-            Get-Module MinecraftServerManager | Should -Not -BeNullOrEmpty
+            $GetModule | Should -Not -BeNullOrEmpty
+        }
+
+        It "Get-Module should contain cmdlets" -ForEach $Cmdlets {
+            $GetModule.ExportedCommands.Keys | Should -Contain $Cmdlet
         }
     }
 }
