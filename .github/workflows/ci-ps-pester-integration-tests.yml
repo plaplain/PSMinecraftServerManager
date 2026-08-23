@@ -7,19 +7,13 @@ on:
     branches: [ 'feature/*', 'enhancement/*', 'bug/*', 'dev' ]
 
 jobs:
-  build-windows:
+  build:
     uses: ./.github/workflows/ci-ps-shared-build.yml
     with:
       runsOn: 'windows-latest'
-
-  build-linux:
-    uses: ./.github/workflows/ci-ps-shared-build.yml
-    with:
-      runsOn: 'ubuntu-latest'
-
   tests-windows:
     uses: './.github/workflows/ci-ps-shared-pester.yml'
-    needs: build-windows
+    needs: build
     with:
       runsOn: 'windows-latest'
       testType: 'integration'
@@ -27,7 +21,7 @@ jobs:
       
   tests-linux:
     uses: './.github/workflows/ci-ps-shared-pester.yml'
-    needs: build-linux
+    needs: build
     with:
       runsOn: 'ubuntu-latest'
       testType: 'integration'

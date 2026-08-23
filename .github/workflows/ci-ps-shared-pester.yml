@@ -7,10 +7,6 @@ on:
             description: 'The type of agent to run on'
             type: string
             required: true
-          artifactPath:
-            description: 'The path where the module is downloaded to'
-            type: string
-            required: true
           testType:
             description: 'The type of test, i.e unit. integration etc'
             type: string
@@ -30,17 +26,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: PSMinecraftServerManager
-          path: ${{ inputs.artifactPath }}/PSMinecraftServerManager
+          path: ${{ runner.temp }}/PSMinecraftServerManager
 
       - name: ${{ inputs.testType }} Tests
         id: IntegrationTests
         shell: pwsh
         run: |
             try{
-              Import-Module "${{ inputs.artifactPath }}\PSMinecraftServerManager\MinecraftServerManager.psd1" -ErrorAction Stop
+              Import-Module "${{ runner.temp }}\PSMinecraftServerManager\MinecraftServerManager.psd1" -ErrorAction Stop
             }
             catch{
-              Get-ChildItem '${{ inputs.artifactPath }}'
+              Get-ChildItem '${{ runner.temp }}'
               throw($_.Exception.Message)
             }
             .\tools\pester.ps1 -Tags "Integration" -TestPath "${{ github.workspace }}\tests" -CodePath "${{ github.workspace }}\src"
