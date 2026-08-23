@@ -2,6 +2,11 @@ name: shared build
 
 on:
     workflow_call:
+        inputs:
+          runsOn:
+            description: 'The type of agent to run on'
+            type: string
+            required: true
 
 jobs:
   build:
