@@ -17,7 +17,6 @@ jobs:
     with:
       runsOn: 'windows-latest'
       testType: 'integration'
-      artifactPath: '${{ github.workspace }}/temp'
       
   tests-linux:
     uses: './.github/workflows/ci-ps-shared-pester.yml'
@@ -25,4 +24,3 @@ jobs:
     with:
       runsOn: 'ubuntu-latest'
       testType: 'integration'
-      artifactPath: '${{ github.workspace }}/temp'
