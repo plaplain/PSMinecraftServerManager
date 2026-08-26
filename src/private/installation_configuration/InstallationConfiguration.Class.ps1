@@ -145,9 +145,31 @@ class InstallationConfiguration {
 
         .INPUTS
         [string]$Path       - The folder path where the server should be exported to.
+    #>
+    [void]ExportConfigurationToFile([string]$Path){
+        $this._ExportConfigurationToFile($Path,$False)
+    }
+
+    <#
+        .SYNOPSIS
+        Exports the configuration to a configuration.json file to the passed path.
+
+        .INPUTS
+        [string]$Path       - The folder path where the server should be exported to.
         [boolean]$Overwrite - Set to true to overwrite an existing configuration file.
     #>
     [void]ExportConfigurationToFile([string]$Path,[boolean]$Overwrite = $false) {
+        $this._ExportConfigurationToFile($Path,$Overwrite)
+    }
+
+    <#
+        .SYNOPSIS
+        A "private" function which exports the configuration to a configuration.json file to the passed path.
+
+        .INPUTS
+        [string]$Path       - The folder path where the server should be exported to.
+    #>
+    [void]_ExportConfigurationToFile([string]$Path,[boolean]$Overwrite){
         if (!(Test-Path -Path $Path)) {
             throw('Invalid path')
         }
