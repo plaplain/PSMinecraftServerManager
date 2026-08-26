@@ -95,7 +95,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName New-Item -MockWith {}
 
         # InstallationConfigurationClass Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $FolderPath} -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $FolderPath} -MockWith {}
         $ConfigurationFilePath = Join-Path -Path $FolderPath -ChildPath 'configuration.json'
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {}
         Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
