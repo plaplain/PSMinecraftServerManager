@@ -85,7 +85,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Name -like $InstallationConfigurationPath} -MockWith {$true}
 
         # Test-Javainstallation Mocks
-        Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {throw()}
+        Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {throw('Message')}
 
         # New-FolderStructure Mocks
         Mock -CommandName Test-Path -ParameterFilter {$Path -like $FolderPath} -MockWith {$true}
