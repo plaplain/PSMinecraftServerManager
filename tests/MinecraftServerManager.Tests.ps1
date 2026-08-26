@@ -70,10 +70,10 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
-            $FolderPath = '/home/minecraft'
+            $FolderPath = '/home'
         }
         else {
-            $FolderPath = 'C:\Temp\'
+            $FolderPath = 'C:\'
         }
 
         $MockVersionResponses = @{
