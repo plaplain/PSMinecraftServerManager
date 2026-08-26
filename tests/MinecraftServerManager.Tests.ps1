@@ -88,14 +88,14 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {}
 
         # New-FolderStructure Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $FolderPath} -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $FolderPath} -MockWith {$true}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LiveFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $BackupFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LogsFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName New-Item -MockWith {}
 
         # InstallationConfigurationClass Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $FolderPath} -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $FolderPath} -MockWith {}
         $ConfigurationFilePath = Join-Path -Path $FolderPath -ChildPath 'configuration.json'
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {}
         Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
