@@ -66,6 +66,8 @@ Describe "Base Function & Class Tests" -Tag 'Unit' {
 
 Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
     BeforeAll {
+        $ModuleName = 'MinecraftServerManager'
+
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
             $FolderPath = '/home/minecraft'
@@ -220,19 +222,19 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             )
         }
 
-        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.2-rc-2/builds" } -MockWith {
+        Mock -ModuleName $ModuleName -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.2-rc-2/builds" } -MockWith {
             $MockVersionResponses['26.2-rc-2']
         }
 
-        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.1.2/builds" } -MockWith {
+        Mock -ModuleName $ModuleName -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.1.2/builds" } -MockWith {
             $MockVersionResponses['26.1.2']
         }
 
-        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.1.1/builds" } -MockWith {
+        Mock -ModuleName $ModuleName -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like "https://fill.papermc.io/v3/projects/paper/versions/26.1.1/builds" } -MockWith {
             $MockVersionResponses['26.1.1']
         }
 
-        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -eq 'https://fill.papermc.io/v3/projects/paper' } -MockWith {
+        Mock -ModuleName $ModuleName -CommandName Invoke-RestMethod -ParameterFilter { $Uri -eq 'https://fill.papermc.io/v3/projects/paper' } -MockWith {
             @{
                 project  = [PSCustomObject]@{
                     id   = 'paper'
@@ -250,7 +252,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             }
         }
 
-        Mock -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like 'https://launchermeta.mojang.com/mc/game/version_manifest_v2.json' } -MockWith {
+        Mock -ModuleName $ModuleName -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like 'https://launchermeta.mojang.com/mc/game/version_manifest_v2.json' } -MockWith {
             [PSCustomObject]@{
                 latest = [PSCustomObject]@{
                     release = '26.2'
@@ -291,21 +293,21 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             }
         }
 
-        Mock -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {}
-        Mock -CommandName New-Item -MockWith {}
-        Mock -CommandName Test-Path -ParameterFilter {$Path -like 'InstallationConfigurationFullPath'}
+        Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName New-Item -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like 'InstallationConfigurationFullPath'}
         
         # InstallationConfigurationClass Mocks
-        Mock -CommandName Test-Path -ParameterFilter {$Path -like $FolderPath} -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $FolderPath} -MockWith {}
         $ConfigurationFilePath = Join-Path -Path $FolderPath -ChildPath 'configuration.json'
-        Mock -CommandName Test-Path -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {}
-        Mock -CommandName Out-File -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
     }
 
     Context "Module can load" {
         BeforeAll{
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'GetModule', Justification = 'False positive due to how Pester works.')]
-            $GetModule = Get-Module MinecraftServerManager
+            $GetModule = Get-Module $ModuleName
 
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'Cmdlets', Justification = 'False positive due to how Pester works.')]
             $Cmdlets = @(
