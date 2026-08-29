@@ -346,7 +346,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
     Context "Install-Minecraft" {
         It "Should install vanilla"{
-            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $FolderPath
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath
         }
     }
 }
