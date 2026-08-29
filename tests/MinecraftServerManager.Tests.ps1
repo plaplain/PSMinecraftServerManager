@@ -104,7 +104,11 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
         Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {
             '{
-                "Servers":[]
+                "Servers":[
+                    {
+                        "IntegrationTest":{}
+                }
+                ]
             }'
         }
 
