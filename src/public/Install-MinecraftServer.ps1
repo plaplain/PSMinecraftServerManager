@@ -58,8 +58,9 @@ function Install-MinecraftServer {
 
     # Configuration initialization
     $InstallationConfigurationPath = Get-InstallationConfigurationPath
+    $ConfigurationTest = Test-Path -Path $InstallationConfigurationPath.FullPath
 
-    if((Test-Path -Path $InstallationConfigurationPath.FullPath)){
+    if($ConfigurationTest){
         $Configuration = [InstallationConfiguration]::new($InstallationConfigurationPath)
     }
     else{
@@ -84,7 +85,13 @@ function Install-MinecraftServer {
         $Configuration.SetServer($Server)
     }
 
-    $Configuration.ExportConfigurationToFile($InstallationPath)
+    if($ConfigurationTest){
+        $Configuration.ExportConfigurationToFile($InstallationPath,$true)
+    }
+    else{
+        $Configuration.ExportConfigurationToFile($InstallationPath)
+    }
+
 
 
     #Install
