@@ -87,13 +87,11 @@ function Install-MinecraftServer {
     }
 
     if($ConfigurationTest){
-        $Configuration.ExportConfigurationToFile($InstallationPath,$true)
+        $Configuration.ExportConfigurationToFile($InstallationConfigurationPath,$true)
     }
     else{
-        $Configuration.ExportConfigurationToFile($InstallationPath)
+        $Configuration.ExportConfigurationToFile($InstallationConfigurationPath)
     }
-
-
 
     #Install
     Update-MinecraftServer -ServerName $ServerName -NoBackup    
