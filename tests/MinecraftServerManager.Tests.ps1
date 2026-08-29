@@ -82,7 +82,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         $InstallationConfigurationPath = Join-Path -Path $FolderPath -ChildPath 'MinecraftServerManager' -AdditionalChildPath 'Install.json'
 
         # Install-MinecraftServer Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Name -like $InstallationConfigurationPath} -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Name -like $InstallationConfigurationPath} -MockWith {$false}
 
         # Test-Javainstallation Mocks
         Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {}
