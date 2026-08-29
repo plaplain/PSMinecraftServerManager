@@ -171,7 +171,7 @@ class InstallationConfiguration {
     #>
     [void]_ExportConfigurationToFile([string]$Path,[boolean]$Overwrite){
         if (!(Test-Path -Path $Path)) {
-            throw('Invalid path')
+            throw("Invalid path '$Path'")
         }
 
         $FilePath = Join-Path -Path $Path -ChildPath $this.ConfigurationFileName
