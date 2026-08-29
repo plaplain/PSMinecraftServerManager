@@ -14,8 +14,8 @@ class InstallationConfiguration {
 
     }
 
-    InstallationConfiguration([string]$ConfigurationFilePath) {
-        $this.LoadConfiguration($ConfigurationFilePath)
+    InstallationConfiguration([string]$ConfigurationFolderPath) {
+        $this.LoadConfiguration($ConfigurationFolderPath)
     }
 
     <#

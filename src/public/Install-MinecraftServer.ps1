@@ -58,7 +58,8 @@ function Install-MinecraftServer {
 
     # Configuration initialization
     $InstallationConfigurationPath = Get-InstallationConfigurationPath
-    $ConfigurationTest = Test-Path -Path $InstallationConfigurationPath
+    $InstallationConfigurationFilePath = Join-Path -Path $InstallationConfigurationPath -ChildPath 'configuration.json'
+    $ConfigurationTest = Test-Path -Path $InstallationConfigurationFilePath
 
     if($ConfigurationTest){
         $Configuration = [InstallationConfiguration]::new($InstallationConfigurationPath)
