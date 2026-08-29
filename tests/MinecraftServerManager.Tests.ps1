@@ -70,16 +70,18 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
-            $FolderPath = '/home/minecraft'
+            $InstallationFolderPath = '/home/minecraft'
+            $ConfigurationFolderPath = Join-Path -Path $Env:HOME -ChildPath ".MinecraftServerManager"
         }
         else {
-            $FolderPath = 'C:\Temp\'
+            $InstallationFolderPath = 'C:\Temp\'
+            $ConfigurationFolderPath = Join-Path -Path $Env:APPDATA -ChildPath ".MinecraftServerManager"
         }
 
-        $LiveFolderPath = Join-Path -Path $FolderPath -ChildPath 'Live'
-        $BackupFolderPath = Join-Path -Path $FolderPath -ChildPath 'Backup'
-        $LogsFolderPath = Join-Path -Path $FolderPath -ChildPath 'Logs'
-        $InstallationConfigurationPath = Join-Path -Path $FolderPath -ChildPath 'MinecraftServerManager' -AdditionalChildPath 'Install.json'
+        $LiveFolderPath = Join-Path -Path $InstallationFolderPath -ChildPath 'Live'
+        $BackupFolderPath = Join-Path -Path $InstallationFolderPath -ChildPath 'Backup'
+        $LogsFolderPath = Join-Path -Path $InstallationFolderPath -ChildPath 'Logs'
+        $InstallationConfigurationPath = Join-Path -Path $InstallationFolderPath -ChildPath 'MinecraftServerManager' -AdditionalChildPath 'Install.json'
 
         # Install-MinecraftServer Mocks
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Name -like $InstallationConfigurationPath} -MockWith {$false}
@@ -88,15 +90,15 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {}
 
         # New-FolderStructure Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $FolderPath} -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$true}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LiveFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $BackupFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LogsFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName New-Item -MockWith {}
 
         # InstallationConfigurationClass Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $FolderPath} -MockWith {$true}
-        $ConfigurationFilePath = Join-Path -Path $FolderPath -ChildPath 'configuration.json'
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$true}
+        $ConfigurationFilePath = Join-Path -Path $ConfigurationFolderPath -ChildPath 'configuration.json'
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
 
