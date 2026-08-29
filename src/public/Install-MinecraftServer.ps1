@@ -57,12 +57,12 @@ function Install-MinecraftServer {
 
 
     # Configuration initialization
-    $InstallationConfigurationPath = Get-InstallationConfigurationPath
-    $InstallationConfigurationFilePath = Join-Path -Path $InstallationConfigurationPath -ChildPath 'configuration.json'
+    $InstallationConfigurationFolderPath = Get-InstallationConfigurationPath
+    $InstallationConfigurationFilePath = Join-Path -Path $InstallationConfigurationFolderPath -ChildPath 'configuration.json'
     $ConfigurationTest = Test-Path -Path $InstallationConfigurationFilePath
 
     if($ConfigurationTest){
-        $Configuration = [InstallationConfiguration]::new($InstallationConfigurationPath)
+        $Configuration = [InstallationConfiguration]::new($InstallationConfigurationFolderPath)
     }
     else{
         $Configuration = [InstallationConfiguration]::new()
@@ -87,10 +87,10 @@ function Install-MinecraftServer {
     }
 
     if($ConfigurationTest){
-        $Configuration.ExportConfigurationToFile($InstallationConfigurationPath,$true)
+        $Configuration.ExportConfigurationToFile($InstallationConfigurationFolderPath,$true)
     }
     else{
-        $Configuration.ExportConfigurationToFile($InstallationConfigurationPath)
+        $Configuration.ExportConfigurationToFile($InstallationConfigurationFolderPath)
     }
 
     #Install
