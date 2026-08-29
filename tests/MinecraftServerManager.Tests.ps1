@@ -102,11 +102,12 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         $ConfigurationFilePath = Join-Path -Path $ConfigurationFolderPath -ChildPath 'configuration.json'
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {$false}
 
-        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWithh {
+        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {
             '{
                 "Servers":[]
             }'
         }
+
         Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
 
         $MockVersionResponses = @{
