@@ -75,7 +75,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         }
         else {
             $InstallationFolderPath = 'C:\Temp\'
-            $ConfigurationFolderPath = Join-Path -Path $Env:APPDATA -ChildPath ".MinecraftServerManager"
+            $ConfigurationFolderPath = Join-Path -Path $Env:APPDATA -ChildPath "MinecraftServerManager"
         }
 
         $LiveFolderPath = Join-Path -Path $InstallationFolderPath -ChildPath 'Live'
