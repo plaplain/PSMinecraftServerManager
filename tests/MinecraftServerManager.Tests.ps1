@@ -73,7 +73,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             $FolderPath = '/home/minecraft'
         }
         else {
-            $FolderPath = 'C:\Temp\sss'
+            $FolderPath = 'C:\Temp\'
         }
 
         $LiveFolderPath = Join-Path -Path $FolderPath -ChildPath 'Live'
@@ -88,7 +88,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {}
 
         # New-FolderStructure Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq 'C:\Temp\sss'} -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $FolderPath} -MockWith {$true}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LiveFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $BackupFolderPath} -MockWith {$false}
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LogsFolderPath} -MockWith {$false}
