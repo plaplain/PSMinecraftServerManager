@@ -31,17 +31,11 @@ Describe 'Get-InstallationConfiguration Unit Tests' -Tag 'Unit' {
         }
 
         It 'Should return a hashtable' {
-            $InstallationConfigurationPath | Should -BeOfType [hashtable]           
-        }
-
-        It 'Should contain the keys FullPath and Parent Path' {
-            $InstallationConfigurationPath.Keys | Should -Contain 'FullPath'
-            $InstallationConfigurationPath.Keys | Should -Contain 'ParentPath'
+            $InstallationConfigurationPath | Should -BeOfType [string]
         }
 
         It 'The value of keys FullPath and ParentPath should not be null or empty.' {
-            $InstallationConfigurationPath.FullPath | Should -Not -BeNullOrEmpty
-            $InstallationConfigurationPath.ParentPath | Should -Not -BeNullOrEmpty
+            $InstallationConfigurationPath | Should -Not -BeNullOrEmpty
         }
     }
 }

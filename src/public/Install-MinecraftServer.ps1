@@ -58,7 +58,7 @@ function Install-MinecraftServer {
 
     # Configuration initialization
     $InstallationConfigurationPath = Get-InstallationConfigurationPath
-    $ConfigurationTest = Test-Path -Path $InstallationConfigurationPath.FullPath
+    $ConfigurationTest = Test-Path -Path $InstallationConfigurationPath
 
     if($ConfigurationTest){
         $Configuration = [InstallationConfiguration]::new($InstallationConfigurationPath)
