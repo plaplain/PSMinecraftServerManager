@@ -362,21 +362,21 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
     Context "Install-Minecraft" {
         It "Should install vanilla"{
-            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath | Should -Not -Throw
         }
 
         It "Should install PaperMc"{
-            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -PaperMc
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -PaperMc | Should -Not -Throw
         }
 
         It "Should throw if directory found"{
             Mock -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$false}
-            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath | Should -Throw
         }
 
         It "Should not throw if directory found"{
             Mock -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$false}
-            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -Force
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -Force | Should -Not -Throw
         }
     }
 }
