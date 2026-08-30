@@ -368,5 +368,15 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         It "Should install PaperMc"{
             Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -PaperMc
         }
+
+        It "Should throw if directory found"{
+            Mock -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$false}
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath
+        }
+
+        It "Should not throw if directory found"{
+            Mock -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$false}
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -Force
+        }
     }
 }
