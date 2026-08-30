@@ -364,5 +364,9 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         It "Should install vanilla"{
             Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath
         }
+
+        It "Should install PaperMc"{
+            Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -PaperMc
+        }
     }
 }
