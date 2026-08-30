@@ -370,12 +370,12 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         }
 
         It "Should throw if directory found"{
-            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$false}
+            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $LiveFolderPath} -MockWith {$true}
             {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath} | Should -Throw
         }
 
         It "Should not throw if directory found"{
-            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$false}
+            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $LiveFolderPath} -MockWith {$true}
             {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -Force} | Should -Not -Throw
         }
     }
