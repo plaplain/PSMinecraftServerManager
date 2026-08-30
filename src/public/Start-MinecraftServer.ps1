@@ -60,7 +60,7 @@ function Start-MinecraftServer {
                 throw("EULA generation took too long.")
             }
             Start-Sleep -Seconds 1
-            $RunTime = 1
+            $RunTime++
         }
 
         Write-Output "Accepting the Eula file"
