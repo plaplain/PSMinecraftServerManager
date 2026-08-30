@@ -334,6 +334,9 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
         # Update-MinecraftServer Mocks
         Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}
+
+        # Backup-MinecraftServer Mocks
+        Mock -ModuleName $ModuleName -CommandName Copy-Item -MockWith {}
     }
 
     Context "Module can load" {
@@ -360,7 +363,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         }
     }
 
-    Context "Install-Minecraft" {
+    Context "Install-MinecraftServer" {
         It "Should install vanilla"{
             {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath} | Should -Not -Throw
         }
@@ -377,6 +380,22 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         It "Should not throw if directory found"{
             Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $LiveFolderPath} -MockWith {$true}
             {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -Force} | Should -Not -Throw
+        }
+    }
+
+    Context "Update-MinecraftServer" {
+        It "Should update with no backup" {
+            {Update-MinecraftServer -Servername 'IntegrationTest' -NoBackup} | Should -Not -Throw
+        }
+
+        It "Should update with with backup" {
+            {Update-MinecraftServer -Servername 'IntegrationTest'} | Should -Not -Throw
+        }
+    }
+
+    Context "Backup-MinecraftServer" {
+        It "Should backup"{
+            {Backup-MinecraftServer -Servername 'IntegrationTest'} | Should -Not -Throw
         }
     }
 }
