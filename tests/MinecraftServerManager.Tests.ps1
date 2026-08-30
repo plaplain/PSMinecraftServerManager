@@ -111,9 +111,9 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
                 ]
             }'
         }
-
         Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
 
+        # Get-PaperMcDownloadUrl Mocks
         $MockVersionResponses = @{
             '26.2-rc-2' = @(
                 [PSCustomObject]@{
@@ -290,6 +290,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             }
         }
 
+        # Get-MinecraftDownloadUrl Mocks
         Mock -ModuleName $ModuleName -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like 'https://launchermeta.mojang.com/mc/game/version_manifest_v2.json' } -MockWith {
             [PSCustomObject]@{
                 latest = [PSCustomObject]@{
@@ -330,6 +331,9 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
                 )
             }
         }
+
+        # Update-MinecraftServer Mocks
+        Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}
     }
 
     Context "Module can load" {
