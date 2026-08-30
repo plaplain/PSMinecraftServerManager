@@ -56,7 +56,7 @@ function Start-MinecraftServer {
 
         $RunTime = 0
         while($Job.State -eq 'Running'){
-            if($RunTime -ge 60){
+            if($RunTime -ge 120){
                 throw("EULA generation took too long.")
             }
             Start-Sleep -Seconds 1
