@@ -400,4 +400,41 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             {Backup-MinecraftServer -Servername 'IntegrationTest'} | Should -Not -Throw
         }
     }
+
+    Context "Start-MinecraftServer" {
+        BeforeAll{
+            $StartJobCallCount = 0
+            Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {
+                if($StartJobCallCount -eq 0){
+                    [PSCustomObject]@{
+                        State = 'Running'
+                    }
+                }
+                else {
+                    [PSCustomObject]@{
+                        State = 'Stopped'
+                    }                    
+                }
+                $StartJobCallCount++
+            }
+
+            Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
+        }
+        It "Should start a minecraft server"{
+            $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest'
+            {$StartServerCall} | Should -Not -Throw
+            $StartServerCall | Should -Invoke Start-Job -Times 2
+        }
+
+        It "Should start a minecraft server in interactive mode"{
+            $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest' -InterativeMode
+            $StartServerCall | Should -Not -Throw
+            $StartServerCall | Should -Invoke Start-Job -Times 1
+            $StartServerCall | Should -Invoke Invoke-Command -Times 1
+        }
+    }
+
+    Context "Stop-MinecraftServer" {
+
+    }
 }

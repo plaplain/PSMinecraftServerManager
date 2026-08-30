@@ -23,7 +23,7 @@ function Start-MinecraftServer {
 
     $InstallationConfigurationPath = Get-InstallationConfigurationPath
 
-    if(!(Test-Path -Path $InstallationConfigurationPath.FullPath)){
+    if(!(Test-Path -Path $InstallationConfigurationPath)){
         throw("No installation detected. Please run Install-MinecraftServer")
     }
 
