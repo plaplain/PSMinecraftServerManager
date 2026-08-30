@@ -36,7 +36,7 @@ function Backup-MinecraftServer {
     }
 
     if(!(Test-Path -Path $BackupFolder)){
-        throw("Invalid live folder '$BackupFolder'")
+        throw("Invalid backup folder '$BackupFolder'")
     }
 
     try{

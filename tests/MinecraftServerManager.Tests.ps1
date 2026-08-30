@@ -336,6 +336,8 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}
 
         # Backup-MinecraftServer Mocks
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$ChildPath -eq 'Live'} -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$ChildPath -eq 'Backup'} -MockWith {$true}
         Mock -ModuleName $ModuleName -CommandName Copy-Item -MockWith {}
     }
 
