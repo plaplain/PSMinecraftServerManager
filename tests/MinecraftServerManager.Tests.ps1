@@ -403,9 +403,11 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
     Context "Start-MinecraftServer" {
         BeforeAll{
-            $StartJobCallCount = 0
-            Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {
-                if($StartJobCallCount -eq 0){
+            Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {}
+
+            $GetJobCallCount = 0
+            Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
+                if($GetJobCallCount -eq 0){
                     [PSCustomObject]@{
                         State = 'Running'
                     }
@@ -415,7 +417,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
                         State = 'Stopped'
                     }                    
                 }
-                $StartJobCallCount++
+                $GetJobCallCount++
             }
 
             Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
