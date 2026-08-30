@@ -52,10 +52,10 @@ function Start-MinecraftServer {
     if (!(Test-Path -Path $EulaFilePath) -and $PSCmdlet.ShouldProcess("Generate EULA for '$ServerName'")) {
         Write-Output "First run detected. Starting the server to generate the eula file. The server will stop, this is expected."
 
-        $Job = Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
+        Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock | Out-Null
 
         $RunTime = 0
-        while($Job.State -eq 'Running'){
+        while((Get-Job -Name $ServerName).State -eq 'Running'){
             if($RunTime -ge 120){
                 throw("EULA generation took too long.")
             }
