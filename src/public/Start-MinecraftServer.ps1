@@ -55,13 +55,18 @@ function Start-MinecraftServer {
         Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock | Out-Null
 
         $RunTime = 0
-        while((Get-Job -Name $ServerName).State -eq 'Running'){
-            if($RunTime -ge 120){
-                throw("EULA generation took too long.")
+        while($RunTime -le 120){
+            if((Get-Job -Name $ServerName).State -ne 'Running'){
+                Continue
             }
+
             Start-Sleep -Seconds 1
             $RunTime++
         }
+
+            if($RunTime -ge 120){
+                throw("EULA generation took too long.")
+            }
 
         Write-Output "Accepting the Eula file"
         $EulaFile = Get-Content -Path $EulaFilePath -Raw
