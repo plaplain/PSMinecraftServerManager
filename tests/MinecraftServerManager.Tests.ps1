@@ -405,9 +405,9 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         BeforeAll{
             Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {}
 
-            $Script:GetJobCallCount = 0
+            $Script:GetJobCallCount = 1
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
-                if($null -eq $Script:GetJobCallCount){
+                if($Script:GetJobCallCount -eq 1){
                     [PSCustomObject]@{
                         State = 'Running'
                     }
