@@ -410,7 +410,6 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
                         State = 'Stopped'
                     }                    
                 }
-            }
 
             Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
         }
