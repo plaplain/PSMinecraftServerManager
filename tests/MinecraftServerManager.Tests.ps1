@@ -84,25 +84,25 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         $InstallationConfigurationPath = Join-Path -Path $InstallationFolderPath -ChildPath 'MinecraftServerManager' -AdditionalChildPath 'Install.json'
 
         # Install-MinecraftServer Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Name -like $InstallationConfigurationPath} -MockWith {$false}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Name -like $InstallationConfigurationPath } -MockWith { $false }
 
         # Test-Javainstallation Mocks
-        Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter {$Name -like 'java'} -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Get-Command -ParameterFilter { $Name -like 'java' } -MockWith {}
 
         # New-FolderStructure Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $InstallationFolderPath} -MockWith {$true}
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LiveFolderPath} -MockWith {$false}
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $BackupFolderPath} -MockWith {$false}
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $LogsFolderPath} -MockWith {$false}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $InstallationFolderPath } -MockWith { $true }
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -like $LiveFolderPath } -MockWith { $false }
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -like $BackupFolderPath } -MockWith { $false }
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -like $LogsFolderPath } -MockWith { $false }
         Mock -ModuleName $ModuleName -CommandName New-Item -MockWith {}
 
         # InstallationConfigurationClass Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $ConfigurationFolderPath} -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $ConfigurationFolderPath } -MockWith { $true }
 
         $ConfigurationFilePath = Join-Path -Path $ConfigurationFolderPath -ChildPath 'configuration.json'
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {$false}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -like $ConfigurationFilePath } -MockWith { $false }
 
-        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter {$Path -like $ConfigurationFilePath} -MockWith {
+        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -like $ConfigurationFilePath } -MockWith {
             '{
                 "Servers":[
                     {
@@ -162,14 +162,14 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
                     }
                 }
             )
-            '26.1.2' = @(
+            '26.1.2'    = @(
                 [PSCustomObject]@{
-                    id = 60
-                    time = (Get-Date '11/12/2025')
-                    channel = 'STABLE'
-                    commits = @{
-                        sha = '70eaed653d2260e42e510ea15e8fcb50152aa5ef'
-                        time = (Get-Date '10/12/2025')
+                    id        = 60
+                    time      = (Get-Date '11/12/2025')
+                    channel   = 'STABLE'
+                    commits   = @{
+                        sha     = '70eaed653d2260e42e510ea15e8fcb50152aa5ef'
+                        time    = (Get-Date '10/12/2025')
                         message = 'Soft limit projectile list size (#13953)'
                     }
                     downloads = @{
@@ -210,14 +210,14 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
                     }
                 }
             )
-            '26.1.1' = @(
+            '26.1.1'    = @(
                 [PSCustomObject]@{
-                    id = 57
-                    time = (Get-Date '05/12/2025')
-                    channel = 'STABLE'
-                    commits = @{
-                        sha = '70eaed653d2260e42e510ea15e8fcb50152aa5ef'
-                        time = (Get-Date '04/12/2025')
+                    id        = 57
+                    time      = (Get-Date '05/12/2025')
+                    channel   = 'STABLE'
+                    commits   = @{
+                        sha     = '70eaed653d2260e42e510ea15e8fcb50152aa5ef'
+                        time    = (Get-Date '04/12/2025')
                         message = 'Soft limit projectile list size (#13953)'
                     }
                     downloads = @{
@@ -293,39 +293,39 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         # Get-MinecraftDownloadUrl Mocks
         Mock -ModuleName $ModuleName -CommandName Invoke-RestMethod -ParameterFilter { $Uri -like 'https://launchermeta.mojang.com/mc/game/version_manifest_v2.json' } -MockWith {
             [PSCustomObject]@{
-                latest = [PSCustomObject]@{
-                    release = '26.2'
+                latest   = [PSCustomObject]@{
+                    release  = '26.2'
                     snapshot = '26.2'
                 }
                 versions = @(
                     [PSCustomObject]@{
-                        id = '26.2'
-                        type = 'release'
-                        url = 'https://piston-meta.mojang.com/v1/packages/4c3cd3500ce8b9ea104c358a784634fedb2a610f/26.2.json'
+                        id          = '26.2'
+                        type        = 'release'
+                        url         = 'https://piston-meta.mojang.com/v1/packages/4c3cd3500ce8b9ea104c358a784634fedb2a610f/26.2.json'
                         releaseTime = '16/06/2026 13:03:33'
                     },
                     [PSCustomObject]@{
-                        id = '26.1.2'
-                        type = 'release'
-                        url = 'https://piston-meta.mojang.com/v1/packages/e3510ae9ff09fba9410cbbb8a02bfd819632155d/26.1.2.json'
+                        id          = '26.1.2'
+                        type        = 'release'
+                        url         = 'https://piston-meta.mojang.com/v1/packages/e3510ae9ff09fba9410cbbb8a02bfd819632155d/26.1.2.json'
                         releaseTime = '09/04/2026 11:12:23'
                     },
                     [PSCustomObject]@{
-                        id = '26.2-rc-2'
-                        type = 'snapshot'
-                        url = 'https://piston-meta.mojang.com/v1/packages/606a0e2eb54d953ac478774efcfcedcdf59f4cc5/26.2-rc-2.json'
+                        id          = '26.2-rc-2'
+                        type        = 'snapshot'
+                        url         = 'https://piston-meta.mojang.com/v1/packages/606a0e2eb54d953ac478774efcfcedcdf59f4cc5/26.2-rc-2.json'
                         releaseTime = '12/06/2026 12:32:28'
                     },
                     [PSCustomObject]@{
-                        id = '26.2-rc-1'
-                        type = 'snapshot'
-                        url = 'https://piston-meta.mojang.com/v1/packages/f7053b943901bf8734b73723f43b31a9a8b6b776/26.2-rc-1.json'
+                        id          = '26.2-rc-1'
+                        type        = 'snapshot'
+                        url         = 'https://piston-meta.mojang.com/v1/packages/f7053b943901bf8734b73723f43b31a9a8b6b776/26.2-rc-1.json'
                         releaseTime = '11/06/2026 12:57:50'
                     },
                     [PSCustomObject]@{
-                        id = '26.2-pre-6'
-                        type = 'snapshot'
-                        url = 'https://piston-meta.mojang.com/v1/packages/020b103ce898979439db892c0c259d76936f559d/26.2-pre-6.json'
+                        id          = '26.2-pre-6'
+                        type        = 'snapshot'
+                        url         = 'https://piston-meta.mojang.com/v1/packages/020b103ce898979439db892c0c259d76936f559d/26.2-pre-6.json'
                         releaseTime = '10/06/2026 13:20:24'
                     }
                 )
@@ -336,23 +336,23 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName Invoke-WebRequest -MockWith {}
 
         # Backup-MinecraftServer Mocks
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq 'Live'} -MockWith {$true}
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq 'Backup'} -MockWith {$true}
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq 'Live' } -MockWith { $true }
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq 'Backup' } -MockWith { $true }
         Mock -ModuleName $ModuleName -CommandName Copy-Item -MockWith {}
     }
 
     Context "Module can load" {
-        BeforeAll{
+        BeforeAll {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'GetModule', Justification = 'False positive due to how Pester works.')]
             $GetModule = Get-Module $ModuleName
 
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'Cmdlets', Justification = 'False positive due to how Pester works.')]
             $Cmdlets = @(
-                @{Cmdlet ='Install-MinecraftServer'}
-                @{Cmdlet ='Update-MinecraftServer'},
-                @{Cmdlet ='Start-MinecraftServer'},
-                @{Cmdlet ='Stop-MinecraftServer'},
-                @{Cmdlet ='Backup-MinecraftServer'}
+                @{Cmdlet = 'Install-MinecraftServer' }
+                @{Cmdlet = 'Update-MinecraftServer' },
+                @{Cmdlet = 'Start-MinecraftServer' },
+                @{Cmdlet = 'Stop-MinecraftServer' },
+                @{Cmdlet = 'Backup-MinecraftServer' }
             )
         }
 
@@ -366,60 +366,71 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
     }
 
     Context "Install-MinecraftServer" {
-        It "Should install vanilla"{
-            {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath} | Should -Not -Throw
+        It "Should install vanilla" {
+            { Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath } | Should -Not -Throw
         }
 
-        It "Should install PaperMc"{
-            {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -PaperMc} | Should -Not -Throw
+        It "Should install PaperMc" {
+            { Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -PaperMc } | Should -Not -Throw
         }
 
-        It "Should throw if directory found"{
-            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $LiveFolderPath} -MockWith {$true}
-            {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath} | Should -Throw
+        It "Should throw if directory found" {
+            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $LiveFolderPath } -MockWith { $true }
+            { Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath } | Should -Throw
         }
 
-        It "Should not throw if directory found"{
-            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter {$Path -eq $LiveFolderPath} -MockWith {$true}
-            {Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -Force} | Should -Not -Throw
+        It "Should not throw if directory found" {
+            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $LiveFolderPath } -MockWith { $true }
+            { Install-MinecraftServer -ServerName 'IntegrationTest' -InstallationPath $InstallationFolderPath -Force } | Should -Not -Throw
         }
     }
 
     Context "Update-MinecraftServer" {
         It "Should update with no backup" {
-            {Update-MinecraftServer -Servername 'IntegrationTest' -NoBackup} | Should -Not -Throw
+            { Update-MinecraftServer -Servername 'IntegrationTest' -NoBackup } | Should -Not -Throw
         }
 
         It "Should update with with backup" {
-            {Update-MinecraftServer -Servername 'IntegrationTest'} | Should -Not -Throw
+            { Update-MinecraftServer -Servername 'IntegrationTest' } | Should -Not -Throw
         }
     }
 
     Context "Backup-MinecraftServer" {
-        It "Should backup"{
-            {Backup-MinecraftServer -Servername 'IntegrationTest'} | Should -Not -Throw
+        It "Should backup" {
+            { Backup-MinecraftServer -Servername 'IntegrationTest' } | Should -Not -Throw
         }
     }
 
     Context "Start-MinecraftServer" {
-        BeforeAll{
+        BeforeAll {
             Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {}
 
+            $Script:GetJobCallCount = 0
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
+                if ($Script:GetJobCallCount -eq 0) {
+                    [PSCustomObject]@{
+                        State = 'Running'
+                    }
+                }
+                else {
                     [PSCustomObject]@{
                         State = 'Stopped'
-                    }                    
+                    }
                 }
+
+                $Script:GetJobCallCount++
+
+            }
 
             Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
         }
-        It "Should start a minecraft server"{
+        It "Should start a minecraft server" {
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest'
-            {$StartServerCall} | Should -Not -Throw
+            { $StartServerCall } | Should -Not -Throw
             $StartServerCall | Should -Invoke Start-Job -Times 2
         }
 
-        It "Should start a minecraft server in interactive mode"{
+        It "Should start a minecraft server in interactive mode" {
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest' -InterativeMode
             $StartServerCall | Should -Not -Throw
             $StartServerCall | Should -Invoke Start-Job -Times 1

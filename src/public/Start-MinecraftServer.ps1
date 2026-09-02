@@ -57,7 +57,7 @@ function Start-MinecraftServer {
         $RunTime = 0
         while($RunTime -le 120){
             if((Get-Job -Name $ServerName).State -ne 'Running'){
-                Continue
+                Break
             }
 
             Start-Sleep -Seconds 1
