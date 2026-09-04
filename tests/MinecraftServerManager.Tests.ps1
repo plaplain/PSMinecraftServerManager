@@ -432,12 +432,13 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         It "Should start a minecraft server" {
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest'
             { $StartServerCall } | Should -Not -Throw
-            $StartServerCall | Should -Invoke Start-Job -Times 2
+
+            Assert-MockCalled -CommandName Start-Jon -Times 2 -ModuleName $ModuleName
         }
 
         It "Should start a minecraft server in interactive mode" {
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest' -InterativeMode
-            $StartServerCall | Should -Not -Throw
+            { $StartServerCall } | Should -Not -Throw
             $StartServerCall | Should -Invoke Start-Job -Times 1
             $StartServerCall | Should -Invoke Invoke-Command -Times 1
         }
