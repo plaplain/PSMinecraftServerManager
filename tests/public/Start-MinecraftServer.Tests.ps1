@@ -78,7 +78,7 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
         Mock -ModuleName $ModuleName -CommandName Start-Sleep -MockWith {}
         Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
             [PSCustomObject]@{
-                State = 'Running'
+                State = 'Stopped'
             }
         }
     }
