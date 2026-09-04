@@ -57,7 +57,7 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
         }
 
         Mock -ModuleName $ModuleName -CommandName Get-InstallationConfigurationPath -MockWith {
-            FullPath = $FolderPath        
+            $FolderPath
         }
 
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $FolderPath } -MockWith { $true }
