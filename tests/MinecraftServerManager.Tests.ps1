@@ -486,3 +486,56 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         }
     }
 }
+
+Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
+    BeforeAll{
+        if ($IsLinux) {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
+            $InstallationFolderPath = '/home/minecraft'
+        }
+        else {
+            $InstallationFolderPath = 'C:\Temp\'
+        }
+
+        if(!(Test-Path $InstallationFolderPath)){
+            New-Item -Path $InstallationFolderPath -ItemType Directory
+        }
+
+        $LivePath = Join-Path -Path $InstallationFolderPath -ChildPath 'Live'
+        $BackupPath = Join-Path -Path $InstallationFolderPath -ChildPath 'Backup'
+    }
+    Context "Smoke Test Minecraft Vanilla" {
+        It 'Should install' {
+            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath} | Should -Not -Throw
+            Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should throw on install' {
+            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath} | Should -Throw
+        }
+
+        It 'Should overwrite install' {
+            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -Force} | Should -Not -Throw
+            Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should start server' {
+            {Start-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            Get-Job -Name 'SmokeTest' | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should Stop server' {
+            {Stop-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            (Get-Job -Name 'SmokeTest').State | Should -Not Be 'Running'
+        }
+
+        It 'Should Backup server'{
+            {Backup-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            Get-ChildItem -Path $BackupPath | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should Update server'{
+            {Update-MinecraftServer -ServerName 'SmokeTest' -NoBackup} | Should -Not -Throw
+        }
+    }
+}
