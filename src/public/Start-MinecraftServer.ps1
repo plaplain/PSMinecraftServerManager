@@ -41,6 +41,8 @@ function Start-MinecraftServer {
     # How do we get the live folder path?
     $MinecraftServerJar = Join-Path -Path $LivePath -ChildPath 'minecraft_server.jar'
 
+    Set-Location -Path $LivePath
+
     if ($IsLinux) {
         $LaunchScriptBlock = { java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui }
     }
@@ -58,7 +60,6 @@ function Start-MinecraftServer {
         $RunTime = 0
         while ($RunTime -le 120) {
             if ((Get-Job -Name $ServerName).State -ne 'Running') {
-                Start-Sleep -Seconds 5 # We sleep here to allow time for the EULA to be generated.
                 Break
             }
 
