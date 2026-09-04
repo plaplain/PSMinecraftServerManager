@@ -39,7 +39,7 @@ function Update-MinecraftServer {
         }
     }
 
-    $FolderStructure = Get-FolderStructure -InstallationPath $ServerConfiguration.InstallationPath
+    $FolderStructure = Get-FolderStructure -InstallationPath $ServerConfiguration.InstallationFolder
 
     $LiveServerJar = Join-Path -Path $FolderStructure['Live'] -ChildPath 'minecraft_server.jar'
 
