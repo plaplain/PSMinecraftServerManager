@@ -472,7 +472,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
                 }
             }
             $StoppedServer = Stop-MinecraftServer -ServerName 'IntegrationTest'
-            $StoppedServer | Should -ExpectedValue "Server no longer running in a stable state."
+            $StoppedServer | Should -Be "Server no longer running in a stable state."
             
             Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
             Assert-MockCalled -CommandName Stop-Job -Times 1 -ModuleName $ModuleName
