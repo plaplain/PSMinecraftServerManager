@@ -341,9 +341,9 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         Mock -ModuleName $ModuleName -CommandName Copy-Item -MockWith {}
 
         # Start-MinecraftServerMocks
-        $EulaFilePath = Join-Path -Path $InstallationFolderPath -ChildPath 'Live' -AdditionalChildPath 'eula.txt'
-        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -eq $EulaFilePath} -MockWith {"false"}
-        Mock -ModuleName $ModuleName -CommandName Out-File -ParameterFilter { $FilePath -eq $EulaFilePath }
+        $EulaFilePath = Join-Path -Path 'Live' -ChildPath 'eula.txt'
+        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -like "*$EulaFilePath"} -MockWith {"false"}
+        Mock -ModuleName $ModuleName -CommandName Out-File -ParameterFilter { $FilePath -like "*$EulaFilePath" }
     }
 
     Context "Module can load" {
