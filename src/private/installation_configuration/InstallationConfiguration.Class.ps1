@@ -27,7 +27,7 @@ class InstallationConfiguration {
     #>
     [void]LoadConfiguration([string]$Path) {
         if (!(Test-Path $Path)) {
-            throw('Invalid path')
+            throw("Invalid path '$Path'")
         }
 
         $FilePath = Join-Path -Path $Path -ChildPath $this.ConfigurationFileName
