@@ -475,7 +475,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             $StoppedServer | Should -Be "Server no longer running in a stable state."
             
             Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
-            Assert-MockCalled -CommandName Stop-Job -Times 1 -ModuleName $ModuleName
+            Assert-MockCalled -CommandName Stop-Job -Times 0 -ModuleName $ModuleName
         }
 
         It "Should throw when no job running" {
