@@ -500,13 +500,58 @@ Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
         if(!(Test-Path $InstallationFolderPath)){
             New-Item -Path $InstallationFolderPath -ItemType Directory
         }
-
-        $LivePath = Join-Path -Path $InstallationFolderPath -ChildPath 'Live'
-        $BackupPath = Join-Path -Path $InstallationFolderPath -ChildPath 'Backup'
     }
+
     Context "Smoke Test Minecraft Vanilla" {
+        BeforeAll{
+            $VanillaInstallPath = Join-Path -Path $InstallationFolderPath -ChildPath "Vanilla"
+            $LivePath = Join-Path -Path $VanillaInstallPath -ChildPath 'Live'
+            $BackupPath = Join-Path -Path $VanillaInstallPath -ChildPath 'Backup'
+        }
+
         It 'Should install' {
             {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath} | Should -Not -Throw
+            Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should throw on install' {
+            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath} | Should -Throw
+        }
+
+        It 'Should overwrite install' {
+            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -Force} | Should -Not -Throw
+            Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should start server' {
+            {Start-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            Get-Job -Name 'SmokeTest' | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should Stop server' {
+            {Stop-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            (Get-Job -Name 'SmokeTest').State | Should -Not Be 'Running'
+        }
+
+        It 'Should Backup server'{
+            {Backup-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            Get-ChildItem -Path $BackupPath | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should Update server'{
+            {Update-MinecraftServer -ServerName 'SmokeTest' -NoBackup} | Should -Not -Throw
+        }
+    }
+
+    Context "Smoke Test Minecraft PaperMc" {
+        BeforeAll{
+            $PaperMcInstallPath = Join-Path -Path $InstallationFolderPath -ChildPath "Vanilla"
+            $LivePath = Join-Path -Path $PaperMcInstallPath -ChildPath 'Live'
+            $BackupPath = Join-Path -Path $PaperMcInstallPath -ChildPath 'Backup'
+        }
+
+        It 'Should install' {
+            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -PaperMc} | Should -Not -Throw
             Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
         }
 
