@@ -446,6 +446,41 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
     }
 
     Context "Stop-MinecraftServer" {
+        BeforeAll{
+            Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
+                [PSCustomObject]@{
+                    State = 'Running'
+                }
+            }
 
+            Mock -Module $ModuleName -CommandName Stop-Job -MockWith {}
+        }
+
+        It "Should stop a minnecraft server" {
+            {Stop-MinecraftServer -ServerName 'IntegrationTest'} | Should -Not -Throw
+            
+            Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
+            Assert-MockCalled -CommandName Stop-Job -Times 1 -ModuleName $ModuleName
+        }
+
+        It "Should return 'Server no longer running...'" {
+            Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
+                [PSCustomObject]@{
+                    State = 'Stopped'
+                }
+            }
+            $StoppedServer = Stop-MinecraftServer -ServerName 'IntegrationTest'
+            $StoppedServer | Should -ExpectedValue "Server no longer running in a stable state."
+            
+            Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
+            Assert-MockCalled -CommandName Stop-Job -Times 1 -ModuleName $ModuleName
+        }
+
+        It "Should throw when no job running" {
+            Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {$null}
+            {Stop-MinecraftServer -ServerName 'IntegrationTest'} | Should -Throw
+            
+            Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
+        }
     }
 }
