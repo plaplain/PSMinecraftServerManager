@@ -76,6 +76,11 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
         Mock -ModuleName $ModuleName -CommandName Out-File -MockWith {}
         Mock -ModuleName $ModuleName -CommandName Get-Content -MockWith { 'false' }
         Mock -ModuleName $ModuleName -CommandName Start-Sleep -MockWith {}
+        Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
+            [PSCustomObject]@{
+                State = 'Running'
+            }
+        }
     }
 
     Context "When input is valid" {
