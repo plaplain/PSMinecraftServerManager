@@ -505,7 +505,11 @@ Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
     Context "Smoke Test Minecraft Vanilla" {
         BeforeAll{
             $VanillaInstallPath = Join-Path -Path $InstallationFolderPath -ChildPath "Vanilla"
+
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'LivePath', Justification = 'False positive due to how Pester works.')]
             $LivePath = Join-Path -Path $VanillaInstallPath -ChildPath 'Live'
+
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'BackupPath', Justification = 'False positive due to how Pester works.')]
             $BackupPath = Join-Path -Path $VanillaInstallPath -ChildPath 'Backup'
         }
 
@@ -546,7 +550,11 @@ Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
     Context "Smoke Test Minecraft PaperMc" {
         BeforeAll{
             $PaperMcInstallPath = Join-Path -Path $InstallationFolderPath -ChildPath "Vanilla"
+
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'LivePath', Justification = 'False positive due to how Pester works.')]
             $LivePath = Join-Path -Path $PaperMcInstallPath -ChildPath 'Live'
+
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'BackupPath', Justification = 'False positive due to how Pester works.')]
             $BackupPath = Join-Path -Path $PaperMcInstallPath -ChildPath 'Backup'
         }
 
