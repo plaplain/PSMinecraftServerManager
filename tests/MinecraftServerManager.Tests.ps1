@@ -450,6 +450,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
                 [PSCustomObject]@{
                     State = 'Running'
+                    Id = 1
                 }
             }
 
@@ -467,6 +468,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
                 [PSCustomObject]@{
                     State = 'Stopped'
+                    Id = 1
                 }
             }
             $StoppedServer = Stop-MinecraftServer -ServerName 'IntegrationTest'
