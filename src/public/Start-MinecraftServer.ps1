@@ -23,7 +23,7 @@ function Start-MinecraftServer {
 
     $InstallationConfigurationPath = Get-InstallationConfigurationPath
 
-    if(!(Test-Path -Path $InstallationConfigurationPath)){
+    if (!(Test-Path -Path $InstallationConfigurationPath)) {
         throw("No installation detected. Please run Install-MinecraftServer")
     }
 
@@ -31,7 +31,7 @@ function Start-MinecraftServer {
 
     $ServerConfig = $Configuration.GetServer($ServerName)
 
-    if($null -eq $ServerConfig){
+    if ($null -eq $ServerConfig) {
         throw("No configuration for server '$ServerName'.")
     }
 
@@ -41,22 +41,24 @@ function Start-MinecraftServer {
     # How do we get the live folder path?
     $MinecraftServerJar = Join-Path -Path $LivePath -ChildPath 'minecraft_server.jar'
 
-    if($IsLinux){
-        $LaunchScriptBlock = {java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui}
+    if ($IsLinux) {
+        $LaunchScriptBlock = { java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui }
     }
     else {
-        $LaunchScriptBlock = {java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui}
+        $LaunchScriptBlock = { java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui }
     }
 
     $EulaFilePath = Join-Path -Path $LivePath -ChildPath "eula.txt"
+
     if (!(Test-Path -Path $EulaFilePath) -and $PSCmdlet.ShouldProcess("Generate EULA for '$ServerName'")) {
         Write-Output "First run detected. Starting the server to generate the eula file. The server will stop, this is expected."
 
         Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock | Out-Null
 
         $RunTime = 0
-        while($RunTime -le 120){
-            if((Get-Job -Name $ServerName).State -ne 'Running'){
+        while ($RunTime -le 120) {
+            if ((Get-Job -Name $ServerName).State -ne 'Running') {
+                Start-Sleep -Seconds 5 # We sleep here to allow time for the EULA to be generated.
                 Break
             }
 
@@ -64,21 +66,26 @@ function Start-MinecraftServer {
             $RunTime++
         }
 
-            if($RunTime -ge 120){
-                throw("EULA generation took too long.")
-            }
+        if ($RunTime -ge 120) {
+            throw("EULA generation took too long.")
+        }
+    }
 
+    if((Test-Path -Path $EulaFilePath)){
         Write-Output "Accepting the Eula file"
         $EulaFile = Get-Content -Path $EulaFilePath -Raw
         $EulaFile = $EulaFile.replace("false", "true")
         $EulaFile | Out-File -FilePath $EulaFilePath -Encoding ([System.Text.Encoding]::UTF8)
     }
+    else {
+        throw("EULA file not present '$EulaFilePath'")
+    }
 
-    if($InterativeMode -and $PSCmdlet.ShouldProcess($ServerName)){
+    if ($InterativeMode -and $PSCmdlet.ShouldProcess($ServerName)) {
         Invoke-Command -ScriptBlock $LaunchScriptBlock
     }
     else {
-        Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock | Out-Null
+        Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
     }    
 }
 
