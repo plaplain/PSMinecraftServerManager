@@ -22,6 +22,8 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
             $FolderPath = 'C:\Temp\'
         }
 
+        New-Item -Path $FolderPath -ItemType Directory
+
         $FunctionDependencies = @(
             'Get-FolderStructure',
             'Get-InstallationConfigurationPath'
