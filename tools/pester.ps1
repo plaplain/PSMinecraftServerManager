@@ -10,7 +10,8 @@ param(
     [Parameter(Mandatory = $true)][string[]]$Tags
 )
 
-Import-Module Pester -Force
+Install-Module -Name Pester -MinimumVersion 6.0.0
+Import-Module -Name Pester -MinimumVersion 6.0.0 -Force
 
 if($OutputPath){
     $TestResultsEnabled = $true
