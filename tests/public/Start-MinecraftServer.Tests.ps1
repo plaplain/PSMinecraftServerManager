@@ -81,6 +81,8 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
                 State = 'Stopped'
             }
         }
+
+        Mock -ModuleName $ModuleName -CommandName Set-Location -MockWith {}
     }
 
     Context "When input is valid" {
