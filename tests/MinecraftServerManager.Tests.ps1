@@ -342,7 +342,19 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
         # Start-MinecraftServerMocks
         $EulaFilePath = Join-Path -Path 'Live' -ChildPath 'eula.txt'
-        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -like "*$EulaFilePath"} -MockWith {"false"}
+
+        $Script:EulaPathCallCount = 0
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith { 
+            if ($Script:EulaPathCallCount -eq 0) {
+                $false
+            }
+            else {
+                $true
+            }
+
+            $Script:EulaPathCallCount++
+        }
+        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -like "*$EulaFilePath" } -MockWith { "false" }
         Mock -ModuleName $ModuleName -CommandName Out-File -ParameterFilter { $FilePath -like "*$EulaFilePath" }
         Mock -ModuleName $ModuleName -CommandName Set-Location -MockWith {}
     }
@@ -447,11 +459,11 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
     }
 
     Context "Stop-MinecraftServer" {
-        BeforeAll{
+        BeforeAll {
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
                 [PSCustomObject]@{
                     State = 'Running'
-                    Id = 1
+                    Id    = 1
                 }
             }
 
@@ -459,7 +471,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         }
 
         It "Should stop a minnecraft server" {
-            {Stop-MinecraftServer -ServerName 'IntegrationTest'} | Should -Not -Throw
+            { Stop-MinecraftServer -ServerName 'IntegrationTest' } | Should -Not -Throw
             
             Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
             Assert-MockCalled -CommandName Stop-Job -Times 1 -ModuleName $ModuleName
@@ -469,7 +481,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
                 [PSCustomObject]@{
                     State = 'Stopped'
-                    Id = 1
+                    Id    = 1
                 }
             }
             $StoppedServer = Stop-MinecraftServer -ServerName 'IntegrationTest'
@@ -480,8 +492,8 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         }
 
         It "Should throw when no job running" {
-            Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {$null}
-            {Stop-MinecraftServer -ServerName 'IntegrationTest'} | Should -Throw
+            Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith { $null }
+            { Stop-MinecraftServer -ServerName 'IntegrationTest' } | Should -Throw
             
             Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
         }
@@ -489,7 +501,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 }
 
 Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
-    BeforeAll{
+    BeforeAll {
         if ($IsLinux) {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'FolderPath', Justification = 'False positive due to how Pester works.')]
             $InstallationFolderPath = '/home/minecraft'
@@ -498,13 +510,13 @@ Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
             $InstallationFolderPath = 'C:\Temp\'
         }
 
-        if(!(Test-Path $InstallationFolderPath)){
+        if (!(Test-Path $InstallationFolderPath)) {
             New-Item -Path $InstallationFolderPath -ItemType Directory
         }
     }
 
     Context "Smoke Test Minecraft Vanilla" {
-        BeforeAll{
+        BeforeAll {
             $VanillaInstallPath = Join-Path -Path $InstallationFolderPath -ChildPath "Vanilla"
 
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'LivePath', Justification = 'False positive due to how Pester works.')]
@@ -515,41 +527,41 @@ Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
         }
 
         It 'Should install' {
-            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath} | Should -Not -Throw
+            { Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath } | Should -Not -Throw
             Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
         }
 
         It 'Should throw on install' {
-            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath} | Should -Throw
+            { Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath } | Should -Throw
         }
 
         It 'Should overwrite install' {
-            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -Force} | Should -Not -Throw
+            { Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -Force } | Should -Not -Throw
             Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
         }
 
         It 'Should start server' {
-            {Start-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            { Start-MinecraftServer -ServerName 'SmokeTest' } | Should -Not -Throw
             Get-Job -Name 'SmokeTest' | Should -Not -BeNullOrEmpty
         }
 
         It 'Should Stop server' {
-            {Stop-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            { Stop-MinecraftServer -ServerName 'SmokeTest' } | Should -Not -Throw
             (Get-Job -Name 'SmokeTest').State | Should -Not Be 'Running'
         }
 
-        It 'Should Backup server'{
-            {Backup-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+        It 'Should Backup server' {
+            { Backup-MinecraftServer -ServerName 'SmokeTest' } | Should -Not -Throw
             Get-ChildItem -Path $BackupPath | Should -Not -BeNullOrEmpty
         }
 
-        It 'Should Update server'{
-            {Update-MinecraftServer -ServerName 'SmokeTest' -NoBackup} | Should -Not -Throw
+        It 'Should Update server' {
+            { Update-MinecraftServer -ServerName 'SmokeTest' -NoBackup } | Should -Not -Throw
         }
     }
 
     Context "Smoke Test Minecraft PaperMc" {
-        BeforeAll{
+        BeforeAll {
             $PaperMcInstallPath = Join-Path -Path $InstallationFolderPath -ChildPath "Vanilla"
 
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'LivePath', Justification = 'False positive due to how Pester works.')]
@@ -560,36 +572,36 @@ Describe "MinecraftServerManager Smoke Tests" -Tag 'Smoke' {
         }
 
         It 'Should install' {
-            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -PaperMc} | Should -Not -Throw
+            { Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -PaperMc } | Should -Not -Throw
             Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
         }
 
         It 'Should throw on install' {
-            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath} | Should -Throw
+            { Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath } | Should -Throw
         }
 
         It 'Should overwrite install' {
-            {Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -Force} | Should -Not -Throw
+            { Install-MinecraftServer -ServerName 'SmokeTest' -InstallationPath $InstallationFolderPath -Force } | Should -Not -Throw
             Get-ChildItem -Path $LivePath | Should -Not -BeNullOrEmpty
         }
 
         It 'Should start server' {
-            {Start-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            { Start-MinecraftServer -ServerName 'SmokeTest' } | Should -Not -Throw
             Get-Job -Name 'SmokeTest' | Should -Not -BeNullOrEmpty
         }
 
         It 'Should Stop server' {
-            {Stop-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+            { Stop-MinecraftServer -ServerName 'SmokeTest' } | Should -Not -Throw
             (Get-Job -Name 'SmokeTest').State | Should -Not Be 'Running'
         }
 
-        It 'Should Backup server'{
-            {Backup-MinecraftServer -ServerName 'SmokeTest'} | Should -Not -Throw
+        It 'Should Backup server' {
+            { Backup-MinecraftServer -ServerName 'SmokeTest' } | Should -Not -Throw
             Get-ChildItem -Path $BackupPath | Should -Not -BeNullOrEmpty
         }
 
-        It 'Should Update server'{
-            {Update-MinecraftServer -ServerName 'SmokeTest' -NoBackup} | Should -Not -Throw
+        It 'Should Update server' {
+            { Update-MinecraftServer -ServerName 'SmokeTest' -NoBackup } | Should -Not -Throw
         }
     }
 }
