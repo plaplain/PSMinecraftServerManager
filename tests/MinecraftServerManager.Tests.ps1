@@ -453,7 +453,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest' -InterativeMode
             { $StartServerCall } | Should -Not -Throw
 
-            Assert-MockCalled -CommandName Start-Job -Times 3 -ModuleName $ModuleName
+            Should-Invoke Start-Job -Times 1 -Exactly -ModuleName $ModuleName
             Assert-MockCalled -CommandName Invoke-Command -Times 1 -ModuleName $ModuleName
         }
     }
