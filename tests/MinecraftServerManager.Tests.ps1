@@ -446,15 +446,15 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest'
             { $StartServerCall } | Should -Not -Throw
 
-            Assert-MockCalled -CommandName Start-Job -Times 2 -ModuleName $ModuleName
+            Should-Invoke -CommandName Start-Job -Times 2 -Exactly  -ModuleName $ModuleName
         }
 
         It "Should start a minecraft server in interactive mode" {
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest' -InterativeMode
             { $StartServerCall } | Should -Not -Throw
 
-            Should-Invoke Start-Job -Times 1 -Exactly -ModuleName $ModuleName
-            Assert-MockCalled -CommandName Invoke-Command -Times 1 -ModuleName $ModuleName
+            Should-Invoke -CommandName  Start-Job -Times 1 -Exactly -ModuleName $ModuleName
+            Should-Invoke -CommandName Invoke-Command -Times 1 -Exactly -ModuleName $ModuleName
         }
     }
 
@@ -473,8 +473,8 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         It "Should stop a minnecraft server" {
             { Stop-MinecraftServer -ServerName 'IntegrationTest' } | Should -Not -Throw
             
-            Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
-            Assert-MockCalled -CommandName Stop-Job -Times 1 -ModuleName $ModuleName
+            Should-Invoke -CommandName Get-Job -Times 1 -Exactly -ModuleName $ModuleName
+            Should-Invoke -CommandName Stop-Job -Times 1 -Exactly -ModuleName $ModuleName
         }
 
         It "Should return 'Server no longer running...'" {
@@ -487,15 +487,15 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             $StoppedServer = Stop-MinecraftServer -ServerName 'IntegrationTest'
             $StoppedServer | Should -Be "Server no longer running in a stable state."
             
-            Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
-            Assert-MockCalled -CommandName Stop-Job -Times 0 -ModuleName $ModuleName
+            Should-Invoke -CommandName Get-Job -Times 1 -Exactly -ModuleName $ModuleName
+            Should-Invoke -CommandName Stop-Job -Times 0 -Exactly -ModuleName $ModuleName
         }
 
         It "Should throw when no job running" {
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith { $null }
             { Stop-MinecraftServer -ServerName 'IntegrationTest' } | Should -Throw
             
-            Assert-MockCalled -CommandName Get-Job -Times 1 -ModuleName $ModuleName
+            Should-Invoke -CommandName Get-Job -Times 1 -Exactly -ModuleName $ModuleName
         }
     }
 }
