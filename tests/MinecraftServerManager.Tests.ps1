@@ -345,6 +345,9 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
         $EulaScriptBlock = New-SequentialResultsMockBehavior -SequentialResults @(
                 $false,
+                $true,
+                $true,
+                $true,
                 $true
             )
 
