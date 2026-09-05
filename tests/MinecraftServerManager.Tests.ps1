@@ -343,7 +343,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         # Start-MinecraftServerMocks
         $EulaFilePath = Join-Path -Path 'Live' -ChildPath 'eula.txt'
 
-        $Script:EulaPathCallCount = 0
+        $Script:EulaPathCallCount = $null
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith { 
             if ($null -eq $Script:EulaPathCallCount) {
                 $false
