@@ -343,6 +343,12 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         # Start-MinecraftServerMocks
         $EulaFilePath = Join-Path -Path 'Live' -ChildPath 'eula.txt'
 
+
+        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -like "*$EulaFilePath" } -MockWith { "false" }
+        Mock -ModuleName $ModuleName -CommandName Out-File -ParameterFilter { $FilePath -like "*$EulaFilePath" }
+        Mock -ModuleName $ModuleName -CommandName Set-Location -MockWith {}
+    }
+
         $Script:EulaPathCallCount = 0
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith { 
             if ($Script:EulaPathCallCount -eq 0) {
@@ -354,10 +360,6 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
             $Script:EulaPathCallCount++
         }
-        Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -like "*$EulaFilePath" } -MockWith { "false" }
-        Mock -ModuleName $ModuleName -CommandName Out-File -ParameterFilter { $FilePath -like "*$EulaFilePath" }
-        Mock -ModuleName $ModuleName -CommandName Set-Location -MockWith {}
-    }
 
     Context "Module can load" {
         BeforeAll {
