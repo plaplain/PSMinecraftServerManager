@@ -363,16 +363,16 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         BeforeAll {
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'GetModule', Justification = 'False positive due to how Pester works.')]
             $GetModule = Get-Module $ModuleName
-
-            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'Cmdlets', Justification = 'False positive due to how Pester works.')]
-            $Cmdlets = @(
-                @{Cmdlet = 'Install-MinecraftServer' }
-                @{Cmdlet = 'Update-MinecraftServer' },
-                @{Cmdlet = 'Start-MinecraftServer' },
-                @{Cmdlet = 'Stop-MinecraftServer' },
-                @{Cmdlet = 'Backup-MinecraftServer' }
-            )
         }
+
+        [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'Cmdlets', Justification = 'False positive due to how Pester works.')]
+        $Cmdlets = @(
+            @{Cmdlet = 'Install-MinecraftServer' }
+            @{Cmdlet = 'Update-MinecraftServer' },
+            @{Cmdlet = 'Start-MinecraftServer' },
+            @{Cmdlet = 'Stop-MinecraftServer' },
+            @{Cmdlet = 'Backup-MinecraftServer' }
+        )
 
         It "Get-Module returns a value" {
             $GetModule | Should -Not -BeNullOrEmpty
