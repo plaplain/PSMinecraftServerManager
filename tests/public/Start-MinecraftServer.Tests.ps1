@@ -63,7 +63,18 @@ Describe 'Start-MinecraftServer Unit Tests' -Tag 'Unit' {
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $FolderPath } -MockWith { $true }
 
         $EulaPath = Join-Path -Path $FolderPath -ChildPath 'Live' -AdditionalChildPath 'eula.txt'
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaPath } -MockWith { $false }
+
+        $Script:EulaPathCallCount = 0
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaPath } -MockWith { 
+            if($Script:EulaPathCallCount -eq 0){
+                $false
+            }
+            else{
+                $true
+            }
+
+            $Script:EulaPathCallCount++
+        }
 
         Mock -ModuleName $ModuleName -CommandName Invoke-Command -MockWith {}
 
