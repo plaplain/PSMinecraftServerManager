@@ -365,7 +365,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             $GetModule = Get-Module $ModuleName
 
             [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'Cmdlets', Justification = 'False positive due to how Pester works.')]
-            $Script:Cmdlets = @(
+            $Cmdlets = @(
                 @{Cmdlet = 'Install-MinecraftServer' }
                 @{Cmdlet = 'Update-MinecraftServer' },
                 @{Cmdlet = 'Start-MinecraftServer' },
@@ -378,8 +378,8 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
             $GetModule | Should -Not -BeNullOrEmpty
         }
 
-        It "Get-Module should contain cmdlets" -ForEach $Script:Cmdlets {
-            $GetModule.ExportedCommands.Keys | Should -Contain $Cmdlet
+        It "Get-Module should contain cmdlets" -ForEach $Cmdlets {
+            $GetModule.ExportedCommands.Keys | Should -Contain $_.Cmdlet
         }
     }
 
