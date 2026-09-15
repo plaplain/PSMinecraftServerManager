@@ -453,16 +453,15 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         }
 
         It "Should start a minecraft server in interactive mode" {
-        $EulaScriptBlock = New-SequentialResultsMockBehavior -SequentialResults @(
-            $false,
-            $true,
-            $true,
-            $true,
-            $true
-        )
+            $EulaScriptBlock = New-SequentialResultsMockBehavior -SequentialResults @(
+                $false,
+                $true,
+                $true,
+                $true,
+                $true
+            )
 
-
-        #Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith $EulaScriptBlock
+            Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith $EulaScriptBlock
 
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest' -InterativeMode
             { $StartServerCall } | Should -Not -Throw
