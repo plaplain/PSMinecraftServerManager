@@ -44,10 +44,10 @@ function Start-MinecraftServer {
     Set-Location -Path $LivePath
 
     if ($IsLinux) {
-        $LaunchScriptBlock = { java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui }
+        $LaunchScriptBlock = {param($MinecraftServerJar) java -Xmx1024M -Xms1024M -jar $MinecraftServerJar nogui }
     }
     else {
-        $LaunchScriptBlock = { java -Xmx1024M -Xms1024M -jar $MinecraftServerjar nogui }
+        $LaunchScriptBlock = {param($MinecraftServerJar) java -Xmx1024M -Xms1024M -jar $MinecraftServerJar nogui }
     }
 
     $EulaFilePath = Join-Path -Path $LivePath -ChildPath "eula.txt"
@@ -55,7 +55,7 @@ function Start-MinecraftServer {
     if (!(Test-Path -Path $EulaFilePath) -and $PSCmdlet.ShouldProcess("Generate EULA for '$ServerName'")) {
         Write-Output "First run detected. Starting the server to generate the eula file. The server will stop, this is expected."
 
-        Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock | Out-Null
+        Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock -ArgumentList $MinecraftServerJar | Out-Null
 
         $RunTime = 0
         while ($RunTime -le 120) {
