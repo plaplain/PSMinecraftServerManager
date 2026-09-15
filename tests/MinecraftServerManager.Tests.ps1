@@ -344,12 +344,25 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         $EulaFilePath = Join-Path -Path 'Live' -ChildPath 'eula.txt'
 
         $EulaScriptBlock = New-SequentialResultsMockBehavior -SequentialResults @(
-                $false,
-                $true,
-                $true,
-                $true,
-                $true
-            )
+            $false,
+            $true,
+            $true,
+            $true,
+            $true
+        )
+
+        $Script:Eula = 0
+        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath }  -MockWith {
+        if ($Script:Eula -eq 0) {
+            $false
+        }
+        else {
+            $true
+        }
+
+        $Script:Eula++
+
+    }
 
         Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith $EulaScriptBlock
         Mock -ModuleName $ModuleName -CommandName Get-Content -ParameterFilter { $Path -like "*$EulaFilePath" } -MockWith { "false" }
@@ -419,7 +432,11 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
 
     Context "Start-MinecraftServer" {
         BeforeAll {
-            Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {}
+            Mock -ModuleName $ModuleName -CommandName Start-Job -MockWith {
+                [PSCustomObject]@{
+                    State = 'Running'
+                }
+            }
 
             $Script:GetJobCallCount = 0
             Mock -ModuleName $ModuleName -CommandName Get-Job -MockWith {
