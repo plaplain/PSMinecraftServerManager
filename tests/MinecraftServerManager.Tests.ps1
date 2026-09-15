@@ -462,7 +462,7 @@ Describe "MinecraftServerManager Integration Tests" -Tag 'Integration' {
         )
 
 
-        Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith $EulaScriptBlock
+        #Mock -ModuleName $ModuleName -CommandName Test-Path -ParameterFilter { $Path -eq $EulaFilePath } -MockWith $EulaScriptBlock
 
             $StartServerCall = Start-MinecraftServer -ServerName 'IntegrationTest' -InterativeMode
             { $StartServerCall } | Should -Not -Throw
