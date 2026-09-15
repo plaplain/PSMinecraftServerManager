@@ -6,7 +6,7 @@ function New-SequentialResultsMockBehavior {
         [object[]] $SequentialResults
     )
 
-    $mockCallCounter = 0
+    $script:mockCallCounter = 0
 
     $mockScriptBlock = {
         $currentIndex = $script:mockCallCounter++
