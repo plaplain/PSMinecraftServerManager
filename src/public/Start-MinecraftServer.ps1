@@ -83,7 +83,7 @@ function Start-MinecraftServer {
     }
 
     if ($InterativeMode -and $PSCmdlet.ShouldProcess($ServerName)) {
-        Invoke-Command -ScriptBlock $LaunchScriptBlock
+        Invoke-Command -ScriptBlock $LaunchScriptBlock -ArgumentList $MinecraftServerJar
     }
     else {
         Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
