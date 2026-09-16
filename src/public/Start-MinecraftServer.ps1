@@ -86,7 +86,7 @@ function Start-MinecraftServer {
         Invoke-Command -ScriptBlock $LaunchScriptBlock -ArgumentList $MinecraftServerJar
     }
     else {
-        Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock
+        Start-Job -Name $ServerName -ScriptBlock $LaunchScriptBlock -ArgumentList $MinecraftServerJar | Out-Null
     }    
 }
 
