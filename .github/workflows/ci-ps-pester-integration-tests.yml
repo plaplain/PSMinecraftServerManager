@@ -1,0 +1,26 @@
+name: Pester Integration Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ 'feature/*', 'enhancement/*', 'bug/*', 'dev' ]
+
+jobs:
+  build:
+    uses: ./.github/workflows/ci-ps-shared-build.yml
+    with:
+      runsOn: 'windows-latest'
+  tests-windows:
+    uses: './.github/workflows/ci-ps-shared-pester.yml'
+    needs: build
+    with:
+      runsOn: 'windows-latest'
+      testType: 'integration'
+      
+  tests-linux:
+    uses: './.github/workflows/ci-ps-shared-pester.yml'
+    needs: build
+    with:
+      runsOn: 'ubuntu-latest'
+      testType: 'integration'
